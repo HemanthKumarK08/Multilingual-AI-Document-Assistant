@@ -1,0 +1,71 @@
+# Python Bytecode and Caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables & Secrets (NEVER COMMIT)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.secret
+
+# IDE and OS Artifacts
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Application Data & Local Storage
+data/vector_store/
+data/telemetry/*.jsonl
+data/processed/
+*.db
+*.sqlite
+*.sqlite3
+
+# Spark and JVM Checkpoints
+metastore_db/
+derby.log
+spark-warehouse/
+.spark-staging/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Temporary and Scratch Files
+scratch/
+tmp/
+*.log
+logs/*.log
+logs/telemetry/*.jsonl

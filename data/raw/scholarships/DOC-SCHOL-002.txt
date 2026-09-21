@@ -1,0 +1,17 @@
+================================================================================
+POST-MATRIC AND STATE SCHOLARSHIP PORTAL APPLICATION MANUAL
+Document ID: DOC-SCHOL-002 | Category: Scholarships | Version: 1.4
+================================================================================
+
+1. STATE SCHOLARSHIP PORTAL (SSP) REGISTRATION
+1.1 All SC, ST, OBC, and EWS category students seeking government post-matric fee concessions must create a student account on the State Scholarship Portal (SSP) using their Aadhaar-linked mobile number.
+
+2. MANDATORY VERIFICATION DOCUMENTS
+2.1 Required documentation:
+    a) Valid Caste and Income Certificate with 17-digit RD number.
+    b) Aadhaar-linked Nationalized Bank Passbook copy.
+    c) Previous semester marks cards / grade transcripts.
+    d) Institutional Fee Receipt and Bonafide Certificate issued by the Registrar.
+
+3. E-ATTESTATION DESK
+3.1 The Institutional E-Attestation Officer verifies uploaded documents within five (5) days of submission on the portal.

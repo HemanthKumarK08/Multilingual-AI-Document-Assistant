@@ -1,0 +1,1277 @@
+[
+  {
+    "question_id": "Q-EN-001",
+    "question": "What is the minimum attendance percentage required in each course to appear for semester end examinations?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "A student must maintain a minimum of 75% attendance in each registered theory and practical course to be eligible to appear for the Semester End Examination.",
+    "acceptable_answer_points": [
+      "Minimum attendance requirement is 75%",
+      "Applies to individual theory and practical courses",
+      "Mandatory for Semester End Examination eligibility"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states minimum 75% attendance requirement in each registered theory and practical course."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-002",
+    "question": "What is the minimum attendance threshold below which no medical condonation can be granted?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "Attendance shortages can only be condoned down to 65%; under no circumstances can a student with attendance below 65% be granted condonation.",
+    "acceptable_answer_points": [
+      "No condonation below 65%",
+      "Condonation allows relaxation between 65% and 74.9%",
+      "Must be on valid medical grounds or university-sanctioned events"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 and 1.2 define condonation limits between 65% and 74.9% and state that below 65% no condonation is granted."
+      }
+    ],
+    "question_type": "policy_constraint",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-EN-003",
+    "question": "How many total credits are required for the award of the MCA degree?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The minimum total credits required for the award of the MCA degree is 88 credits.",
+    "acceptable_answer_points": [
+      "Total credits required is 88 credits",
+      "Distributed across core, electives, and project work"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.2 defines the minimum total credits required for MCA degree as 88 credits."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-004",
+    "question": "What is the curfew timing for resident students on weekdays in campus hostels?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "All resident students must return to the hostel premises before 9:00 PM on weekdays and 9:30 PM on weekends.",
+    "acceptable_answer_points": [
+      "Weekday curfew is 9:00 PM",
+      "Weekend curfew is 9:30 PM"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 states all resident students must return before 9:00 PM on weekdays and 9:30 PM on weekends."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-005",
+    "question": "What is the annual household income limit to be eligible for the Institutional Merit-cum-Means Scholarship?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The total annual household income of the applicant's parents/guardians from all sources must not exceed Rs. 2,50,000 per annum.",
+    "acceptable_answer_points": [
+      "Income limit is Rs. 2,50,000 per annum",
+      "Requires Revenue Officer Income Certificate"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states family annual income must not exceed Rs. 2,50,000 per annum."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-006",
+    "question": "Under what condition is a placed student allowed to interview for a Dream Company?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "A placed student is allowed one additional chance to interview for a Dream / Super-Dream Company if the offered CTC is at least double (2.0x) their initial placement package or exceeds Rs. 10.0 LPA.",
+    "acceptable_answer_points": [
+      "Offered CTC must be at least 2.0x the initial package",
+      "Or package must exceed Rs. 10.0 LPA",
+      "Permitted only one additional chance"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-001",
+        "page": 1,
+        "evidence_summary": "Clause 3.1 states placed students get one chance for Dream Company if CTC is at least 2.0x initial package or exceeds 10 LPA."
+      }
+    ],
+    "question_type": "policy_constraint",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-EN-007",
+    "question": "What is the fee charged for revaluation of an answer script per theory course?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The revaluation fee is Rs. 750 per theory course.",
+    "acceptable_answer_points": [
+      "Revaluation fee is Rs. 750 per theory course",
+      "Must apply online within 10 days of result announcement"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 states revaluation fee is Rs. 750 per theory course."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-008",
+    "question": "What happens if a student is found possessing unauthorized copying material during an exam?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "Possession of unauthorized copying material constitutes a Level 1 malpractice offense resulting in cancellation of the concerned paper and award of an 'F' grade in the subject.",
+    "acceptable_answer_points": [
+      "Level 1 malpractice offense",
+      "Cancellation of the concerned paper",
+      "Award of 'F' grade in the subject"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-001",
+        "page": 1,
+        "evidence_summary": "Clause 3.1 outlines Level 1 malpractice penalty as cancellation of paper and 'F' grade."
+      }
+    ],
+    "question_type": "disciplinary_rule",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-EN-009",
+    "question": "What minimum CGPA is required to qualify for First Class with Distinction?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "A student must secure a minimum CGPA of 7.75, having cleared all courses in the first attempt within the normal program duration.",
+    "acceptable_answer_points": [
+      "Minimum CGPA of 7.75",
+      "All courses cleared in first attempt",
+      "Completed within normal duration"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 defines First Class with Distinction as CGPA >= 7.75 with first attempt clearance."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-010",
+    "question": "What is the refundable caution deposit amount for hostel accommodation?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The refundable caution deposit for hostel accommodation is Rs. 10,000 payable as a one-time deposit at admission.",
+    "acceptable_answer_points": [
+      "Caution deposit is Rs. 10,000",
+      "One-time deposit at admission",
+      "Refundable upon room clearance"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.3 specifies refundable caution deposit of Rs. 10,000."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-011",
+    "question": "What is the 24x7 toll-free emergency helpline number for anti-ragging complaints?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The 24x7 institutional anti-ragging toll-free helpline number is 1800-425-0099.",
+    "acceptable_answer_points": [
+      "Toll-free helpline is 1800-425-0099",
+      "Operates 24x7"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-003",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 lists 24x7 toll-free helpline as 1800-425-0099."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-012",
+    "question": "What minimum percentage of attendance is required in pre-placement training to be eligible for campus drives?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "A minimum attendance of 85% in all pre-placement training sessions and soft-skill workshops is mandatory.",
+    "acceptable_answer_points": [
+      "Minimum 85% attendance required in pre-placement training",
+      "Mandatory for appearing in campus recruitment drives"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.2 requires 85% attendance in pre-placement training."
+      }
+    ],
+    "question_type": "policy_constraint",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-013",
+    "question": "What tuition fee concession is available for differently abled students?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "Students with a benchmark disability of 40% or more receive a 75% tuition fee waiver throughout the program duration.",
+    "acceptable_answer_points": [
+      "75% tuition fee waiver",
+      "Benchmark disability of 40% or more",
+      "Certified by District Medical Board"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-003",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 specifies 75% tuition fee waiver for benchmark disability >= 40%."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-014",
+    "question": "What is the late registration fine if a student registers after the first three days of the semester?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "Late registration is permitted up to seven working days after semester commencement with a fine of Rs. 500.",
+    "acceptable_answer_points": [
+      "Late fine is Rs. 500",
+      "Permitted up to 7 working days with Dean approval"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-003",
+        "page": 1,
+        "evidence_summary": "Clause 1.2 specifies late registration fine of Rs. 500."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-015",
+    "question": "How long is a candidate permitted to complete a 2-year MCA degree program before expiry of registration?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The maximum duration permitted for completing the 2-year MCA program is eight (8) consecutive semesters from the date of admission.",
+    "acceptable_answer_points": [
+      "Maximum duration is 8 consecutive semesters (4 years)",
+      "Normal duration is 4 semesters"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.2 specifies maximum duration of 8 consecutive semesters."
+      }
+    ],
+    "question_type": "policy_constraint",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-016",
+    "question": "What is the penalty if a student fails to appear for an interview after registering for a placement drive?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "Registering for a recruitment drive and failing to appear without prior written permission results in debarment from the next two (2) recruitment drives.",
+    "acceptable_answer_points": [
+      "Debarment from next 2 recruitment drives",
+      "Penalty for unexcused absence"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-001",
+        "page": 1,
+        "evidence_summary": "Clause 4.1 specifies debarment from 2 recruitment drives for unexcused absence."
+      }
+    ],
+    "question_type": "disciplinary_rule",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-EN-017",
+    "question": "What is the cost of obtaining a photocopy of an evaluated Semester End Examination answer script?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "The fee for obtaining a photocopy of a valued answer script is Rs. 300 per subject, applied within 5 working days.",
+    "acceptable_answer_points": [
+      "Fee is Rs. 300 per subject",
+      "Must apply within 5 working days of result declaration"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 specifies Rs. 300 fee per subject for evaluated script photocopy."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-018",
+    "question": "What is the fee waiver provided to gold medalists at National Games or Inter-University sports?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "Gold medalists at All-India Inter-University (AIU) or National Games receive a 100% Tuition Fee Waiver plus free hostel lodging.",
+    "acceptable_answer_points": [
+      "100% Tuition Fee Waiver",
+      "Free hostel lodging included"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-004",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states 100% tuition waiver + free hostel lodging for gold medalists."
+      }
+    ],
+    "question_type": "fact_lookup",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-019",
+    "question": "Can high-wattage electric immersion heaters be used in hostel student rooms?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "No. High-wattage electrical appliances such as heaters, immersion rods, and induction cooktops are strictly banned in student rooms due to fire safety regulations.",
+    "acceptable_answer_points": [
+      "Strictly banned / prohibited",
+      "Fire safety violation"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-001",
+        "page": 1,
+        "evidence_summary": "Clause 3.2 explicitly bans high-wattage electrical appliances including heaters and immersion rods."
+      }
+    ],
+    "question_type": "policy_constraint",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-EN-020",
+    "question": "What minimum CGPA is required for an MCA student to apply for a full-semester industry internship NOC?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": "A student must have completed all prerequisite coursework and possess a minimum CGPA of 6.75 to be issued an NOC for a full-semester industry internship.",
+    "acceptable_answer_points": [
+      "Minimum CGPA of 6.75",
+      "All prerequisite coursework completed"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 requires minimum CGPA of 6.75 for full-semester internship NOC."
+      }
+    ],
+    "question_type": "policy_constraint",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+
+  {
+    "question_id": "Q-HI-001",
+    "question": "सेमेस्टर परीक्षा में बैठने के लिए न्यूनतम उपस्थिति कितनी आवश्यक है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "सेमेस्टर अंतिम परीक्षा में उपस्थित होने के लिए प्रत्येक विषय में न्यूनतम 75% उपस्थिति आवश्यक है।",
+    "acceptable_answer_points": [
+      "न्यूनतम उपस्थिति 75% है",
+      "प्रत्येक विषय में अनिवार्य"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 mandates 75% attendance per course."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-002",
+    "question": "हॉस्टल में छात्रों के लिए रात का कर्फ्यू समय क्या है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "छात्रों को सप्ताह के दिनों में रात 9:00 बजे से पहले और सप्ताहांत में रात 9:30 बजे से पहले हॉस्टल लौटना अनिवार्य है।",
+    "acceptable_answer_points": [
+      "सप्ताह के दिनों में रात 9:00 बजे",
+      "सप्ताहांत में रात 9:30 बजे"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 defines 9:00 PM weekday and 9:30 PM weekend curfew."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-003",
+    "question": "मेरिट-कम-मीन्स छात्रवृत्ति के लिए परिवार की वार्षिक आय सीमा क्या है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "आवेदक के परिवार की कुल वार्षिक आय 2,50,000 रुपये से अधिक नहीं होनी चाहिए।",
+    "acceptable_answer_points": [
+      "अधिकतम आय 2,50,000 रुपये प्रति वर्ष"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states annual income limit of Rs. 2,50,000."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-004",
+    "question": "उत्तर पुस्तिका के पुनर्मूल्यांकन (Revaluation) के लिए प्रति विषय कितना शुल्क है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "पुनर्मूल्यांकन के लिए प्रति थ्योरी विषय 750 रुपये का शुल्क है।",
+    "acceptable_answer_points": [
+      "पुनर्मूल्यांकन शुल्क 750 रुपये प्रति विषय है"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 states revaluation fee is Rs. 750."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-005",
+    "question": "एमसीए डिग्री प्राप्त करने के लिए कुल कितने क्रेडिट आवश्यक हैं?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "एमसीए की डिग्री के लिए कुल 88 क्रेडिट अनिवार्य हैं।",
+    "acceptable_answer_points": [
+      "कुल 88 क्रेडिट"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.2 states 88 credits required for MCA."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-006",
+    "question": "एंटी-रैगिंग आपातकालीन टोल-फ्री हेल्पलाइन नंबर क्या है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "एंटी-रैगिंग 24x7 टोल-फ्री हेल्पलाइन नंबर 1800-425-0099 है।",
+    "acceptable_answer_points": [
+      "टोल-फ्री नंबर 1800-425-0099"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-003",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 provides 1800-425-0099 hotline."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-007",
+    "question": "प्लेसमेंट ड्राइव के लिए पंजीकृत होने के बाद अनुपस्थित रहने पर क्या दंड है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "बिना पूर्व अनुमति के अनुपस्थित रहने पर छात्र को अगली दो (2) भर्ती प्रक्रियाओं से निष्कासित (Debar) कर दिया जाता है।",
+    "acceptable_answer_points": [
+      "अगली 2 भर्ती प्रक्रियाओं से निष्कासन"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-001",
+        "page": 1,
+        "evidence_summary": "Clause 4.1 debarment from 2 drives."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-008",
+    "question": "हॉस्टल की सुरक्षा जमा राशि (Caution Deposit) कितनी है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "हॉस्टल की रिफंडेबल सुरक्षा जमा राशि 10,000 रुपये है।",
+    "acceptable_answer_points": [
+      "सुरक्षा जमा 10,000 रुपये"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.3 states Rs. 10,000 caution deposit."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-009",
+    "question": "दिव्यांग छात्रों को कितनी ट्यूशन फीस में छूट मिलती है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "40% या अधिक विकलांगता वाले दिव्यांग छात्रों को 75% ट्यूशन फीस में छूट मिलती है।",
+    "acceptable_answer_points": [
+      "75% ट्यूशन फीस छूट",
+      "40% या अधिक दिव्यांगता"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-003",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states 75% tuition waiver for >=40% disability."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-HI-010",
+    "question": "मेडिकल आधार पर उपस्थिति में अधिकतम कितनी छूट दी जा सकती है?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": "वैध मेडिकल आधार पर अधिकतम 10% की छूट दी जा सकती है (65% से 74.9% तक)। 65% से कम उपस्थिति पर कोई छूट नहीं मिलती।",
+    "acceptable_answer_points": [
+      "अधिकतम 10% छूट",
+      "65% से 74.9% के बीच मान्य"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 allows up to 10% condonation down to 65%."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+
+  {
+    "question_id": "Q-KN-001",
+    "question": "ಸೆಮಿಸ್ಟರ್ ಪರೀಕ್ಷೆ ಬರೆಯಲು ಕನಿಷ್ಠ ಹಾಜರಾತಿ ಶೇಕಡಾವಾರು ಎಷ್ಟು ಇರಬೇಕು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಪ್ರತಿಯೊಂದು ವಿಷಯದಲ್ಲಿ ಪರೀಕ್ಷೆ ಬರೆಯಲು ಕನಿಷ್ಠ 75% ಹಾಜರಾತಿ ಕಡ್ಡಾಯವಾಗಿದೆ.",
+    "acceptable_answer_points": [
+      "ಕನಿಷ್ಠ 75% ಹಾಜರಾತಿ ಅಗತ್ಯ",
+      "ಪ್ರತಿಯೊಂದು ಥಿಯರಿ ಮತ್ತು ಲ್ಯಾಬ್ ವಿಷಯಕ್ಕೆ ಅನ್ವಯ"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states minimum 75% attendance requirement."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-002",
+    "question": "ಹಾಸ್ಟೆಲ್ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ವಾರದ ದಿನಗಳಲ್ಲಿ ಕರ್ಫ್ಯೂ ಸಮಯ ಎಷ್ಟು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಹಾಸ್ಟೆಲ್ ವಿದ್ಯಾರ್ಥಿಗಳು ವಾರದ ದಿನಗಳಲ್ಲಿ ರಾತ್ರಿ 9:00 ಗಂಟೆಯ ಒಳಗೆ ಮತ್ತು ವಾರಾಂತ್ಯದಲ್ಲಿ ರಾತ್ರಿ 9:30 ಗಂಟೆಯ ಒಳಗೆ ಹಾಸ್ಟೆಲ್‌ಗೆ ಮರಳಬೇಕು.",
+    "acceptable_answer_points": [
+      "ವಾರದ ದಿನಗಳಲ್ಲಿ ರಾತ್ರಿ 9:00 ಗಂಟೆ",
+      "ವಾರಾಂತ್ಯದಲ್ಲಿ ರಾತ್ರಿ 9:30 ಗಂಟೆ"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 specifies 9:00 PM weekday and 9:30 PM weekend curfew."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-003",
+    "question": "ಮೆರಿಟ್-ಕಮ್-ಮೀನ್ಸ್ ಸ್ಕಾಲರ್‌ಶಿಪ್ ಪಡೆಯಲು ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯ ಮಿತಿ ಎಷ್ಟು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಕುಟುಂಬದ ವಾರ್ಷಿಕ ಆದಾಯವು ರೂ. 2,50,000 (ಎರಡು ಲಕ್ಷ ಐವತ್ತು ಸಾವಿರ) ಮೀರಬಾರದು.",
+    "acceptable_answer_points": [
+      "ವಾರ್ಷಿಕ ಆದಾಯ ಮಿತಿ ರೂ. 2,50,000"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states income limit of Rs. 2,50,000 per annum."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-004",
+    "question": "ಉತ್ತರ ಪತ್ರಿಕೆಯ ಮರುಮೌಲ್ಯಮಾಪನಕ್ಕೆ (Revaluation) ಶುಲ್ಕ ಎಷ್ಟು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಪ್ರತಿ ಥಿಯರಿ ವಿಷಯದ ಮರುಮೌಲ್ಯಮಾಪನಕ್ಕೆ ರೂ. 750 ಶುಲ್ಕ ನಿಗದಿಪಡಿಸಲಾಗಿದೆ.",
+    "acceptable_answer_points": [
+      "ಮರುಮೌಲ್ಯಮಾಪನ ಶುಲ್ಕ ರೂ. 750"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 defines revaluation fee of Rs. 750 per course."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-005",
+    "question": "ಎಂಸಿಎ ಪದವಿ ಪೂರ್ಣಗೊಳಿಸಲು ಒಟ್ಟು ಎಷ್ಟು ಕ್ರೆಡಿಟ್‌ಗಳು ಬೇಕು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಎಂಸಿಎ ಪದವಿಗಾಗಿ ಕನಿಷ್ಠ 88 ಕ್ರೆಡಿಟ್‌ಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಬೇಕು.",
+    "acceptable_answer_points": [
+      "ಒಟ್ಟು 88 ಕ್ರೆಡಿಟ್‌ಗಳು"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.2 states 88 credits for MCA."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-006",
+    "question": "ರ್ಯಾಗಿಂಗ್ ವಿರೋಧಿ 24x7 ತುರ್ತು ಸಹಾಯವಾಣಿ ಸಂಖ್ಯೆ ಯಾವುದು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ರ್ಯಾಗಿಂಗ್ ವಿರೋಧಿ 24x7 ಟೋಲ್-ಫ್ರೀ ಸಹಾಯವಾಣಿ ಸಂಖ್ಯೆ 1800-425-0099 ಆಗಿದೆ.",
+    "acceptable_answer_points": [
+      "ಟೋಲ್-ಫ್ರೀ ಸಂಖ್ಯೆ 1800-425-0099"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-003",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 specifies toll-free number 1800-425-0099."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-007",
+    "question": "ಪ್ಲೇಸ್‌ಮೆಂಟ್ ಡ್ರೈವ್‌ಗೆ ನೋಂದಾಯಿಸಿ ಸಂದರ್ಶನಕ್ಕೆ ಗೈರುಹಾಜರಾದರೆ ಶಿಕ್ಷೆ ಏನು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಅನುಮತಿಯಿಲ್ಲದೆ ಗೈರುಹಾಜರಾದರೆ ವಿದ್ಯಾರ್ಥಿಯನ್ನು ಮುಂದಿನ ಎರಡು (2) ಪ್ಲೇಸ್‌ಮೆಂಟ್ ಡ್ರೈವ್‌ಗಳಿಂದ ಡಿಬಾರ್ ಮಾಡಲಾಗುತ್ತದೆ.",
+    "acceptable_answer_points": [
+      "ಮುಂದಿನ 2 ಡ್ರೈವ್‌ಗಳಿಂದ ಡಿಬಾರ್"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-001",
+        "page": 1,
+        "evidence_summary": "Clause 4.1 debarment from next 2 drives."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-008",
+    "question": "ಹಾಸ್ಟೆಲ್ ಕಾಷನ್ ಡೆಪಾಸಿಟ್ (Caution Deposit) ಎಷ್ಟು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ಹಾಸ್ಟೆಲ್‌ನ ಮರುಪಾವತಿಸಬಹುದಾದ ಕಾಷನ್ ಡೆಪಾಸಿಟ್ ರೂ. 10,000 ಆಗಿದೆ.",
+    "acceptable_answer_points": [
+      "ಕಾಷನ್ ಡೆಪಾಸಿಟ್ ರೂ. 10,000"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.3 states Rs. 10,000 caution deposit."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-009",
+    "question": "ವಿಕಲಚೇತನ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಬೋಧನಾ ಶುಲ್ಕದಲ್ಲಿ ಎಷ್ಟು ರಿಯಾಯಿತಿ ಸಿಗುತ್ತದೆ?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "40% ಅಥವಾ ಅದಕ್ಕಿಂತ ಹೆಚ್ಚು ವಿಕಲಾಂಗತೆ ಹೊಂದಿರುವ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ 75% ಬೋಧನಾ ಶುಲ್ಕ ರಿಯಾಯಿತಿ ನೀಡಲಾಗುತ್ತದೆ.",
+    "acceptable_answer_points": [
+      "75% ಬೋಧನಾ ಶುಲ್ಕ ರಿಯಾಯಿತಿ",
+      "40% ಅಥವಾ ಅದಕ್ಕಿಂತ ಹೆಚ್ಚು ವಿಕಲಾಂಗತೆ"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-003",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states 75% tuition fee waiver."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-KN-010",
+    "question": "ವೈದ್ಯಕೀಯ ಕಾರಣಗಳಿಗಾಗಿ ಹಾಜರಾತಿಯಲ್ಲಿ ಎಷ್ಟು ಶೇಕಡಾ ವಿನಾಯಿತಿ (Condonation) ನೀಡಬಹುದು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": "ವೈದ್ಯಕೀಯ ಕಾರಣಗಳಿಗಾಗಿ ಗರಿಷ್ಠ 10% ವರೆಗೆ ಹಾಜರಾತಿ ವಿನಾಯಿತಿ ನೀಡಬಹುದು (65% ರಿಂದ 74.9% ವರೆಗೆ). 65% ಕ್ಕಿಂತ ಕಡಿಮೆ ಇದ್ದರೆ ವಿನಾಯಿತಿ ಸಿಗುವುದಿಲ್ಲ.",
+    "acceptable_answer_points": [
+      "ಗರಿಷ್ಠ 10% ವಿನಾಯಿತಿ",
+      "65% ರಿಂದ 74.9% ಹಾಜರಾತಿಗೆ ಮಾತ್ರ ಅನ್ವಯ"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 allows up to 10% condonation down to 65%."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+
+  {
+    "question_id": "Q-TE-001",
+    "question": "సెమిస్టర్ పరీక్షలు రాయడానికి కనీస హాజరు శాతం ఎంత ఉండాలి?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "సెమిస్టర్ చివరి పరీక్షలకు హాజరు కావడానికి ప్రతి కోర్సులో కనీసం 75% హాజరు తప్పనిసరి.",
+    "acceptable_answer_points": [
+      "కనీసం 75% హాజరు అవసరం"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 specifies 75% attendance requirement."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-002",
+    "question": "హాస్టల్ విద్యార్థులకు రాత్రి కర్ఫ్యూ సమయం ఎంత?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "వారపు రోజులలో రాత్రి 9:00 గంటలకు మరియు వారాంతాల్లో రాత్రి 9:30 గంటలకు హాస్టల్ లోపలికి చేరుకోవాలి.",
+    "acceptable_answer_points": [
+      "రాత్రి 9:00 గంటలు (వారపు రోజులు)",
+      "రాత్రి 9:30 గంటలు (వారాంతాల్లో)"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 specifies 9:00 PM and 9:30 PM curfew."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-003",
+    "question": "మెరిట్-కమ్-మీన్స్ స్కాలర్‌షిప్ కోసం కుటుంబ వార్షిక ఆదాయ పరిమితి ఎంత?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "కుటుంబ వార్షిక ఆదాయం రూ. 2,50,000 మించకూడదు.",
+    "acceptable_answer_points": [
+      "రూ. 2,50,000 ఆదాయ పరిమితి"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states annual income limit of Rs. 2,50,000."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-004",
+    "question": "రీవాల్యుయేషన్ (Revaluation) దరఖాస్తు రుసుము ఎంత?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "ప్రతి థియరీ సబ్జెక్టుకు రీవాల్యుయేషన్ ఫీజు రూ. 750.",
+    "acceptable_answer_points": [
+      "రీవాల్యుయేషన్ ఫీజు రూ. 750"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 states revaluation fee of Rs. 750."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-005",
+    "question": "ఎంసీఏ డిగ్రీ సాధించడానికి మొత్తం ఎన్ని క్రెడిట్స్ అవసరం?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "ఎంసీఏ డిగ్రీ కోసం మొత్తం 88 క్రెడిట్స్ పూర్తి చేయాలి.",
+    "acceptable_answer_points": [
+      "మొత్తం 88 క్రెడిట్స్"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ACAD-001",
+        "page": 1,
+        "evidence_summary": "Clause 2.2 states 88 credits for MCA."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "academic_regulations",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-006",
+    "question": "ర్యాగింగ్ వ్యతిరేక అత్యవసర టోల్-ఫ్రీ నంబర్ ఏమిటి?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "యాంటీ-ర్యాగింగ్ 24x7 టోల్-ఫ్రీ హెల్ప్‌లైన్ నంబర్ 1800-425-0099.",
+    "acceptable_answer_points": [
+      "టోల్-ఫ్రీ నంబర్ 1800-425-0099"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-003",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 provides 1800-425-0099 toll-free line."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-007",
+    "question": "ప్లేస్‌మెంట్ డ్రైవ్‌కు హాజరు కాకపోతే విధించే జరిమానా ఏమిటి?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "ముందస్తు అనుమతి లేకుండా డ్రైవ్‌కు గైర్హాజరైతే తదుపరి 2 రిక్రూట్‌మెంట్ డ్రైవ్‌ల నుండి డిబార్ చేయబడతారు.",
+    "acceptable_answer_points": [
+      "తదుపరి 2 డ్రైవ్‌ల నుండి డిబార్"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-001",
+        "page": 1,
+        "evidence_summary": "Clause 4.1 debarment from next 2 drives."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-008",
+    "question": "హాస్టల్ కాషన్ డిపాజిట్ (Caution Deposit) మొత్తం ఎంత?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "రీఫండబుల్ హాస్టల్ కాషన్ డిపాజిట్ రూ. 10,000.",
+    "acceptable_answer_points": [
+      "కాషన్ డిపాజిట్ రూ. 10,000"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.3 states Rs. 10,000 caution deposit."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-009",
+    "question": "దివ్యాంగ విద్యార్థులకు ట్యూషన్ ఫీజులో ఎంత రాయితీ లభిస్తుంది?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "40% లేదా అంతకంటే ఎక్కువ వైకల్యం ఉన్న దివ్యాంగ విద్యార్థులకు 75% ట్యూషన్ ఫీజు రాయితీ ఇవ్వబడుతుంది.",
+    "acceptable_answer_points": [
+      "75% ట్యూషన్ ఫీజు రాయితీ",
+      "కనీసం 40% వైకల్యం"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-003",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states 75% tuition waiver for >=40% disability."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+  {
+    "question_id": "Q-TE-010",
+    "question": "వైద్య కారణాలపై హాజరులో గరిష్టంగా ఎంత మినహాయింపు లభిస్తుంది?",
+    "language": "te",
+    "input_type": "text",
+    "expected_answer": "వైద్య కారణాలపై గరిష్టంగా 10% వరకు మినహాయింపు (65% నుండి 74.9% మధ్య) ఇవ్వవచ్చు. 65% కంటే తక్కువ ఉంటే మినహాయింపు లభించదు.",
+    "acceptable_answer_points": [
+      "గరిష్టంగా 10% మినహాయింపు",
+      "65% నుండి 74.9% మధ్య మాత్రమే లభిస్తుంది"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-002",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 allows up to 10% condonation down to 65%."
+      }
+    ],
+    "question_type": "cross_lingual_fact",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "medium"
+  },
+
+  {
+    "question_id": "Q-MIX-001",
+    "question": "Hostel re-admission ge minimum attendance percentage eshtu beku?",
+    "language": "kn",
+    "input_type": "code_mixed_kanglish",
+    "expected_answer": "A minimum of 75% overall attendance is required for hostel and academic continuation.",
+    "acceptable_answer_points": [
+      "Minimum 75% attendance required"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-ATTN-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states 75% attendance requirement."
+      }
+    ],
+    "question_type": "code_mixed_retrieval",
+    "category": "attendance",
+    "answer_available": true,
+    "difficulty": "hard"
+  },
+  {
+    "question_id": "Q-MIX-002",
+    "question": "Exam revaluation fee kitna lagega per subject and apply kab tak kar sakte hain?",
+    "language": "hi",
+    "input_type": "code_mixed_hinglish",
+    "expected_answer": "Revaluation fee is Rs. 750 per theory course, and application must be submitted within 10 days of result announcement.",
+    "acceptable_answer_points": [
+      "Fee is Rs. 750 per course",
+      "Apply within 10 days of result announcement"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-EXAM-002",
+        "page": 1,
+        "evidence_summary": "Clause 2.1 specifies Rs. 750 fee and 10-day application window."
+      }
+    ],
+    "question_type": "code_mixed_retrieval",
+    "category": "examination_guidelines",
+    "answer_available": true,
+    "difficulty": "hard"
+  },
+  {
+    "question_id": "Q-MIX-003",
+    "question": "Scholarship apply cheyadaniki parent annual income limit entha undali?",
+    "language": "te",
+    "input_type": "code_mixed_tenglish",
+    "expected_answer": "For Institutional Merit-cum-Means scholarship, family annual income must not exceed Rs. 2,50,000 per annum.",
+    "acceptable_answer_points": [
+      "Annual income limit is Rs. 2,50,000"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-SCHOL-001",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 specifies Rs. 2,50,000 income limit."
+      }
+    ],
+    "question_type": "code_mixed_retrieval",
+    "category": "scholarships",
+    "answer_available": true,
+    "difficulty": "hard"
+  },
+  {
+    "question_id": "Q-MIX-004",
+    "question": "Placement drive ge formal dress code mandatory na?",
+    "language": "kn",
+    "input_type": "code_mixed_kanglish",
+    "expected_answer": "Yes, all candidates appearing for aptitude tests, group discussions, and technical/HR interviews must strictly adhere to formal corporate attire.",
+    "acceptable_answer_points": [
+      "Formal corporate attire is strictly mandatory"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-PLACE-003",
+        "page": 1,
+        "evidence_summary": "Clause 1.1 states formal corporate attire is strictly mandatory."
+      }
+    ],
+    "question_type": "code_mixed_retrieval",
+    "category": "placements",
+    "answer_available": true,
+    "difficulty": "hard"
+  },
+  {
+    "question_id": "Q-MIX-005",
+    "question": "Hostel room me electric induction cooktop use kar sakte hain kya?",
+    "language": "hi",
+    "input_type": "code_mixed_hinglish",
+    "expected_answer": "No, high-wattage electrical appliances including induction cooktops, heaters, and immersion rods are strictly banned in student rooms.",
+    "acceptable_answer_points": [
+      "Strictly prohibited / banned in student rooms"
+    ],
+    "source_documents": [
+      {
+        "document_id": "DOC-HOST-001",
+        "page": 1,
+        "evidence_summary": "Clause 3.2 bans induction cooktops and high-wattage appliances."
+      }
+    ],
+    "question_type": "code_mixed_retrieval",
+    "category": "hostel",
+    "answer_available": true,
+    "difficulty": "hard"
+  },
+
+  {
+    "question_id": "Q-UNANS-001",
+    "question": "What is the special diet cafeteria menu on next Monday for Marine Engineering students?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": null,
+    "acceptable_answer_points": [
+      "Information not found in institutional documents",
+      "No marine engineering cafeteria menu in corpus"
+    ],
+    "source_documents": [],
+    "question_type": "not_in_corpus",
+    "category": "hostel",
+    "answer_available": false,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-UNANS-002",
+    "question": "What is the annual bus transport fee from Majestic to the campus?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": null,
+    "acceptable_answer_points": [
+      "Information not found in institutional documents"
+    ],
+    "source_documents": [],
+    "question_type": "not_in_corpus",
+    "category": "general",
+    "answer_available": false,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-UNANS-003",
+    "question": "ಕಾಲೇಜಿನ ಕ್ರಿಕೆಟ್ ತಂಡದ ಕೋಚ್ ಅವರ ಹೆಸರು ಏನು?",
+    "language": "kn",
+    "input_type": "text",
+    "expected_answer": null,
+    "acceptable_answer_points": [
+      "ಈ ಮಾಹಿತಿ ಕಾಲೇಜು ನಿಯಮಾವಳಿಗಳ ದಾಖಲೆಗಳಲ್ಲಿ ಲಭ್ಯವಿಲ್ಲ"
+    ],
+    "source_documents": [],
+    "question_type": "not_in_corpus",
+    "category": "scholarships",
+    "answer_available": false,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-UNANS-004",
+    "question": "कॉलेज की मुख्य लाइब्रेरी में रोबोटिक्स की कुल कितनी विदेशी किताबें उपलब्ध हैं?",
+    "language": "hi",
+    "input_type": "text",
+    "expected_answer": null,
+    "acceptable_answer_points": [
+      "यह जानकारी उपलब्ध दस्तावेजों में नहीं है"
+    ],
+    "source_documents": [],
+    "question_type": "not_in_corpus",
+    "category": "academic_regulations",
+    "answer_available": false,
+    "difficulty": "easy"
+  },
+  {
+    "question_id": "Q-UNANS-005",
+    "question": "How much subsidy is provided for purchasing an Apple MacBook Pro laptop for MCA students?",
+    "language": "en",
+    "input_type": "text",
+    "expected_answer": null,
+    "acceptable_answer_points": [
+      "Information not available in uploaded documents"
+    ],
+    "source_documents": [],
+    "question_type": "not_in_corpus",
+    "category": "scholarships",
+    "answer_available": false,
+    "difficulty": "easy"
+  }
+]

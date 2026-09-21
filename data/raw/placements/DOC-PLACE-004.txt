@@ -1,0 +1,10 @@
+================================================================================
+CAREER GUIDANCE, SKILL TRAINING & HIGHER EDUCATION ADVISORY CIRCULAR
+Document ID: DOC-PLACE-004 | Category: Placements | Version: 1.0
+================================================================================
+
+1. HIGHER EDUCATION AND COMPETITIVE EXAM SUPPORT
+1.1 The Centre for Career Advisory conducts weekend coaching for GATE, GRE, CAT, and UGC-NET examinations free of charge for enrolled students.
+
+2. INDUSTRY CERTIFICATION SPONSORSHIP
+2.1 The institution subsidizes up to 50% of the examination fee for approved professional cloud/AI certifications (AWS, Microsoft Azure, Google Cloud, Oracle) for students maintaining a CGPA >= 7.50.

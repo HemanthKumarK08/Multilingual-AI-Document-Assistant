@@ -1,0 +1,11 @@
+# Multilingual AI Document Assistant with Big Data Analytics
+# Complete Project Requirements
+
+# Base Web Framework & API
+-r requirements/base.txt
+
+# Development & Testing
+-r requirements/dev.txt
+
+# ML, Embeddings, Vector Store & Big Data Analytics
+-r requirements/optional.txt

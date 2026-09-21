@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multilingual-doc-assistant"
+version = "0.1.0"
+description = "Multilingual AI Document Assistant with Big Data Analytics"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+authors = [
+    { name = "Hemanth Kumar K" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "sqlalchemy>=2.0.28",
+    "aiosqlite>=0.20.0",
+    "python-dotenv>=1.0.1",
+    "pymupdf>=1.23.26",
+    "python-docx>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.1.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0",
+    "ruff>=0.3.0",
+    "mypy>=1.9.0",
+]
+ml = [
+    "torch>=2.2.0",
+    "transformers>=4.38.0",
+    "sentence-transformers>=2.5.0",
+    "chromadb>=0.4.24",
+]
+bigdata = [
+    "pyspark>=3.5.0",
+]
+all = [
+    "multilingual-doc-assistant[dev,ml,bigdata]"
+]

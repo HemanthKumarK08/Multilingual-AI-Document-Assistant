@@ -1,0 +1,18 @@
+================================================================================
+DEGREE REQUIREMENTS, CGPA CALCULATION & AWARD OF HONORS
+Document ID: DOC-ACAD-002 | Category: Academic Regulations | Version: 1.4
+================================================================================
+
+1. ELIGIBILITY FOR DEGREE CONFERMENT
+1.1 A student shall be declared eligible for the award of the degree if they have:
+    a) Earned all prescribed credits specified in the curriculum (88 credits for MCA).
+    b) Maintained a final CGPA of not less than 5.00 at the end of the final semester.
+    c) Cleared all mandatory non-credit audit courses (Environmental Studies, Research Methodology).
+    d) No pending disciplinary cases, malpractice investigations, or institutional fee dues.
+
+2. CLASSIFICATION OF DEGREE AWARDS
+2.1 Degree classifications are determined strictly by final CGPA upon completing the program:
+    - First Class with Distinction (FCD): CGPA >= 7.75, provided all courses are cleared in the first attempt within normal duration.
+    - First Class (FC)                  : CGPA >= 6.75 and < 7.75.
+    - Second Class (SC)                 : CGPA >= 5.00 and < 6.75.
+2.2 Students clearing courses through supplementary or make-up exams are not eligible for University ranks or Gold Medals.

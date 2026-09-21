@@ -1,0 +1,18 @@
+# Core Web & API Framework
+fastapi>=0.110.0,<0.112.0
+uvicorn[standard]>=0.28.0,<0.30.0
+pydantic>=2.6.0,<3.0.0
+pydantic-settings>=2.2.0,<3.0.0
+
+# Relational Database & ORM (SQLite / aiosqlite)
+sqlalchemy>=2.0.28,<2.1.0
+aiosqlite>=0.20.0,<0.21.0
+greenlet>=3.0.0
+
+# Configuration & Utilities
+python-dotenv>=1.0.1,<2.0.0
+python-multipart>=0.0.9
+
+# Document Extraction (Phase 2 core)
+pymupdf>=1.23.26,<1.25.0
+python-docx>=1.1.0,<1.2.0

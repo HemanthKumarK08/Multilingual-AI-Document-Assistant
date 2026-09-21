@@ -1,0 +1,17 @@
+{
+  "generated_at_utc": "2026-09-15T10:59:27.214625Z",
+  "queries_evaluated": 350,
+  "avg_total_latency_ms": 291.9,
+  "p50_total_latency_ms": 313.77,
+  "p95_total_latency_ms": 461.33,
+  "avg_generation_latency_ms": 261.06,
+  "grounded_answer_rate": 94.0,
+  "citation_validity_rate": 94.0,
+  "fallback_answer_rate": 6.0,
+  "avg_citation_count": 1.91,
+  "provider_distribution": {
+    "mock": 42,
+    "gemini": 234,
+    "ollama": 74
+  }
+}

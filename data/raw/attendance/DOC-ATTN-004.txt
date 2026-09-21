@@ -1,0 +1,10 @@
+================================================================================
+INTERNAL ASSESSMENT BIOMETRIC LOGGING & GRIEVANCE GUIDELINES
+Document ID: DOC-ATTN-004 | Category: Attendance | Version: 1.0
+================================================================================
+
+1. CIE ELIGIBILITY AND MINIMUM SCORE CRITERIA
+1.1 A student must secure a minimum of 40% in continuous internal assessments (CIE) in theory courses and 50% in laboratory courses to be certified eligible for Semester End Examinations.
+
+2. ATTENDANCE GRIEVANCE COMMITTEE
+2.1 If a student believes an attendance entry in the ERP portal is incorrect due to technical failure, they may appeal to the Department Attendance Grievance Committee within three (3) working days of the monthly attendance display.

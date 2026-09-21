@@ -1,0 +1,176 @@
+{
+  "run_id": "807a6a45-12cd-448a-b585-c00ab9ce1380",
+  "started_at": "2026-09-12T13:44:32.489113+00:00",
+  "completed_at": "2026-09-12T13:44:46.036822+00:00",
+  "embedding_model_name": "intfloat/multilingual-e5-small",
+  "embedding_dimension": 384,
+  "embedding_device": "cpu",
+  "embedding_batch_size": 8,
+  "embedding_normalized": true,
+  "documents_discovered": 26,
+  "documents_succeeded": 26,
+  "documents_failed": 0,
+  "chunks_discovered": 71,
+  "chunks_embedded": 71,
+  "chunks_failed": 0,
+  "total_elapsed_seconds": 13.548,
+  "document_summaries": [
+    {
+      "doc_id": "DOC-ACAD-001",
+      "status": "success",
+      "chunk_count": 7,
+      "duration_ms": 12909.34
+    },
+    {
+      "doc_id": "DOC-ACAD-002",
+      "status": "success",
+      "chunk_count": 4,
+      "duration_ms": 46.93
+    },
+    {
+      "doc_id": "DOC-ACAD-003",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 33.49
+    },
+    {
+      "doc_id": "DOC-ACAD-004",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 22.53
+    },
+    {
+      "doc_id": "DOC-ATTN-001",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 24.94
+    },
+    {
+      "doc_id": "DOC-ATTN-002",
+      "status": "success",
+      "chunk_count": 4,
+      "duration_ms": 34.31
+    },
+    {
+      "doc_id": "DOC-ATTN-003",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 27.21
+    },
+    {
+      "doc_id": "DOC-ATTN-004",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 19.66
+    },
+    {
+      "doc_id": "DOC-COORD-001",
+      "status": "success",
+      "chunk_count": 1,
+      "duration_ms": 7.36
+    },
+    {
+      "doc_id": "DOC-EXAM-001",
+      "status": "success",
+      "chunk_count": 5,
+      "duration_ms": 41.22
+    },
+    {
+      "doc_id": "DOC-EXAM-002",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 24.95
+    },
+    {
+      "doc_id": "DOC-EXAM-003",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 23.91
+    },
+    {
+      "doc_id": "DOC-EXAM-004",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 21.88
+    },
+    {
+      "doc_id": "DOC-HOST-001",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 36.02
+    },
+    {
+      "doc_id": "DOC-HOST-002",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 33.94
+    },
+    {
+      "doc_id": "DOC-HOST-003",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 25.69
+    },
+    {
+      "doc_id": "DOC-HOST-004",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 18.01
+    },
+    {
+      "doc_id": "DOC-ORIG-001",
+      "status": "success",
+      "chunk_count": 1,
+      "duration_ms": 6.71
+    },
+    {
+      "doc_id": "DOC-PLACE-001",
+      "status": "success",
+      "chunk_count": 4,
+      "duration_ms": 42.17
+    },
+    {
+      "doc_id": "DOC-PLACE-002",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 19.79
+    },
+    {
+      "doc_id": "DOC-PLACE-003",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 19.66
+    },
+    {
+      "doc_id": "DOC-PLACE-004",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 18.84
+    },
+    {
+      "doc_id": "DOC-SCHOL-001",
+      "status": "success",
+      "chunk_count": 3,
+      "duration_ms": 30.77
+    },
+    {
+      "doc_id": "DOC-SCHOL-002",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 22.7
+    },
+    {
+      "doc_id": "DOC-SCHOL-003",
+      "status": "success",
+      "chunk_count": 2,
+      "duration_ms": 18.57
+    },
+    {
+      "doc_id": "DOC-SCHOL-004",
+      "status": "success",
+      "chunk_count": 1,
+      "duration_ms": 16.93
+    }
+  ],
+  "errors": []
+}

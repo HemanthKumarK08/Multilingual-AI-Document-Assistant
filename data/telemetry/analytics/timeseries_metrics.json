@@ -1,0 +1,71 @@
+{
+  "generated_at_utc": "2026-09-15T10:59:27.214625Z",
+  "daily_trends": [
+    {
+      "date": "2026-09-08",
+      "queries": 50,
+      "avg_latency_ms": 278.82,
+      "fallback_rate": 8.0,
+      "grounded_rate": 92.0
+    },
+    {
+      "date": "2026-09-09",
+      "queries": 50,
+      "avg_latency_ms": 279.67,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0
+    },
+    {
+      "date": "2026-09-10",
+      "queries": 50,
+      "avg_latency_ms": 270.85,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0
+    },
+    {
+      "date": "2026-09-11",
+      "queries": 50,
+      "avg_latency_ms": 295.47,
+      "fallback_rate": 2.0,
+      "grounded_rate": 98.0
+    },
+    {
+      "date": "2026-09-12",
+      "queries": 50,
+      "avg_latency_ms": 325.05,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0
+    },
+    {
+      "date": "2026-09-13",
+      "queries": 50,
+      "avg_latency_ms": 282.07,
+      "fallback_rate": 10.0,
+      "grounded_rate": 90.0
+    },
+    {
+      "date": "2026-09-14",
+      "queries": 50,
+      "avg_latency_ms": 311.35,
+      "fallback_rate": 4.0,
+      "grounded_rate": 96.0
+    }
+  ],
+  "hourly_distribution": {
+    "8": 22,
+    "9": 24,
+    "10": 23,
+    "11": 20,
+    "12": 23,
+    "13": 26,
+    "14": 20,
+    "15": 18,
+    "16": 18,
+    "17": 34,
+    "18": 17,
+    "19": 30,
+    "20": 30,
+    "21": 20,
+    "22": 25
+  }
+}

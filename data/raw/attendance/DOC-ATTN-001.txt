@@ -1,0 +1,12 @@
+================================================================================
+MANDATORY ATTENDANCE THRESHOLDS AND 75% REQUIREMENT POLICY
+Document ID: DOC-ATTN-001 | Category: Attendance | Version: 2.0
+================================================================================
+
+1. MINIMUM ATTENDANCE REQUIREMENT
+1.1 Every student is required to maintain a minimum attendance of seventy-five percent (75%) in each individual registered theory and practical course to be eligible to appear for the Semester End Examination.
+1.2 Attendance is calculated from the date of commencement of instructional classes as per the official academic calendar until the last working day.
+
+2. BIOMETRIC LOGGING & PORTAL SYNCHRONIZATION
+2.1 Attendance is logged in real-time by course instructors via the institutional Enterprise Resource Planning (ERP) portal.
+2.2 Students can monitor their live cumulative attendance percentage daily through the student dashboard. Any discrepancy must be reported within forty-eight (48) hours of class conduct.

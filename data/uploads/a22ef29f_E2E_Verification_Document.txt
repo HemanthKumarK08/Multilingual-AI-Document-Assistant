@@ -1,0 +1,6 @@
+This is a test document for the
+Multilingual AI Document Assistant.
+
+The document is being used to verify
+document ingestion and indexing.
+Bangalore Institute of Technology MCA Project.
