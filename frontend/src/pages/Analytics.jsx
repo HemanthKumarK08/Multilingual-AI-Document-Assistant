@@ -130,7 +130,7 @@ export default function Analytics() {
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-400 mb-1">
             <BarChart3 size={14} />
-            <span>Big Data Engine • Phase 8.5</span>
+            <span>PySpark Big Data Analytics Engine</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Big Data Analytics Dashboard

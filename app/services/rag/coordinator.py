@@ -59,7 +59,10 @@ class RAGCoordinator:
         )
 
         query_id = retrieval_result.query.query_id
-        response_lang = retrieval_result.query.language if retrieval_result.query.language != "und" else "en"
+        if language and language.lower().strip() not in ("auto", "und"):
+            response_lang = language.lower().strip()
+        else:
+            response_lang = retrieval_result.query.language if retrieval_result.query.language != "und" else "en"
 
         # 2. Evidence Sufficiency Gating
         gate_result = evaluate_evidence_sufficiency(

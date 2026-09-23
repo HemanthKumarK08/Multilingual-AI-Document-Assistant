@@ -22,7 +22,7 @@ export default function Dashboard() {
         <div className="max-w-3xl space-y-4 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs font-semibold">
             <Sparkles size={14} className="text-brand-400" />
-            <span>Phase 8.1 Active • Application Shell</span>
+            <span>Production Ready • AI Document Intelligence</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">

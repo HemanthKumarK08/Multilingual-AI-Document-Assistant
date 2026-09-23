@@ -38,16 +38,16 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
       >
         <div className="p-4 space-y-6">
           {/* Institution / Project Badge */}
-          <div className="px-3 py-2.5 rounded-xl bg-gradient-to-br from-surface-card to-brand-950/40 border border-surface-border flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-brand-500/10 text-brand-400">
+          <div className="px-3.5 py-3 rounded-2xl bg-gradient-to-br from-surface-card to-brand-950/40 border border-surface-border flex items-center gap-3 shadow-sm">
+            <div className="p-2 rounded-xl bg-brand-500/10 text-brand-400 shrink-0">
               <Building2 size={20} />
             </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold tracking-wider text-brand-300">
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase font-bold tracking-wider text-brand-400">
                 Major Project
               </p>
-              <p className="text-xs font-semibold text-white">
-                Bangalore Inst. of Tech.
+              <p className="text-xs font-semibold text-white truncate" title="Bangalore Institute of Technology">
+                Bangalore Institute of Tech.
               </p>
             </div>
           </div>

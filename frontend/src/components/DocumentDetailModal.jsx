@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   X,
   FileText,
@@ -13,7 +13,16 @@ import {
   CheckCircle2,
   AlertCircle,
   Clock,
+  ExternalLink,
+  Download,
+  Eye,
+  Loader2,
+  Trash2,
+  FileCode,
+  FileType
 } from 'lucide-react';
+import { apiService } from '../services/api';
+import MarkdownRenderer from './MarkdownRenderer';
 
 function formatBytes(bytes) {
   if (!bytes || bytes === 0) return '0 B';
@@ -23,7 +32,12 @@ function formatBytes(bytes) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
-export default function DocumentDetailModal({ doc, onClose }) {
+export default function DocumentDetailModal({ doc, onClose, onDeleteRequested }) {
+  const [activeTab, setActiveTab] = useState('preview'); // 'preview' | 'metadata'
+  const [contentData, setContentData] = useState(null);
+  const [loadingContent, setLoadingContent] = useState(true);
+  const [contentError, setContentError] = useState(null);
+
   // Close on Escape key press
   useEffect(() => {
     function handleKeyDown(e) {
@@ -33,30 +47,60 @@ export default function DocumentDetailModal({ doc, onClose }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
+  // Fetch document content / preview from backend
+  useEffect(() => {
+    let isMounted = true;
+    if (!doc?.doc_id) return;
+
+    setLoadingContent(true);
+    setContentError(null);
+
+    apiService.getDocumentContent(doc.doc_id)
+      .then((data) => {
+        if (isMounted) {
+          setContentData(data);
+          setLoadingContent(false);
+        }
+      })
+      .catch((err) => {
+        if (isMounted) {
+          console.error("Failed to load document content:", err);
+          setContentError(err.message || 'Unable to load document content');
+          setLoadingContent(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [doc?.doc_id]);
+
   if (!doc) return null;
 
   const isStatusSuccess = doc.status === 'parsed' || doc.status === 'indexed' || doc.status === 'completed';
+  const fileType = (doc.file_type || '').toLowerCase();
+  const fileUrl = apiService.getDocumentFileUrl(doc.doc_id);
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md animate-fadeIn"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
     >
       <div
-        className="relative w-full max-w-2xl bg-surface-card border border-surface-border rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative w-full max-w-5xl bg-surface-card border border-surface-border rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="p-6 border-b border-surface-border flex items-start justify-between bg-surface-base/50">
-          <div className="flex items-start gap-3.5">
-            <div className="p-3 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400 shrink-0">
-              <FileText size={24} />
+        <div className="p-4 sm:p-5 border-b border-surface-border flex items-center justify-between bg-surface-base/70">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="p-2.5 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-400 shrink-0">
+              <FileText size={22} />
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="px-2 py-0.5 rounded-md bg-brand-500/10 border border-brand-500/20 text-brand-300 font-mono text-[11px] font-bold">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="px-2 py-0.5 rounded-md bg-brand-500/10 border border-brand-500/20 text-brand-300 font-mono text-[10px] sm:text-[11px] font-bold">
                   {doc.doc_id}
                 </span>
                 <span
@@ -66,134 +110,317 @@ export default function DocumentDetailModal({ doc, onClose }) {
                       : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
                   }`}
                 >
-                  {isStatusSuccess ? <CheckCircle2 size={11} /> : <AlertCircle size={11} />}
+                  {isStatusSuccess ? <CheckCircle2 size={10} /> : <AlertCircle size={10} />}
                   <span>{doc.status}</span>
                 </span>
+                <span className="px-2 py-0.5 rounded bg-surface-base border border-surface-border text-gray-300 text-[10px] font-mono uppercase font-bold">
+                  {fileType || 'DOC'}
+                </span>
               </div>
-              <h2 id="modal-title" className="text-lg font-bold text-white leading-snug">
+              <h2 id="modal-title" className="text-base sm:text-lg font-bold text-white leading-snug truncate">
                 {doc.display_title || doc.filename}
               </h2>
-              <p className="text-xs text-gray-400 font-mono mt-0.5">{doc.filename}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close modal"
-            className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-surface-base border border-transparent hover:border-surface-border transition"
-          >
-            <X size={20} />
-          </button>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {onDeleteRequested && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onDeleteRequested(doc);
+                }}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-300 text-xs font-semibold transition"
+                title="Delete Document"
+              >
+                <Trash2 size={13} />
+                <span>Delete</span>
+              </button>
+            )}
+            <button
+              onClick={onClose}
+              aria-label="Close modal"
+              className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-surface-base border border-transparent hover:border-surface-border transition"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Viewer Navigation Subheader Tabs */}
+        <div className="px-5 py-2.5 bg-surface-base/40 border-b border-surface-border flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveTab('preview')}
+              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+                activeTab === 'preview'
+                  ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/30'
+                  : 'text-gray-400 hover:text-white hover:bg-surface-card'
+              }`}
+            >
+              Document Content
+            </button>
+            <button
+              onClick={() => setActiveTab('metadata')}
+              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+                activeTab === 'metadata'
+                  ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/30'
+                  : 'text-gray-400 hover:text-white hover:bg-surface-card'
+              }`}
+            >
+              Metadata & Provenance
+            </button>
+          </div>
+
+          {/* External Action Button */}
+          <div className="flex items-center gap-2">
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-brand-300 font-medium transition"
+            >
+              <span>Raw File</span>
+              <ExternalLink size={12} />
+            </a>
+          </div>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-6 overflow-y-auto space-y-6">
-          {/* Document Properties Grid */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
-              Document Metadata
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
-                <div className="flex items-center gap-1.5 text-gray-400">
-                  <Layers size={13} className="text-brand-400" />
-                  <span>Category</span>
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-[350px]">
+          {activeTab === 'preview' ? (
+            /* Document Content Preview Tab */
+            <div className="space-y-4">
+              {loadingContent ? (
+                /* Loading Skeleton */
+                <div className="space-y-3 py-10 text-center">
+                  <Loader2 size={32} className="animate-spin text-brand-400 mx-auto" />
+                  <p className="text-xs text-gray-400">Loading document content preview...</p>
+                  <div className="max-w-md mx-auto space-y-2 pt-4">
+                    <div className="h-4 bg-surface-base rounded animate-pulse" />
+                    <div className="h-4 bg-surface-base rounded animate-pulse w-5/6 mx-auto" />
+                    <div className="h-4 bg-surface-base rounded animate-pulse w-4/6 mx-auto" />
+                  </div>
                 </div>
-                <p className="font-semibold text-white capitalize">
-                  {doc.category ? doc.category.replace(/_/g, ' ') : 'General'}
+              ) : contentError ? (
+                /* Error State */
+                <div className="p-8 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center space-y-3">
+                  <AlertCircle size={32} className="text-rose-400 mx-auto" />
+                  <h3 className="text-sm font-bold text-rose-200">Unable to preview this document</h3>
+                  <p className="text-xs text-rose-300/80 max-w-md mx-auto">{contentError}</p>
+                  <div className="pt-2">
+                    <a
+                      href={fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-card border border-surface-border text-xs font-semibold text-white hover:bg-surface-base transition"
+                    >
+                      <Download size={13} />
+                      <span>Download / Open File Directly</span>
+                    </a>
+                  </div>
+                </div>
+              ) : fileType === 'pdf' ? (
+                /* PDF Viewer: Embedded native iframe */
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs text-gray-400 px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>Original PDF Document Viewer</span>
+                    </div>
+                    <a
+                      href={fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-brand-400 hover:text-brand-300 font-semibold inline-flex items-center gap-1"
+                    >
+                      <span>Open in Full Tab</span>
+                      <ExternalLink size={12} />
+                    </a>
+                  </div>
+                  <div className="w-full h-[520px] rounded-2xl overflow-hidden border border-surface-border bg-gray-950 shadow-inner">
+                    <iframe
+                      src={`${fileUrl}#toolbar=1&navpanes=1&scrollbar=1`}
+                      title={doc.display_title || doc.filename}
+                      className="w-full h-full border-none"
+                    />
+                  </div>
+                </div>
+              ) : fileType === 'md' ? (
+                /* Markdown Safe Renderer */
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs text-gray-400 px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-indigo-400" />
+                      <span>Original Markdown Document Preview</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-gray-500">
+                      {contentData?.text_content ? `${contentData.text_content.length} chars` : ''}
+                    </span>
+                  </div>
+                  <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[520px] overflow-y-auto text-sm leading-relaxed">
+                    <MarkdownRenderer content={contentData?.text_content || 'No text content found in document.'} />
+                  </div>
+                </div>
+              ) : fileType === 'docx' || fileType === 'doc' ? (
+                /* DOCX Preview: Structured formatted content */
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs text-gray-400 px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400" />
+                      <span>Document Preview (Extracted Institutional Content)</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-gray-500">
+                      {contentData?.sections_count ? `${contentData.sections_count} sections` : 'Structured Text'}
+                    </span>
+                  </div>
+                  <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[520px] overflow-y-auto space-y-4 text-xs leading-relaxed">
+                    {contentData?.text_content ? (
+                      contentData.text_content.split('\n\n').map((para, pIdx) => (
+                        <p key={pIdx} className="text-gray-200">
+                          {para}
+                        </p>
+                      ))
+                    ) : (
+                      <p className="text-gray-400 italic">No extracted text content available for this document.</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                /* Plain TXT Viewer */
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-xs text-gray-400 px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                      <span>Original Plain Text Viewer</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-gray-500">
+                      {contentData?.text_content ? `${contentData.text_content.length} chars` : ''}
+                    </span>
+                  </div>
+                  <pre className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[520px] overflow-y-auto font-mono text-xs text-gray-200 whitespace-pre-wrap leading-relaxed">
+                    {contentData?.text_content || 'No text content available.'}
+                  </pre>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Metadata & Provenance Tab */
+            <div className="space-y-6 animate-fadeIn">
+              {/* Document Properties Grid */}
+              <div className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                  Document Metadata
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                  <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <Layers size={13} className="text-brand-400" />
+                      <span>Category</span>
+                    </div>
+                    <p className="font-semibold text-white capitalize">
+                      {doc.category ? doc.category.replace(/_/g, ' ') : 'General'}
+                    </p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <Globe size={13} className="text-indigo-400" />
+                      <span>Language</span>
+                    </div>
+                    <p className="font-semibold text-white uppercase">{doc.language || 'en'}</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <HardDrive size={13} className="text-emerald-400" />
+                      <span>File Size</span>
+                    </div>
+                    <p className="font-semibold text-white">{formatBytes(doc.file_size_bytes)}</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <FileText size={13} className="text-amber-400" />
+                      <span>Page Count</span>
+                    </div>
+                    <p className="font-semibold text-white">{doc.page_count ?? 1} Pages</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <Database size={13} className="text-blue-400" />
+                      <span>Format</span>
+                    </div>
+                    <p className="font-semibold text-white uppercase">{doc.file_type || 'TXT'}</p>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
+                    <div className="flex items-center gap-1.5 text-gray-400">
+                      <Calendar size={13} className="text-purple-400" />
+                      <span>Ingested On</span>
+                    </div>
+                    <p className="font-semibold text-white truncate">
+                      {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cryptographic SHA-256 Provenance */}
+              <div className="p-4 rounded-2xl bg-surface-base/60 border border-surface-border/60 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-gray-300">
+                    <Hash size={14} className="text-brand-400" />
+                    SHA-256 Provenance Hash
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    Verified
+                  </span>
+                </div>
+                <p className="font-mono text-[11px] text-gray-400 break-all bg-surface-card/90 p-2.5 rounded-xl border border-surface-border/40 select-all">
+                  {doc.file_hash_sha256 || 'N/A'}
                 </p>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
-                <div className="flex items-center gap-1.5 text-gray-400">
-                  <Globe size={13} className="text-indigo-400" />
-                  <span>Language</span>
+              {/* Error Message if any */}
+              {doc.error_message && (
+                <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <AlertCircle size={15} />
+                    <span>Processing Notice</span>
+                  </div>
+                  <p className="text-rose-200/90">{doc.error_message}</p>
                 </div>
-                <p className="font-semibold text-white uppercase">{doc.language || 'en'}</p>
-              </div>
+              )}
 
-              <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
-                <div className="flex items-center gap-1.5 text-gray-400">
-                  <HardDrive size={13} className="text-emerald-400" />
-                  <span>File Size</span>
+              {/* Chunk & Vector Store Details */}
+              <div className="p-4 rounded-2xl bg-surface-base/40 border border-surface-border/50 text-xs text-gray-400 space-y-1.5">
+                <div className="flex items-center gap-2 text-gray-300 font-semibold">
+                  <Info size={15} className="text-brand-400" />
+                  <span>ChromaDB Vector Store Chunks</span>
                 </div>
-                <p className="font-semibold text-white">{formatBytes(doc.file_size_bytes)}</p>
-              </div>
-
-              <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
-                <div className="flex items-center gap-1.5 text-gray-400">
-                  <FileText size={13} className="text-amber-400" />
-                  <span>Page Count</span>
-                </div>
-                <p className="font-semibold text-white">{doc.page_count ?? 1} Pages</p>
-              </div>
-
-              <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
-                <div className="flex items-center gap-1.5 text-gray-400">
-                  <Database size={13} className="text-blue-400" />
-                  <span>Format</span>
-                </div>
-                <p className="font-semibold text-white uppercase">{doc.file_type || 'TXT'}</p>
-              </div>
-
-              <div className="p-3 rounded-xl bg-surface-base/60 border border-surface-border/60 space-y-1">
-                <div className="flex items-center gap-1.5 text-gray-400">
-                  <Calendar size={13} className="text-purple-400" />
-                  <span>Ingested On</span>
-                </div>
-                <p className="font-semibold text-white truncate">
-                  {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'N/A'}
+                <p className="text-gray-400 leading-relaxed text-[11px]">
+                  Chunk indexed under collection <code className="text-brand-300 font-mono">document_chunks</code> with ownership tag <code className="text-brand-300 font-mono">{doc.doc_id}</code>. Total indexed chunks: <span className="font-bold text-white">{doc.chunk_count || contentData?.sections_count || 'N/A'}</span>.
                 </p>
               </div>
-            </div>
-          </div>
-
-          {/* Cryptographic SHA-256 Provenance */}
-          <div className="p-4 rounded-2xl bg-surface-base/60 border border-surface-border/60 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-xs font-bold text-gray-300">
-                <Hash size={14} className="text-brand-400" />
-                SHA-256 Provenance Hash
-              </span>
-              <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                Verified
-              </span>
-            </div>
-            <p className="font-mono text-[11px] text-gray-400 break-all bg-surface-card/90 p-2.5 rounded-xl border border-surface-border/40 select-all">
-              {doc.file_hash_sha256 || 'N/A'}
-            </p>
-          </div>
-
-          {/* Error Message if any */}
-          {doc.error_message && (
-            <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs space-y-1">
-              <div className="flex items-center gap-1.5 font-bold">
-                <AlertCircle size={15} />
-                <span>Processing Notice</span>
-              </div>
-              <p className="text-rose-200/90">{doc.error_message}</p>
             </div>
           )}
-
-          {/* Chunk Inspection Notice (Step 15) */}
-          <div className="p-4 rounded-2xl bg-surface-base/40 border border-surface-border/50 text-xs text-gray-400 space-y-1.5">
-            <div className="flex items-center gap-2 text-gray-300 font-semibold">
-              <Info size={15} className="text-brand-400" />
-              <span>ChromaDB Vector Store Chunks</span>
-            </div>
-            <p className="text-gray-400 leading-relaxed text-[11px]">
-              Chunk inspection is available internally via the ChromaDB collection <code className="text-brand-300 font-mono">document_chunks</code> and intermediate artifacts at <code className="text-brand-300 font-mono">data/processed/{doc.doc_id}_chunks.json</code>. No public chunk inspection REST endpoint is currently exposed.
-            </p>
-          </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 border-t border-surface-border flex justify-end bg-surface-base/50">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-surface-card hover:bg-surface-card/80 border border-surface-border text-xs font-semibold text-white transition active:scale-95"
-          >
-            Close Details
-          </button>
+        <div className="p-4 border-t border-surface-border flex items-center justify-between bg-surface-base/70">
+          <div className="text-xs text-gray-400 font-mono">
+            ID: <span className="text-gray-200">{doc.doc_id}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onClose}
+              className="px-5 py-2 rounded-xl bg-surface-card hover:bg-surface-card/80 border border-surface-border text-xs font-semibold text-white transition active:scale-95"
+            >
+              Close Viewer
+            </button>
+          </div>
         </div>
       </div>
     </div>

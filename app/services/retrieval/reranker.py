@@ -9,7 +9,8 @@ from app.services.retrieval.models import CandidateChunk, ProcessedQuery
 
 _STOPWORDS = {
     'what', 'is', 'the', 'in', 'for', 'to', 'of', 'and', 'a', 'an', 'on', 'are',
-    'how', 'do', 'does', 'explain', 'about', 'which', 'where', 'can', 'be',
+    'how', 'do', 'does', 'did', 'explain', 'about', 'which', 'where', 'can', 'be',
+    'who', 'whom', 'whose', 'when', 'why', 'won', 'was', 'were', 'been', 'have', 'has',
     'tell', 'me', 'used', 'with', 'from', 'at', 'by', 'use', 'using', 'mentioned',
     'any', 'some', 'give', 'detail', 'details', 'system', 'platform'
 }
@@ -21,7 +22,8 @@ _DOMAIN_KEYWORDS = {
     'supplementary', 'makeup', 'fast-track', 'backlog', 'scholarship', 'merit',
     'hostel', 'placement', 'debarment', 'eligibility', 'grade', 'malpractice',
     'express', 'jwt', 'rbac', 'cloudflare', 'gemini', 'openai', 'html5', 'css3',
-    'javascript', 'python', 'vision', 'proctor'
+    'javascript', 'python', 'vision', 'proctor', 'cgtmse', 'guarantee', 'scheme',
+    'msme', 'website', 'portal', 'apply', 'url', 'guidelines', 'mli', 'mlis'
 }
 
 
@@ -102,8 +104,22 @@ def heuristic_rerank(
         if ('technology' in q_stems or 'stack' in q_stems or 'tech' in q_stems) and 'technology stack' in cand_copy.section_title.lower():
             sec_bonus += 0.30
 
-        # 7. Short content penalty
-        short_penalty = 0.05 if len(cand_copy.text_content.strip()) < 30 else 0.0
+        # 6b. Website / Application portal intent bonus (only if candidate matches query terms!)
+        if matched_key or matched_all:
+            is_website_or_apply_q = any(w in q_stems for w in ['website', 'portal', 'url', 'link', 'site', 'apply', 'cgtmse', 'guideline', 'guidelines'])
+            if is_website_or_apply_q:
+                if 'http' in chunk_text_lower or 'www.' in chunk_text_lower:
+                    sec_bonus += 0.35
+                if 'how to apply' in cand_copy.section_title.lower() or 'how to apply' in chunk_text_lower:
+                    sec_bonus += 0.30
+
+        # 7. Short content penalty (heavier penalty if short fragment under 80 chars)
+        if len(cand_copy.text_content.strip()) < 80:
+            short_penalty = 0.25
+        elif len(cand_copy.text_content.strip()) < 120:
+            short_penalty = 0.10
+        else:
+            short_penalty = 0.0
 
         # Combine into un-clamped score for sorting
         computed_score = base_score + (key_coverage * 0.50) + (all_coverage * 0.10) + domain_bonus + sec_bonus + phrase_bonus - short_penalty

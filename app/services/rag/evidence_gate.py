@@ -20,7 +20,8 @@ _INJECTION_PATTERNS = [
 
 _GENERIC_STOPWORDS = {
     "what", "is", "the", "in", "for", "to", "of", "and", "a", "an", "on", "are",
-    "how", "do", "does", "explain", "about", "which", "where", "can", "be",
+    "how", "do", "does", "did", "explain", "about", "which", "where", "can", "be",
+    "who", "whom", "whose", "when", "why", "won", "was", "were", "been", "have", "has",
     "policy", "guidelines", "rules", "system", "campus", "college", "details",
     "student", "students", "faculty", "staff", "university", "department",
 }
@@ -98,9 +99,11 @@ def evaluate_evidence_sufficiency(
             all_context_tokens.update(tokenize(cand.text_content))
             all_context_tokens.update(tokenize(cand.section_title))
         
-        # If query has substantial domain tokens (e.g. cryogenics, saturn, pet unicorn) but 0 overlap with context
+        # If query has substantial domain tokens (e.g. cryogenics, saturn, pet unicorn), evaluate coverage
         matched_tokens = q_tokens.intersection(all_context_tokens)
-        if not matched_tokens and len(q_tokens) >= 2:
+        overlap_ratio = len(matched_tokens) / len(q_tokens) if q_tokens else 0.0
+
+        if not matched_tokens and len(q_tokens) >= 1:
             return EvidenceGateResult(
                 is_sufficient=False,
                 reason=REASON_LOW_RELEVANCE,
@@ -108,6 +111,15 @@ def evaluate_evidence_sufficiency(
                 minimum_score=threshold,
                 observed_best_score=round(best_score, 4),
                 warnings=warnings + ["No informative query keywords were present in retrieved context."],
+            )
+        elif len(q_tokens) >= 3 and len(matched_tokens) < 2 and overlap_ratio < 0.30:
+            return EvidenceGateResult(
+                is_sufficient=False,
+                reason=REASON_LOW_RELEVANCE,
+                selected_candidates=[],
+                minimum_score=threshold,
+                observed_best_score=round(best_score, 4),
+                warnings=warnings + ["Low keyword overlap between query and retrieved candidates."],
             )
 
     # 5. Check if qualifying candidates meet min_chunks

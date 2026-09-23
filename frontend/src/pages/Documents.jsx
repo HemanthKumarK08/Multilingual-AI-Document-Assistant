@@ -6,6 +6,7 @@ import {
   RefreshCw,
   FileText,
   Eye,
+  Trash2,
   CheckCircle2,
   AlertCircle,
   Clock,
@@ -13,6 +14,9 @@ import {
   HardDrive,
   Globe,
   SlidersHorizontal,
+  AlertTriangle,
+  Loader2,
+  X
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import DocumentUploadZone from '../components/DocumentUploadZone';
@@ -43,7 +47,13 @@ export default function Documents() {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  
+  // Modal states
   const [selectedDoc, setSelectedDoc] = useState(null);
+  const [documentToDelete, setDocumentToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+  const [successNotice, setSuccessNotice] = useState(null);
 
   async function loadDocuments(isRefresh = false) {
     if (isRefresh) setRefreshing(true);
@@ -65,6 +75,41 @@ export default function Documents() {
     loadDocuments();
   }, []);
 
+  // Handle Document Deletion
+  async function handleConfirmDelete() {
+    if (!documentToDelete) return;
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const resp = await apiService.deleteDocument(documentToDelete.doc_id);
+      
+      // Update local state and remove deleted document
+      setDocuments((prev) => prev.filter((d) => d.doc_id !== documentToDelete.doc_id));
+      
+      // Close viewer modal if currently viewing this deleted doc
+      if (selectedDoc?.doc_id === documentToDelete.doc_id) {
+        setSelectedDoc(null);
+      }
+
+      setSuccessNotice(
+        resp.message || `Document '${documentToDelete.display_title || documentToDelete.filename}' was successfully removed.`
+      );
+      
+      // Auto-dismiss toast
+      setTimeout(() => {
+        setSuccessNotice(null);
+      }, 5000);
+
+      setDocumentToDelete(null);
+    } catch (err) {
+      console.error("Deletion failed:", err);
+      setDeleteError(err.message || 'Failed to delete document and associated vectors.');
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   // Client-side filtering across loaded documents
   const filteredDocuments = documents.filter((doc) => {
     const matchesCategory =
@@ -85,6 +130,22 @@ export default function Documents() {
 
   return (
     <div className="space-y-8 animate-fadeIn max-w-7xl mx-auto pb-12">
+      {/* Toast / Notification Banner */}
+      {successNotice && (
+        <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 flex items-center justify-between gap-3 shadow-lg animate-fadeIn">
+          <div className="flex items-center gap-2 text-xs font-semibold">
+            <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+            <span>{successNotice}</span>
+          </div>
+          <button
+            onClick={() => setSuccessNotice(null)}
+            className="text-emerald-400 hover:text-white p-1 rounded-lg transition"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-surface-border pb-5">
         <div>
@@ -96,7 +157,7 @@ export default function Documents() {
             Documents
           </h1>
           <p className="text-xs sm:text-sm text-gray-400 mt-0.5">
-            Manage and index your institutional knowledge base for RAG retrieval.
+            Manage, inspect, and safely index your institutional knowledge base for RAG retrieval.
           </p>
         </div>
 
@@ -331,18 +392,33 @@ export default function Documents() {
                           </span>
                         </td>
 
-                        {/* Actions */}
+                        {/* Actions: View and Delete */}
                         <td className="py-3.5 px-4 text-right">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedDoc(doc);
-                            }}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-base hover:bg-brand-600 hover:text-white border border-surface-border text-xs font-semibold text-gray-300 transition shadow-sm active:scale-95"
-                          >
-                            <Eye size={13} />
-                            <span>View</span>
-                          </button>
+                          <div className="inline-flex items-center gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedDoc(doc);
+                              }}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-base hover:bg-brand-600 hover:text-white border border-surface-border text-xs font-semibold text-gray-300 transition shadow-sm active:scale-95"
+                              title="View Document & Metadata"
+                            >
+                              <Eye size={13} />
+                              <span>View</span>
+                            </button>
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDocumentToDelete(doc);
+                              }}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-base hover:bg-rose-600 hover:text-white border border-surface-border hover:border-rose-500 text-xs font-semibold text-rose-400 transition shadow-sm active:scale-95"
+                              title="Delete Document"
+                            >
+                              <Trash2 size={13} />
+                              <span>Delete</span>
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -354,12 +430,85 @@ export default function Documents() {
         )}
       </section>
 
-      {/* Document Detail Modal */}
+      {/* Document Viewer Modal */}
       {selectedDoc && (
         <DocumentDetailModal
           doc={selectedDoc}
           onClose={() => setSelectedDoc(null)}
+          onDeleteRequested={(docToDelete) => setDocumentToDelete(docToDelete)}
         />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {documentToDelete && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-dialog-title"
+        >
+          <div
+            className="relative w-full max-w-md bg-surface-card border border-rose-500/30 rounded-3xl shadow-2xl overflow-hidden p-6 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0">
+                <AlertTriangle size={24} />
+              </div>
+              <div className="space-y-1">
+                <h3 id="delete-dialog-title" className="text-base font-bold text-white">
+                  Delete {documentToDelete.display_title || documentToDelete.filename}?
+                </h3>
+                <p className="text-xs font-mono text-gray-400">
+                  Document ID: <span className="text-gray-200">{documentToDelete.doc_id}</span>
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-300 leading-relaxed bg-surface-base/80 p-3.5 rounded-2xl border border-surface-border">
+              This will remove the document from the document inventory and its indexed data. This action cannot be undone.
+            </p>
+
+            {deleteError && (
+              <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2">
+                <AlertCircle size={15} className="text-rose-400 shrink-0 mt-0.5" />
+                <span>{deleteError}</span>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setDocumentToDelete(null);
+                  setDeleteError(null);
+                }}
+                disabled={isDeleting}
+                className="px-4 py-2 rounded-xl bg-surface-base hover:bg-surface-card border border-surface-border text-xs font-semibold text-gray-300 hover:text-white transition disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 border border-rose-500 text-xs font-semibold text-white transition shadow-lg shadow-rose-600/20 disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 size={13} className="animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={13} />
+                    <span>Delete Document</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

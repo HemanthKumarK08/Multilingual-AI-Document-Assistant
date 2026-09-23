@@ -42,12 +42,12 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
           <div>
             <h1 className="text-sm sm:text-base font-bold text-white tracking-tight leading-tight flex items-center gap-2">
               Multilingual AI Document Assistant
-              <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-full bg-brand-500/10 text-brand-300 border border-brand-500/20">
-                Phase 8.1
+              <span className="hidden sm:inline-block px-2.5 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 shadow-sm">
+                Production
               </span>
             </h1>
             <p className="text-[11px] text-gray-400 hidden sm:block">
-              Institutional RAG & Big Data Analytics Platform
+              AI-Powered Document Intelligence & Big Data Analytics
             </p>
           </div>
         </div>

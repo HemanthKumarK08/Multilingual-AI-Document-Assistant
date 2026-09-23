@@ -99,6 +99,24 @@ _INDIC_TERM_TRANSLATIONS: Dict[str, List[str]] = {
     "credits": ["total credits required MCA degree 88"],
     "mca": ["MCA degree total credits 88", "program duration"],
 
+# Government & MSME Schemes (CGTMSE / Credit Guarantee)
+    "क्रेडिट गारंटी": ["credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
+    "गारंटी": ["credit guarantee scheme", "cgtmse", "guarantee coverage"],
+    "योजना": ["scheme", "government scheme", "cgtmse"],
+    "वेबसाइट": ["website", "official portal", "https://www.cgtmse.in", "www.msme.gov.in"],
+    "आवेदन": ["how to apply", "application through MLIs banks", "apply online portal"],
+    "ಕ್ರೆಡಿಟ್ ಗ್ಯಾರಂಟಿ": ["credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
+    "ಗ್ಯಾರಂಟಿ": ["credit guarantee scheme", "cgtmse", "guarantee"],
+    "ಯೋಜನೆ": ["scheme", "government scheme"],
+    "ವೆಬ್‌ಸೈಟ್": ["website", "official portal", "https://www.cgtmse.in"],
+    "ಅರ್ಜಿ": ["how to apply", "application through MLIs banks", "apply online"],
+    "క్రెడిట్ గ్యారెంటీ": ["credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
+    "గ్యారెంటీ": ["credit guarantee scheme", "cgtmse", "guarantee"],
+    "స్కీమ్": ["scheme", "government scheme"],
+    "వెబ్‌సైట్": ["website", "official portal", "https://www.cgtmse.in"],
+    "దరఖాస్తు": ["how to apply", "application through MLIs banks", "apply online"],
+    "cgtmse": ["credit guarantee scheme for micro and small enterprises", "https://www.cgtmse.in", "how to apply MLIs banks"],
+
     # Anti-Ragging & Emergency
     "एंटी-रैगिंग": ["anti-ragging toll-free emergency helpline number"],
     "हेल्पलाइन": ["emergency toll-free helpline number 24x7"],
@@ -149,6 +167,21 @@ _DOMAIN_SYNONYM_MAPPINGS: Dict[str, List[str]] = {
         "full-semester industry internship NOC minimum CGPA",
         "internship eligibility prerequisite coursework",
     ],
+"cgtmse": [
+        "credit guarantee scheme for micro and small enterprises",
+        "how to apply through MLIs banks and NBFCs",
+        "official guidelines website https://www.cgtmse.in",
+    ],
+    "guarantee": [
+        "credit guarantee scheme for micro and small enterprises cgtmse",
+        "collateral free loan up to 5 crore MLIs",
+        "detailed guidelines website https://www.cgtmse.in",
+    ],
+    "website": [
+        "official website portal https://www.cgtmse.in",
+        "detailed guidelines visit website",
+        "how to apply online portal",
+    ],
     "ragging": [
         "24x7 toll-free emergency anti-ragging helpline number",
         "anti-ragging committee grievance",
@@ -163,15 +196,32 @@ def extract_matched_expansion_terms(query_text: str) -> List[Tuple[str, List[str
     """
     matched: List[Tuple[str, List[str]]] = []
     lower_text = query_text.lower()
+    matched_indic_keys: List[str] = []
 
-    # 1. Match Indic / Romanized translation keywords
-    for key, terms in _INDIC_TERM_TRANSLATIONS.items():
+    # Financial / scheme indicator check to avoid collision with academic course credits
+    is_financial_or_scheme = any(
+        w in lower_text for w in [
+            "गारंटी", "ग್ಯಾರಂಟಿ", "గ్యారెంటీ", "guarantee", "cgtmse", "योजना", "ಯೋಜನೆ", "స్కీమ్", "scheme", "msme"
+        ]
+    )
+
+    # 1. Match Indic / Romanized translation keywords (longest keys checked first)
+    for key, terms in sorted(_INDIC_TERM_TRANSLATIONS.items(), key=lambda x: len(x[0]), reverse=True):
         if key in lower_text or re.search(r"\b" + re.escape(key) + r"\b", lower_text, re.IGNORECASE):
+            # Avoid matching shorter substring if longer key was already matched
+            if any(key in mk for mk in matched_indic_keys):
+                continue
+            # If financial guarantee query, do not inject MCA academic degree credits
+            if is_financial_or_scheme and key in ["क्रेडिट", "ಕ್ರೆಡಿಟ್", "క్రెడిట్స్", "credits"]:
+                continue
             matched.append((key, terms))
+            matched_indic_keys.append(key)
 
-    # 2. Match English domain synonyms
-    for key, terms in _DOMAIN_SYNONYM_MAPPINGS.items():
+    # 2. Match English domain synonyms (longest keys checked first)
+    for key, terms in sorted(_DOMAIN_SYNONYM_MAPPINGS.items(), key=lambda x: len(x[0]), reverse=True):
         if re.search(r"\b" + re.escape(key) + r"\b", lower_text, re.IGNORECASE):
+            if is_financial_or_scheme and key == "credits":
+                continue
             matched.append((key, terms))
 
     return matched

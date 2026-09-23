@@ -105,6 +105,20 @@ export const apiService = {
     });
   },
 
+  async getDocumentContent(docId) {
+    return request(`/api/v1/documents/${encodeURIComponent(docId)}/content`);
+  },
+
+  getDocumentFileUrl(docId) {
+    return `${API_BASE}/api/v1/documents/${encodeURIComponent(docId)}/file`;
+  },
+
+  async deleteDocument(docId) {
+    return request(`/api/v1/documents/${encodeURIComponent(docId)}`, {
+      method: 'DELETE',
+    });
+  },
+
   // Question Answering / RAG
   async submitQuery(queryText, targetLanguage = 'en', category = null) {
     return request('/api/v1/qa/query', {
