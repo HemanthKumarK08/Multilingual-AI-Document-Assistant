@@ -21,6 +21,7 @@ _INDIC_TERM_TRANSLATIONS: Dict[str, List[str]] = {
     "ಹಾಜರಾತಿ": ["attendance", "minimum attendance requirement", "75%"],
     "ವಿನಾಯಿತಿ": ["condonation", "medical attendance condonation"],
     "ಹಾಜರು": ["attendance", "minimum attendance percentage", "75%"],
+    "హాజరు": ["attendance", "minimum attendance percentage", "75%"],
     "మినహాయింపు": ["condonation", "attendance condonation 65%"],
     "upastithi": ["attendance", "minimum attendance percentage"],
     "hajarati": ["attendance", "minimum attendance requirement"],
@@ -32,7 +33,7 @@ _INDIC_TERM_TRANSLATIONS: Dict[str, List[str]] = {
     "मруಮೌಲ್ಯಮಾಪನ": ["revaluation fee", "answer script photocopy"],
     "ಮರುಮೌಲ್ಯಮಾಪನ": ["revaluation fee", "answer script photocopy"],
     "ಶುಲ್ಕ": ["fee", "cost", "application fee"],
-    "రీవాల్యుయేషన్": ["revaluation application fee", "photocopy cost"],
+    "రీవాల్యుయేషన్": ["revaluation fee", "revaluation application fee", "photocopy cost", "revaluation"],
     "రుసుము": ["fee", "charge", "application fee"],
     "punarmulyankan": ["revaluation fee", "answer script revaluation"],
     "marumaulyamapana": ["revaluation fee", "answer script photocopy"],
@@ -99,21 +100,27 @@ _INDIC_TERM_TRANSLATIONS: Dict[str, List[str]] = {
     "credits": ["total credits required MCA degree 88"],
     "mca": ["MCA degree total credits 88", "program duration"],
 
-# Government & MSME Schemes (CGTMSE / Credit Guarantee)
+    # Government & MSME Schemes (CGTMSE / Credit Guarantee)
+    "सीजीटीएमएसई": ["CGTMSE", "credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
     "क्रेडिट गारंटी": ["credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
     "गारंटी": ["credit guarantee scheme", "cgtmse", "guarantee coverage"],
     "योजना": ["scheme", "government scheme", "cgtmse"],
     "वेबसाइट": ["website", "official portal", "https://www.cgtmse.in", "www.msme.gov.in"],
+    "पोर्टल": ["portal", "official website", "https://www.cgtmse.in", "cgtmse website"],
     "आवेदन": ["how to apply", "application through MLIs banks", "apply online portal"],
+    "ಸಿಜಿಟಿಎಂಎಸ್ಇ": ["CGTMSE", "credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
     "ಕ್ರೆಡಿಟ್ ಗ್ಯಾರಂಟಿ": ["credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
     "ಗ್ಯಾರಂಟಿ": ["credit guarantee scheme", "cgtmse", "guarantee"],
     "ಯೋಜನೆ": ["scheme", "government scheme"],
     "ವೆಬ್‌ಸೈಟ್": ["website", "official portal", "https://www.cgtmse.in"],
+    "ಪೋರ್ಟಲ್": ["portal", "official website", "https://www.cgtmse.in"],
     "ಅರ್ಜಿ": ["how to apply", "application through MLIs banks", "apply online"],
+    "సిజిటిఎంఎస్ఇ": ["CGTMSE", "credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
     "క్రెడిట్ గ్యారెంటీ": ["credit guarantee scheme cgtmse", "https://www.cgtmse.in", "how to apply MLIs banks"],
     "గ్యారెంటీ": ["credit guarantee scheme", "cgtmse", "guarantee"],
     "స్కీమ్": ["scheme", "government scheme"],
     "వెబ్‌సైట్": ["website", "official portal", "https://www.cgtmse.in"],
+    "పోర్టల్": ["portal", "official website", "https://www.cgtmse.in"],
     "దరఖాస్తు": ["how to apply", "application through MLIs banks", "apply online"],
     "cgtmse": ["credit guarantee scheme for micro and small enterprises", "https://www.cgtmse.in", "how to apply MLIs banks"],
 
@@ -229,16 +236,15 @@ def extract_matched_expansion_terms(query_text: str) -> List[Tuple[str, List[str
 
 def expand_query(
     processed_query: ProcessedQuery,
-    max_variants: int = 4,
+    max_variants: int = 3,
     enable_expansion: bool = True,
     enable_transliteration: bool = True,
 ) -> List[QueryVariant]:
     """
-    Generates bounded, traceable query variants for retrieval:
+    Generates bounded, traceable query variants for hybrid retrieval (max 3 variants):
     1. Variant 1: Original normalized query (Weight = 1.0, Type = 'original').
     2. Variant 2: Transliterated / Cross-lingual English search phrase (Weight = 0.85).
-    3. Variant 3: Domain synonym expansion (Weight = 0.80).
-    4. Variant 4: Broad policy concept expansion (Weight = 0.75).
+    3. Variant 3: Domain synonym / lexical expansion (Weight = 0.80).
     """
     variants: List[QueryVariant] = []
 
@@ -270,8 +276,6 @@ def expand_query(
                 seen_phrases.add(term.lower())
                 collected_terms.append(term)
 
-    limit_terms = settings.RETRIEVAL_MAX_EXPANSION_TERMS
-
     # Generate cross-lingual translation variant (Variant 2)
     if enable_transliteration and (processed_query.language in ("hi", "kn", "te") or processed_query.is_romanized or processed_query.is_code_mixed):
         if collected_terms:
@@ -298,18 +302,6 @@ def expand_query(
                 weight=0.80,
                 language="en",
                 source_terms=matched_sources[:3],
-            ))
-
-    # Generate broader expanded variant if space permits (Variant 4)
-    if len(variants) < max_variants and len(collected_terms) >= 3:
-        expanded_text = " ".join(collected_terms[1:4])
-        if not any(v.variant_text.lower() == expanded_text.lower() for v in variants):
-            variants.append(QueryVariant(
-                variant_text=expanded_text,
-                variant_type="expanded",
-                weight=0.75,
-                language="en",
-                source_terms=matched_sources[:4],
             ))
 
     return variants[:max_variants]

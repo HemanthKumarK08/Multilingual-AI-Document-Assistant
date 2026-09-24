@@ -16,10 +16,22 @@ def create_fallback_answer(
     latency_ms: float = 0.0,
 ) -> GroundedAnswer:
     """
-    Constructs a deterministic Information-Not-Found response.
-    Guarantees no fabricated answers or citations when evidence is insufficient.
+    Constructs a deterministic Information-Not-Found or localized unavailable response.
+    Guarantees no fabricated answers or citations when evidence or language capability is insufficient.
     """
-    msg = custom_message or settings.RAG_FALLBACK_MESSAGE
+    if custom_message:
+        msg = custom_message
+    elif reason == "MISSING_TARGET_SCRIPT":
+        if response_language == "hi":
+            msg = "अनुरोधित भाषा (हिन्दी) में उत्तर देने के लिए बहुभाषी मॉडल सेवा वर्तमान में अनुपलब्ध है।"
+        elif response_language == "kn":
+            msg = "ವಿನಂತಿಸಿದ ಭಾಷೆಯಲ್ಲಿ (ಕನ್ನಡ) ಉತ್ತರಿಸಲು ಬಹುಭಾಷಾ ಮಾದರಿ ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ."
+        elif response_language == "te":
+            msg = "అభ్యర్థించిన భాషలో (తెలుగు) సమాధానం ఇవ్వడానికి బహుభాషా మోడల్ సేవ ప్రస్తుతం అందుబాటులో లేదు."
+        else:
+            msg = settings.RAG_FALLBACK_MESSAGE
+    else:
+        msg = settings.RAG_FALLBACK_MESSAGE
 
     return GroundedAnswer(
         query_id=query_id,
@@ -34,3 +46,4 @@ def create_fallback_answer(
         warnings=warnings or [],
         latency_ms=round(latency_ms, 2),
     )
+

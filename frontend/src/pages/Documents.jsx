@@ -392,7 +392,7 @@ export default function Documents() {
                           </span>
                         </td>
 
-                        {/* Actions: View and Delete */}
+                        {/* Actions: [ 👁 View ] [ 🗑 Delete ] */}
                         <td className="py-3.5 px-4 text-right">
                           <div className="inline-flex items-center gap-2">
                             <button
@@ -457,16 +457,20 @@ export default function Documents() {
               </div>
               <div className="space-y-1">
                 <h3 id="delete-dialog-title" className="text-base font-bold text-white">
-                  Delete {documentToDelete.display_title || documentToDelete.filename}?
+                  Delete Document?
                 </h3>
-                <p className="text-xs font-mono text-gray-400">
-                  Document ID: <span className="text-gray-200">{documentToDelete.doc_id}</span>
+                <p className="text-xs font-semibold text-gray-200 truncate max-w-xs">
+                  {documentToDelete.display_title || documentToDelete.filename}
+                </p>
+                <p className="text-[10px] font-mono text-gray-400">
+                  ID: {documentToDelete.doc_id}
                 </p>
               </div>
             </div>
 
             <p className="text-xs text-gray-300 leading-relaxed bg-surface-base/80 p-3.5 rounded-2xl border border-surface-border">
-              This will remove the document from the document inventory and its indexed data. This action cannot be undone.
+              You are about to permanently remove: <strong className="text-white">{documentToDelete.display_title || documentToDelete.filename}</strong>.<br />
+              This will remove the document record, uploaded file, processed artifacts, and indexed vectors. This action cannot be undone.
             </p>
 
             {deleteError && (

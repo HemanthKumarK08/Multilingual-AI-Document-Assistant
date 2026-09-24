@@ -1,17 +1,17 @@
 """
-Retrieval Pipeline Coordinator Module (Phase 6)
+Retrieval Pipeline Coordinator Module (Research-Backed RAG Architecture)
 Coordinates multi-stage, multi-variant hybrid retrieval workflow:
-Query Processing -> Query Expansion & Transliteration -> Multi-Variant Dense & Lexical Retrieval
--> Priority-Weighted Candidate Fusion -> Deterministic Heuristic Reranking -> Validation.
+Query Processing -> Query Rewriting (max 3 variants) -> Multi-Variant Dense & Lexical Retrieval (top-20 each)
+-> Multi-Query Reciprocal Rank Fusion (RRF, k=60) -> Candidate Relevance Stage -> Validation.
 """
 
 import time
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from app.core.config import settings
 from app.core.logging import logger
 from app.services.retrieval.dense_retriever import DenseRetriever
-from app.services.retrieval.hybrid import fuse_hybrid_scores
+from app.services.retrieval.hybrid import reciprocal_rank_fusion
 from app.services.retrieval.lexical_retriever import LexicalRetriever
 from app.services.retrieval.models import (
     CandidateChunk,
@@ -28,7 +28,7 @@ from app.services.retrieval.validation import validate_retrieval_result
 
 class RetrievalCoordinator:
     """
-    Coordinates the full multi-stage, multi-variant retrieval workflow.
+    Coordinates multi-query dense + BM25 retrieval and Reciprocal Rank Fusion (RRF).
     """
 
     def __init__(
@@ -45,14 +45,16 @@ class RetrievalCoordinator:
         self,
         raw_query: str,
         language: Optional[str] = None,
+        target_language: Optional[str] = None,
         filters: Optional[RetrievalFilter] = None,
-        dense_top_k: Optional[int] = None,
-        lexical_top_k: Optional[int] = None,
-        final_top_k: Optional[int] = None,
+        dense_top_k: Optional[int] = 20,
+        lexical_top_k: Optional[int] = 20,
+        final_top_k: Optional[int] = 20,
         dense_weight: Optional[float] = None,
         lexical_weight: Optional[float] = None,
         enable_reranking: Optional[bool] = None,
         enable_query_expansion: Optional[bool] = None,
+        conversation_history: Optional[List[Dict[str, str]]] = None,
     ) -> RetrievalResult:
         """
         Executes end-to-end multi-variant hybrid retrieval for a user query.
@@ -60,12 +62,17 @@ class RetrievalCoordinator:
         start_time = time.perf_counter()
         warnings: List[str] = []
 
-        # 1. Query Processing & Normalization
-        query: ProcessedQuery = process_query(raw_query, explicit_language=language)
+        # 1. Query Processing, Normalization & Intent Understanding
+        query: ProcessedQuery = process_query(
+            raw_query=raw_query,
+            explicit_language=language,
+            target_language=target_language,
+            conversation_history=conversation_history,
+        )
 
-        d_k = dense_top_k or settings.RETRIEVAL_DENSE_TOP_K
-        l_k = lexical_top_k or settings.RETRIEVAL_LEXICAL_TOP_K
-        f_k = final_top_k or settings.RETRIEVAL_FINAL_TOP_K
+        d_k = dense_top_k or 20
+        l_k = lexical_top_k or 20
+        f_k = final_top_k or 20
         d_weight = dense_weight if dense_weight is not None else settings.RETRIEVAL_DENSE_WEIGHT
         l_weight = lexical_weight if lexical_weight is not None else settings.RETRIEVAL_LEXICAL_WEIGHT
         rerank = enable_reranking if enable_reranking is not None else settings.RETRIEVAL_ENABLE_RERANKING
@@ -75,11 +82,11 @@ class RetrievalCoordinator:
             else settings.RETRIEVAL_ENABLE_QUERY_EXPANSION
         )
 
-        # 2. Safe Query Expansion & Transliteration
+        # 2. Safe Query Rewriting (max 3 variants)
         if expansion_active:
             variants = expand_query(
                 processed_query=query,
-                max_variants=settings.RETRIEVAL_MAX_QUERY_VARIANTS,
+                max_variants=3,
                 enable_expansion=True,
                 enable_transliteration=settings.RETRIEVAL_ENABLE_TRANSLITERATION,
             )
@@ -98,7 +105,7 @@ class RetrievalCoordinator:
             query.is_transliterated = True
 
         # 3. Multi-Variant Dense and Lexical Retrieval
-        merged_candidates: Dict[str, CandidateChunk] = {}
+        ranked_lists_for_rrf: List[Tuple[List[CandidateChunk], float, str]] = []
         total_found = 0
 
         for var_idx, variant in enumerate(variants):
@@ -114,100 +121,62 @@ class RetrievalCoordinator:
                 )
             )
 
-            v_d_k = d_k if is_primary else min(8, d_k)
-            v_l_k = l_k if is_primary else min(8, l_k)
-            weight = variant.weight
+            # Variant weighting
+            var_weight = variant.weight
 
-            # Dense Retrieval for variant
+            # Dense Retrieval for variant (top 20)
             try:
                 dense_res = self.dense_retriever.retrieve(
                     query=var_query,
-                    top_k=v_d_k,
+                    top_k=d_k,
                     filters=filters,
                     min_score=settings.RETRIEVAL_MIN_SCORE,
                 )
+                for c in dense_res:
+                    if variant.variant_type not in c.query_variant_sources:
+                        c.query_variant_sources.append(variant.variant_type)
                 total_found += len(dense_res)
+                if dense_res:
+                    ranked_lists_for_rrf.append((dense_res, var_weight, f"dense_{variant.variant_type}"))
             except Exception as e:
                 logger.warning(f"Dense retrieval error for variant '{variant.variant_text}': {e}")
                 warnings.append(f"Dense retrieval error: {str(e)}")
-                dense_res = []
 
-            # Lexical Retrieval for variant
-            lexical_res: List[CandidateChunk] = []
+            # Lexical Retrieval for variant (top 20)
             if self.lexical_retriever and settings.RETRIEVAL_ENABLE_LEXICAL:
                 try:
                     lexical_res = self.lexical_retriever.retrieve(
                         query=var_query,
-                        top_k=v_l_k,
+                        top_k=l_k,
                         filters=filters,
                         min_score=settings.RETRIEVAL_MIN_SCORE,
                     )
+                    for c in lexical_res:
+                        if variant.variant_type not in c.query_variant_sources:
+                            c.query_variant_sources.append(variant.variant_type)
                     total_found += len(lexical_res)
+                    if lexical_res:
+                        ranked_lists_for_rrf.append((lexical_res, var_weight, f"lexical_{variant.variant_type}"))
                 except Exception as e:
                     logger.warning(f"Lexical retrieval error for variant '{variant.variant_text}': {e}")
                     warnings.append(f"Lexical retrieval error: {str(e)}")
-                    lexical_res = []
 
-            # Merge Dense Candidates
-            for cand in dense_res:
-                weighted_score = (cand.dense_score or 0.0) * weight
-                cid = cand.chunk_id
-                if cid not in merged_candidates:
-                    cand_copy = cand.model_copy()
-                    cand_copy.dense_score = weighted_score
-                    cand_copy.query_variant_sources = [variant.variant_type]
-                    merged_candidates[cid] = cand_copy
-                else:
-                    existing = merged_candidates[cid]
-                    if weighted_score > (existing.dense_score or 0.0):
-                        existing.dense_score = weighted_score
-                    if variant.variant_type not in existing.query_variant_sources:
-                        existing.query_variant_sources.append(variant.variant_type)
-                    for m in cand.retrieval_methods:
-                        if m not in existing.retrieval_methods:
-                            existing.retrieval_methods.append(m)
+        # 4. Multi-Query Reciprocal Rank Fusion (RRF, k=60)
+        fused_pool = reciprocal_rank_fusion(
+            ranked_lists=ranked_lists_for_rrf,
+            k=60.0,
+            top_k=20,  # Max 20 candidates in pool
+        )
 
-            # Merge Lexical Candidates
-            for cand in lexical_res:
-                weighted_score = (cand.lexical_score or 0.0) * weight
-                cid = cand.chunk_id
-                if cid not in merged_candidates:
-                    cand_copy = cand.model_copy()
-                    cand_copy.lexical_score = weighted_score
-                    cand_copy.query_variant_sources = [variant.variant_type]
-                    merged_candidates[cid] = cand_copy
-                else:
-                    existing = merged_candidates[cid]
-                    if weighted_score > (existing.lexical_score or 0.0):
-                        existing.lexical_score = weighted_score
-                    if variant.variant_type not in existing.query_variant_sources:
-                        existing.query_variant_sources.append(variant.variant_type)
-                    for m in cand.retrieval_methods:
-                        if m not in existing.retrieval_methods:
-                            existing.retrieval_methods.append(m)
-
-        # 4. Hybrid Score Computation
-        unique_candidates = list(merged_candidates.values())
-        for cand in unique_candidates:
-            d_s = cand.dense_score or 0.0
-            l_s = cand.lexical_score or 0.0
-            cand.hybrid_score = round(d_weight * d_s + l_weight * l_s, 4)
-
-        # Sort by hybrid score descending
-        unique_candidates.sort(key=lambda c: (c.hybrid_score or 0.0), reverse=True)
-
-        # Cap intermediate candidate pool before reranking (max 30)
-        candidate_pool = unique_candidates[:30]
-
-        # 5. Deterministic Heuristic Reranking
-        if rerank and candidate_pool:
+        # 5. Candidate Relevance & Heuristic Reranking
+        if rerank and fused_pool:
             ranked_candidates = heuristic_rerank(
                 query=query,
-                candidates=candidate_pool,
+                candidates=fused_pool,
                 top_k=f_k,
             )
         else:
-            ranked_candidates = candidate_pool[:f_k]
+            ranked_candidates = fused_pool[:f_k]
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
 

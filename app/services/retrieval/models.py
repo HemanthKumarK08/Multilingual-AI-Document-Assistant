@@ -16,13 +16,28 @@ class QueryVariant(BaseModel):
     source_terms: List[str] = Field(default_factory=list)
 
 class ProcessedQuery(BaseModel):
-    """Normalized and analyzed user query."""
+    """Normalized and analyzed user query with structured intent and entity extraction."""
     query_id: str = Field(default_factory=lambda: str(uuid4()))
     raw_query: str
     normalized_query: str
     language: str = "und"
     script: str = "Unknown"
     language_source: Literal["explicit", "detected", "default"] = "detected"
+    target_language: Optional[str] = None
+    query_intent: Literal[
+        "FACTUAL",
+        "DEFINITION",
+        "HOW_TO",
+        "WHERE_TO",
+        "NUMERICAL",
+        "POLICY",
+        "COMPARISON",
+        "LIST",
+        "OUT_OF_DOMAIN",
+        "AMBIGUOUS",
+    ] = "FACTUAL"
+    entities: List[str] = Field(default_factory=list)
+    important_terms: List[str] = Field(default_factory=list)
     is_code_mixed: bool = False
     is_romanized: bool = False
     is_transliterated: bool = False
@@ -77,11 +92,18 @@ class CandidateChunk(BaseModel):
     source_end_offset: int = 0
     file_hash_sha256: str = ""
     
-    # Retrieval Scores
+    # Retrieval & Fusion Scores
     dense_score: Optional[float] = None
     lexical_score: Optional[float] = None
+    rrf_score: Optional[float] = None
     hybrid_score: Optional[float] = None
     rerank_score: Optional[float] = None
+    
+    # Relevance evaluation components
+    entity_match: Optional[float] = None
+    important_term_coverage: Optional[float] = None
+    query_intent_match: Optional[float] = None
+    document_scope_match: Optional[float] = None
     
     # Provenance
     retrieval_methods: List[str] = Field(default_factory=list)

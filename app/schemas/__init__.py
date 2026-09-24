@@ -69,6 +69,9 @@ class QueryResponse(BaseModel):
     detected_language: str
     answer_text: str
     is_fallback: bool
+    grounded: bool = True
+    fallback_reason: Optional[str] = None
+    response_state: str = "GROUNDED"
     citations: List[Citation]
     retrieval_latency_ms: float
     generation_latency_ms: float

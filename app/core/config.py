@@ -82,7 +82,7 @@ class Settings(BaseSettings):
     LLM_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "gemini"
     LLM_PRIMARY_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "gemini"
     LLM_FALLBACK_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "ollama"
-    LLM_MODEL_NAME: str = "gemini-1.5-flash"
+    LLM_MODEL_NAME: str = "gemini-2.5-flash"
     LLM_TEMPERATURE: float = 0.0
     LLM_MAX_OUTPUT_TOKENS: int = 512
     LLM_TIMEOUT_SECONDS: int = 60

@@ -19,7 +19,10 @@ import {
   Loader2,
   Trash2,
   FileCode,
-  FileType
+  FileType,
+  BookOpen,
+  FileSearch,
+  Sparkles
 } from 'lucide-react';
 import { apiService } from '../services/api';
 import MarkdownRenderer from './MarkdownRenderer';
@@ -33,7 +36,8 @@ function formatBytes(bytes) {
 }
 
 export default function DocumentDetailModal({ doc, onClose, onDeleteRequested }) {
-  const [activeTab, setActiveTab] = useState('preview'); // 'preview' | 'metadata'
+  // Tabs: 'original' | 'content' | 'metadata'
+  const [activeTab, setActiveTab] = useState('original');
   const [contentData, setContentData] = useState(null);
   const [loadingContent, setLoadingContent] = useState(true);
   const [contentError, setContentError] = useState(null);
@@ -147,28 +151,41 @@ export default function DocumentDetailModal({ doc, onClose, onDeleteRequested })
           </div>
         </div>
 
-        {/* Viewer Navigation Subheader Tabs */}
-        <div className="px-5 py-2.5 bg-surface-base/40 border-b border-surface-border flex items-center justify-between gap-4">
+        {/* Viewer Navigation Subheader Tabs: [ View Original ] [ View Content ] [ Metadata ] */}
+        <div className="px-5 py-2.5 bg-surface-base/40 border-b border-surface-border flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setActiveTab('preview')}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
-                activeTab === 'preview'
+              onClick={() => setActiveTab('original')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                activeTab === 'original'
                   ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/30'
                   : 'text-gray-400 hover:text-white hover:bg-surface-card'
               }`}
             >
-              Document Content
+              <BookOpen size={13} />
+              <span>View Original</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('content')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                activeTab === 'content'
+                  ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/30'
+                  : 'text-gray-400 hover:text-white hover:bg-surface-card'
+              }`}
+            >
+              <FileSearch size={13} />
+              <span>View Content</span>
             </button>
             <button
               onClick={() => setActiveTab('metadata')}
-              className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 activeTab === 'metadata'
                   ? 'bg-brand-600 text-white shadow-sm shadow-brand-600/30'
                   : 'text-gray-400 hover:text-white hover:bg-surface-card'
               }`}
             >
-              Metadata & Provenance
+              <Info size={13} />
+              <span>Metadata</span>
             </button>
           </div>
 
@@ -178,53 +195,53 @@ export default function DocumentDetailModal({ doc, onClose, onDeleteRequested })
               href={fileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-brand-300 font-medium transition"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-surface-card hover:bg-surface-base border border-surface-border text-xs text-gray-300 hover:text-brand-300 font-medium transition shadow-sm"
             >
+              <Download size={12} />
               <span>Raw File</span>
-              <ExternalLink size={12} />
+              <ExternalLink size={11} />
             </a>
           </div>
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-[350px]">
-          {activeTab === 'preview' ? (
-            /* Document Content Preview Tab */
-            <div className="space-y-4">
-              {loadingContent ? (
-                /* Loading Skeleton */
-                <div className="space-y-3 py-10 text-center">
-                  <Loader2 size={32} className="animate-spin text-brand-400 mx-auto" />
-                  <p className="text-xs text-gray-400">Loading document content preview...</p>
-                  <div className="max-w-md mx-auto space-y-2 pt-4">
-                    <div className="h-4 bg-surface-base rounded animate-pulse" />
-                    <div className="h-4 bg-surface-base rounded animate-pulse w-5/6 mx-auto" />
-                    <div className="h-4 bg-surface-base rounded animate-pulse w-4/6 mx-auto" />
-                  </div>
-                </div>
-              ) : contentError ? (
-                /* Error State */
-                <div className="p-8 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center space-y-3">
-                  <AlertCircle size={32} className="text-rose-400 mx-auto" />
-                  <h3 className="text-sm font-bold text-rose-200">Unable to preview this document</h3>
-                  <p className="text-xs text-rose-300/80 max-w-md mx-auto">{contentError}</p>
-                  <div className="pt-2">
-                    <a
-                      href={fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-card border border-surface-border text-xs font-semibold text-white hover:bg-surface-base transition"
-                    >
-                      <Download size={13} />
-                      <span>Download / Open File Directly</span>
-                    </a>
-                  </div>
-                </div>
-              ) : fileType === 'pdf' ? (
-                /* PDF Viewer: Embedded native iframe */
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-[380px]">
+          {loadingContent ? (
+            /* Loading Skeleton */
+            <div className="space-y-3 py-12 text-center">
+              <Loader2 size={32} className="animate-spin text-brand-400 mx-auto" />
+              <p className="text-xs text-gray-400">Loading document...</p>
+              <div className="max-w-md mx-auto space-y-2 pt-4">
+                <div className="h-4 bg-surface-base rounded animate-pulse" />
+                <div className="h-4 bg-surface-base rounded animate-pulse w-5/6 mx-auto" />
+                <div className="h-4 bg-surface-base rounded animate-pulse w-4/6 mx-auto" />
+              </div>
+            </div>
+          ) : contentError ? (
+            /* Error State */
+            <div className="p-8 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-center space-y-3">
+              <AlertCircle size={32} className="text-rose-400 mx-auto" />
+              <h3 className="text-sm font-bold text-rose-200">Unable to preview this document</h3>
+              <p className="text-xs text-rose-300/80 max-w-md mx-auto">{contentError}</p>
+              <div className="pt-2">
+                <a
+                  href={fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-card border border-surface-border text-xs font-semibold text-white hover:bg-surface-base transition"
+                >
+                  <Download size={13} />
+                  <span>Download / Open File Directly</span>
+                </a>
+              </div>
+            </div>
+          ) : activeTab === 'original' ? (
+            /* TAB 1: VIEW ORIGINAL */
+            <div className="space-y-4 animate-fadeIn">
+              {fileType === 'pdf' ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs text-gray-400 px-1">
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 font-semibold text-emerald-400">
                       <span className="w-2 h-2 rounded-full bg-emerald-400" />
                       <span>Original PDF Document Viewer</span>
                     </div>
@@ -238,7 +255,7 @@ export default function DocumentDetailModal({ doc, onClose, onDeleteRequested })
                       <ExternalLink size={12} />
                     </a>
                   </div>
-                  <div className="w-full h-[520px] rounded-2xl overflow-hidden border border-surface-border bg-gray-950 shadow-inner">
+                  <div className="w-full h-[540px] rounded-2xl overflow-hidden border border-surface-border bg-gray-950 shadow-inner">
                     <iframe
                       src={`${fileUrl}#toolbar=1&navpanes=1&scrollbar=1`}
                       title={doc.display_title || doc.filename}
@@ -247,67 +264,110 @@ export default function DocumentDetailModal({ doc, onClose, onDeleteRequested })
                   </div>
                 </div>
               ) : fileType === 'md' ? (
-                /* Markdown Safe Renderer */
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs text-gray-400 px-1">
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 font-semibold text-indigo-400">
                       <span className="w-2 h-2 rounded-full bg-indigo-400" />
-                      <span>Original Markdown Document Preview</span>
+                      <span>Original Markdown Document</span>
                     </div>
                     <span className="text-[11px] font-mono text-gray-500">
-                      {contentData?.text_content ? `${contentData.text_content.length} chars` : ''}
+                      {contentData?.text_content ? `${contentData.text_content.length} characters` : ''}
                     </span>
                   </div>
-                  <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[520px] overflow-y-auto text-sm leading-relaxed">
-                    <MarkdownRenderer content={contentData?.text_content || 'No text content found in document.'} />
+                  <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[540px] overflow-y-auto text-sm leading-relaxed">
+                    <MarkdownRenderer content={contentData?.text_content || 'No text content available.'} />
                   </div>
                 </div>
               ) : fileType === 'docx' || fileType === 'doc' ? (
-                /* DOCX Preview: Structured formatted content */
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-gray-400 px-1">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-amber-400" />
-                      <span>Document Preview (Extracted Institutional Content)</span>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs space-y-2">
+                    <div className="flex items-center gap-2 font-bold text-amber-300">
+                      <Info size={16} />
+                      <span>DOCX Binary File Format</span>
                     </div>
-                    <span className="text-[11px] font-mono text-gray-500">
-                      {contentData?.sections_count ? `${contentData.sections_count} sections` : 'Structured Text'}
-                    </span>
+                    <p className="text-amber-200/90 leading-relaxed">
+                      Direct binary DOCX rendering is not supported natively inside web browsers. You can open/download the original file using the button below, or view the extracted structured text in the <strong>View Content</strong> tab.
+                    </p>
+                    <div className="pt-1">
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 text-xs font-semibold text-white transition"
+                      >
+                        <Download size={13} />
+                        <span>Download Original DOCX</span>
+                      </a>
+                    </div>
                   </div>
-                  <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[520px] overflow-y-auto space-y-4 text-xs leading-relaxed">
+
+                  <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[420px] overflow-y-auto space-y-3 text-xs">
+                    <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider">
+                      Structured Document Preview (Extracted Institutional Content)
+                    </h4>
                     {contentData?.text_content ? (
                       contentData.text_content.split('\n\n').map((para, pIdx) => (
-                        <p key={pIdx} className="text-gray-200">
+                        <p key={pIdx} className="text-gray-200 leading-relaxed">
                           {para}
                         </p>
                       ))
                     ) : (
-                      <p className="text-gray-400 italic">No extracted text content available for this document.</p>
+                      <p className="text-gray-400 italic">No text content extracted for this DOCX document.</p>
                     )}
                   </div>
                 </div>
               ) : (
-                /* Plain TXT Viewer */
+                /* Plain TXT File */
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs text-gray-400 px-1">
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 font-semibold text-emerald-400">
                       <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                      <span>Original Plain Text Viewer</span>
+                      <span>Original Plain Text File</span>
                     </div>
                     <span className="text-[11px] font-mono text-gray-500">
-                      {contentData?.text_content ? `${contentData.text_content.length} chars` : ''}
+                      {contentData?.text_content ? `${contentData.text_content.length} characters` : ''}
                     </span>
                   </div>
-                  <pre className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[520px] overflow-y-auto font-mono text-xs text-gray-200 whitespace-pre-wrap leading-relaxed">
+                  <pre className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[540px] overflow-y-auto font-mono text-xs text-gray-200 whitespace-pre-wrap leading-relaxed">
                     {contentData?.text_content || 'No text content available.'}
                   </pre>
                 </div>
               )}
             </div>
+          ) : activeTab === 'content' ? (
+            /* TAB 2: VIEW EXTRACTED CONTENT / PREVIEW */
+            <div className="space-y-4 animate-fadeIn">
+              <div className="p-3.5 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-300 text-xs flex items-center justify-between">
+                <div className="flex items-center gap-2 font-semibold">
+                  <Sparkles size={15} />
+                  <span>Extracted Content Preview (Normalized Institutional Data)</span>
+                </div>
+                <span className="text-[11px] font-mono text-gray-400">
+                  {contentData?.sections_count ? `${contentData.sections_count} sections` : 'Extracted Text'}
+                </span>
+              </div>
+
+              {fileType === 'md' ? (
+                <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[500px] overflow-y-auto text-sm leading-relaxed">
+                  <MarkdownRenderer content={contentData?.text_content || 'No text content found in document.'} />
+                </div>
+              ) : (
+                <div className="p-5 rounded-2xl bg-surface-base/80 border border-surface-border max-h-[500px] overflow-y-auto space-y-4 text-xs leading-relaxed">
+                  {contentData?.text_content ? (
+                    contentData.text_content.split('\n\n').map((para, pIdx) => (
+                      <p key={pIdx} className="text-gray-200">
+                        {para}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="text-gray-400 italic">No extracted text content available for this document.</p>
+                  )}
+                </div>
+              )}
+            </div>
           ) : (
-            /* Metadata & Provenance Tab */
+            /* TAB 3: METADATA & PROVENANCE */
             <div className="space-y-6 animate-fadeIn">
-              {/* Document Properties Grid */}
               <div className="space-y-3">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
                   Document Metadata

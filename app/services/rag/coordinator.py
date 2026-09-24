@@ -1,13 +1,18 @@
 """
-Grounded RAG Pipeline Coordinator Module
+Grounded RAG Pipeline Coordinator Module (Research-Backed RAG Architecture)
+Coordinates the complete pipeline:
+Query Understanding -> Hybrid Multi-Query RRF Retrieval -> Candidate Relevance Reranker
+-> Answerability Gate -> Context Reconstruction -> Grounded Multilingual Generation
+-> Post-Generation Faithfulness Guard -> Grounded Answer.
 """
 
 import time
-from typing import Optional
+from typing import Any, Dict, List, Optional
 
 from app.core.config import settings
 from app.core.logging import logger
 from app.services.rag.answer_generator import generate_grounded_answer
+from app.services.rag.answer_guard import answer_guard
 from app.services.rag.constants import (
     CONFIDENCE_HIGH,
     CONFIDENCE_LOW,
@@ -26,8 +31,7 @@ from app.services.retrieval.models import RetrievalFilter, RetrievalResult
 
 class RAGCoordinator:
     """
-    Orchestrates the complete evidence-grounded RAG answering pipeline:
-    Query -> Retrieval -> Evidence Gating -> Context Building -> Grounded LLM Generation -> Citation Validation -> Grounded Answer.
+    Orchestrates the research-backed evidence-grounded RAG answering pipeline.
     """
 
     def __init__(
@@ -42,7 +46,9 @@ class RAGCoordinator:
         self,
         query: str,
         language: Optional[str] = None,
+        target_language: Optional[str] = None,
         filters: Optional[RetrievalFilter] = None,
+        conversation_history: Optional[List[Dict[str, Any]]] = None,
         max_context_chunks: Optional[int] = None,
         min_evidence_score: Optional[float] = None,
     ) -> GroundedAnswer:
@@ -51,20 +57,26 @@ class RAGCoordinator:
         """
         start_time = time.perf_counter()
 
-        # 1. Retrieval Stage
+        # 1. Retrieval Stage (includes query understanding, rewriting, Dense+BM25, RRF, reranking)
         retrieval_result: RetrievalResult = self.retrieval_coordinator.retrieve(
             raw_query=query,
             language=language,
+            target_language=target_language,
             filters=filters,
+            conversation_history=conversation_history,
         )
 
         query_id = retrieval_result.query.query_id
-        if language and language.lower().strip() not in ("auto", "und"):
+        
+        # Determine target response language
+        if target_language and target_language.lower().strip() not in ("auto", "und"):
+            response_lang = target_language.lower().strip()
+        elif language and language.lower().strip() not in ("auto", "und"):
             response_lang = language.lower().strip()
         else:
             response_lang = retrieval_result.query.language if retrieval_result.query.language != "und" else "en"
 
-        # 2. Evidence Sufficiency Gating
+        # 2. Answerability & Evidence Sufficiency Gating
         gate_result = evaluate_evidence_sufficiency(
             retrieval_result=retrieval_result,
             min_score=min_evidence_score or settings.RAG_MIN_EVIDENCE_SCORE,
@@ -82,14 +94,14 @@ class RAGCoordinator:
                 latency_ms=elapsed_ms,
             )
 
-        # 3. Context Construction
+        # 3. Context Reconstruction (Natural document order + Bidirectional boundary repair)
         context = build_context_package(
             candidates=gate_result.selected_candidates,
             max_chunks=max_context_chunks or settings.RETRIEVAL_MAX_CONTEXT_CHUNKS,
             max_characters=settings.RETRIEVAL_MAX_CONTEXT_CHARACTERS,
         )
 
-        # 4. LLM Generation
+        # 4. Multilingual Grounded LLM Generation
         try:
             answer_text, citations, gen_warnings = generate_grounded_answer(
                 query_text=retrieval_result.query.normalized_query,
@@ -114,13 +126,20 @@ class RAGCoordinator:
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000.0
 
-        # Check if fallback was returned by generator
-        if answer_text == settings.RAG_FALLBACK_MESSAGE:
+        # Check if model returned fallback message or localized language unavailable message
+        is_lang_unavail_msg = (
+            "सेवा वर्तमान में अनुपलब्ध" in answer_text
+            or "ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ" in answer_text
+            or "సేవ ప్రస్తుతం అందుబాటులో లేదు" in answer_text
+        )
+
+        if answer_text == settings.RAG_FALLBACK_MESSAGE or is_lang_unavail_msg:
             return create_fallback_answer(
                 query_id=query_id,
-                reason="MODEL_FALLBACK_TRIGGERED",
+                reason="LANGUAGE_UNAVAILABLE" if is_lang_unavail_msg else "MODEL_FALLBACK_TRIGGERED",
                 response_language=response_lang,
                 retrieval_id=retrieval_result.retrieval_id,
+                custom_message=answer_text if is_lang_unavail_msg else None,
                 warnings=gen_warnings,
                 latency_ms=elapsed_ms,
             )
@@ -152,5 +171,29 @@ class RAGCoordinator:
         is_valid, val_errors = validate_grounded_answer(answer_obj, context)
         if not is_valid:
             answer_obj.warnings.extend(val_errors)
+
+        # 6. Deterministic AnswerGuard Post-Generation Verification
+        guard_res = answer_guard.verify_and_guard(
+            answer=answer_obj,
+            context=context,
+            query_text=retrieval_result.query.raw_query,
+            target_language=response_lang,
+        )
+
+        if guard_res.fallback_required:
+            return create_fallback_answer(
+                query_id=query_id,
+                reason=guard_res.fallback_reason or "ANSWER_GUARD_REJECTION",
+                response_language=response_lang,
+                retrieval_id=retrieval_result.retrieval_id,
+                warnings=guard_res.violations,
+                latency_ms=round((time.perf_counter() - start_time) * 1000.0, 2),
+            )
+
+        if guard_res.sanitized_answer:
+            answer_obj.answer_text = guard_res.sanitized_answer
+
+        if guard_res.violations:
+            answer_obj.warnings.extend(guard_res.violations)
 
         return answer_obj

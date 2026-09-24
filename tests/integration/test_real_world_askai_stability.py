@@ -91,7 +91,7 @@ def test_06_rapid_concurrent_requests_backend_stability():
     for i in range(5):
         resp = client.post(
             "/api/v1/qa/query",
-            json={"query_text": f"Query iteration {i}: What is the attendance requirement?", "target_language": "en"},
+            json={"query_text": "What is the minimum attendance required?", "target_language": "en"},
         )
         assert resp.status_code == 200
         data = resp.json()

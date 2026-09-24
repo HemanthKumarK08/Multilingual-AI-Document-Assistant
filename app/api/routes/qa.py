@@ -2,7 +2,9 @@
 Question Answering and Grounded RAG Endpoints (Phase 5)
 """
 
+from functools import partial
 import time
+import anyio.to_thread
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
@@ -28,29 +30,54 @@ async def submit_query(req: QueryRequest, db: AsyncSession = Depends(get_db)):
     filters = RetrievalFilter(category=req.category) if req.category else None
 
     try:
-        grounded_answer = _rag_coordinator.answer(
-            query=req.query_text,
-            language=req.target_language,
-            filters=filters,
+        grounded_answer = await anyio.to_thread.run_sync(
+            partial(
+                _rag_coordinator.answer,
+                query=req.query_text,
+                target_language=req.target_language,
+                filters=filters,
+            )
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Query execution error: {str(e)}")
 
     total_latency = (time.perf_counter() - start_time) * 1000.0
 
-    # Map sources to API Citation schema
-    api_citations = [
-        Citation(
-            document_id=src.doc_id,
-            document_title=src.filename,
-            category=req.category or "general",
-            page_number=src.page_number,
-            chunk_index=0,
-            similarity_score=1.0,
-            excerpt=src.section_title or "Evidence Source",
-        )
-        for src in grounded_answer.sources
-    ]
+    # Determine authoritative response state
+    is_lang_unavail = (
+        grounded_answer.fallback_reason in ("MISSING_TARGET_SCRIPT", "LANGUAGE_UNAVAILABLE", "UNAVAILABLE_LANGUAGE", "SCRIPT_CONTAMINATION")
+        or "सेवा वर्तमान में अनुपलब्ध" in grounded_answer.answer_text
+        or "ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ" in grounded_answer.answer_text
+        or "సేవ ప్రస్తుతం అందుబాటులో లేదు" in grounded_answer.answer_text
+    )
+
+    if is_lang_unavail:
+        response_state = "LANGUAGE_UNAVAILABLE"
+        is_fallback = True
+        is_grounded = False
+        api_citations = []
+    elif grounded_answer.fallback_used or not grounded_answer.grounded:
+        response_state = "INSUFFICIENT_EVIDENCE"
+        is_fallback = True
+        is_grounded = False
+        api_citations = []
+    else:
+        response_state = "GROUNDED"
+        is_fallback = False
+        is_grounded = True
+        # Map sources to API Citation schema only for truly grounded answers
+        api_citations = [
+            Citation(
+                document_id=src.doc_id,
+                document_title=src.filename,
+                category=req.category or "general",
+                page_number=src.page_number,
+                chunk_index=0,
+                similarity_score=1.0,
+                excerpt=src.section_title or "Evidence Source",
+            )
+            for src in grounded_answer.sources
+        ]
 
     # Compute script and provider for telemetry
     script_map = {"en": "latin", "hi": "devanagari", "kn": "kannada", "te": "telugu"}
@@ -112,7 +139,10 @@ async def submit_query(req: QueryRequest, db: AsyncSession = Depends(get_db)):
         query_text=req.query_text,
         detected_language=grounded_answer.response_language,
         answer_text=grounded_answer.answer_text,
-        is_fallback=grounded_answer.fallback_used,
+        is_fallback=is_fallback,
+        grounded=is_grounded,
+        fallback_reason=grounded_answer.fallback_reason if is_fallback else None,
+        response_state=response_state,
         citations=api_citations,
         retrieval_latency_ms=round(grounded_answer.latency_ms * 0.4, 2),
         generation_latency_ms=round(grounded_answer.latency_ms * 0.6, 2),

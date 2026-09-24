@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   BotMessageSquare,
   Send,
@@ -14,7 +14,6 @@ import {
   ShieldCheck,
   Info,
   Loader2,
-  BookmarkCheck,
   Mic,
   Volume2,
 } from 'lucide-react';
@@ -29,7 +28,7 @@ import { createTTSController, stopAllSpeech } from '../components/voice/textToSp
 import VoiceLanguageSelector, { getVoiceLanguageLabel } from '../components/voice/VoiceLanguageSelector';
 import ErrorBoundary from '../components/ErrorBoundary';
 
-const LANGUAGE_DISPLAY_NAMES = {
+export const LANGUAGE_DISPLAY_NAMES = {
   en: 'English',
   hi: 'हिन्दी',
   kn: 'ಕನ್ನಡ',
@@ -81,7 +80,7 @@ const STARTER_PROMPTS = [
   },
 ];
 
-// Phase 9.5: Map RAG language codes to BCP-47 TTS locales
+// Map RAG language codes to BCP-47 TTS locales
 const TTS_LOCALE_MAP = {
   en: 'en-US',
   hi: 'hi-IN',
@@ -89,29 +88,266 @@ const TTS_LOCALE_MAP = {
   te: 'te-IN',
 };
 
+/**
+ * Authoritative Response State Derivation
+ */
+export function deriveResponseState(msg) {
+  if (msg.is_error || msg.response_state === 'ERROR') {
+    return 'ERROR';
+  }
+  if (msg.response_state === 'LANGUAGE_UNAVAILABLE') {
+    return 'LANGUAGE_UNAVAILABLE';
+  }
+  if (msg.response_state === 'INSUFFICIENT_EVIDENCE') {
+    return 'INSUFFICIENT_EVIDENCE';
+  }
+  if (msg.response_state === 'GROUNDED') {
+    return (Array.isArray(msg.citations) && msg.citations.length > 0 && !msg.is_fallback)
+      ? 'GROUNDED'
+      : 'INSUFFICIENT_EVIDENCE';
+  }
+
+  const content = msg.content || msg.answer_text || '';
+  const isLangUnavail = (
+    msg.fallback_reason === 'MISSING_TARGET_SCRIPT' ||
+    msg.fallback_reason === 'LANGUAGE_UNAVAILABLE' ||
+    msg.fallback_reason === 'UNAVAILABLE_LANGUAGE' ||
+    content.includes('सेवा वर्तमान में अनुपलब्ध') ||
+    content.includes('ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ') ||
+    content.includes('సేవ ప్రస్తుతం అందుబాటులో లేదు')
+  );
+
+  if (isLangUnavail) {
+    return 'LANGUAGE_UNAVAILABLE';
+  }
+
+  if (msg.is_fallback || msg.grounded === false) {
+    return 'INSUFFICIENT_EVIDENCE';
+  }
+
+  if (Array.isArray(msg.citations) && msg.citations.length > 0) {
+    return 'GROUNDED';
+  }
+
+  return 'INSUFFICIENT_EVIDENCE';
+}
+
+/**
+ * Memoized Chat Message Item
+ * Renders honest response states, prominent answer typography, and zero phantom citations.
+ */
+export const ChatMessageItem = React.memo(function ChatMessageItem({
+  msg,
+  idx,
+  copiedIndex,
+  copyToClipboard,
+}) {
+  const isUser = msg.role === 'user';
+  const responseState = !isUser ? deriveResponseState(msg) : null;
+
+  const isGrounded = responseState === 'GROUNDED';
+  const isLanguageUnavailable = responseState === 'LANGUAGE_UNAVAILABLE';
+  const isInsufficientEvidence = responseState === 'INSUFFICIENT_EVIDENCE';
+  const isError = responseState === 'ERROR';
+
+  const citationCount = Array.isArray(msg.citations) ? msg.citations.length : 0;
+  const langLabel = LANGUAGE_DISPLAY_NAMES[msg.detected_language] || msg.detected_language || 'English';
+
+  return (
+    <div
+      className={`flex gap-3 sm:gap-3.5 ${isUser ? 'justify-end' : 'justify-start'} animate-fadeIn`}
+    >
+      {!isUser && (
+        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-brand-500 flex items-center justify-center text-white shrink-0 shadow-md shadow-indigo-500/20 mt-0.5">
+          <Sparkles size={16} />
+        </div>
+      )}
+
+      <div
+        className={`max-w-3xl sm:max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-lg space-y-3 ${
+          isUser
+            ? 'bg-brand-600 text-white rounded-tr-sm'
+            : 'bg-surface-card border border-surface-border text-gray-100 rounded-tl-sm'
+        }`}
+      >
+        {/* Assistant Header Status Bar */}
+        {!isUser && (
+          <div className="flex items-center justify-between border-b border-surface-border/60 pb-2 text-[11px]">
+            <div className="flex items-center gap-2 flex-wrap">
+              {isGrounded && (
+                <span
+                  data-testid="grounded-badge"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm"
+                >
+                  <ShieldCheck size={12} />
+                  <span>
+                    Grounded in {citationCount} {citationCount === 1 ? 'Source' : 'Sources'}
+                  </span>
+                </span>
+              )}
+
+              {isLanguageUnavailable && (
+                <span
+                  data-testid="language-unavailable-badge"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-sm"
+                >
+                  <Globe size={12} />
+                  <span>Language Unavailable</span>
+                </span>
+              )}
+
+              {isInsufficientEvidence && (
+                <span
+                  data-testid="insufficient-evidence-badge"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20 shadow-sm"
+                >
+                  <Info size={12} />
+                  <span>Insufficient Evidence</span>
+                </span>
+              )}
+
+              {isError && (
+                <span
+                  data-testid="error-badge"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-sm"
+                >
+                  <AlertCircle size={12} />
+                  <span>System Error</span>
+                </span>
+              )}
+
+              {msg.detected_language && (
+                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+                  isLanguageUnavailable
+                    ? 'text-amber-300 bg-amber-500/10 border-amber-500/20'
+                    : 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20'
+                }`}>
+                  {langLabel}
+                </span>
+              )}
+            </div>
+
+            <button
+              onClick={() => copyToClipboard(msg.content, idx)}
+              className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-white transition py-0.5 px-1.5 rounded-md hover:bg-surface-base"
+              title="Copy answer"
+            >
+              {copiedIndex === idx ? (
+                <>
+                  <Check size={12} className="text-emerald-400" />
+                  <span className="text-emerald-400 font-semibold">Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={12} />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Fallback Notice Banners */}
+        {!isUser && isInsufficientEvidence && (
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-start gap-2">
+            <Info size={15} className="text-amber-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] text-amber-200/90 leading-relaxed">
+              I couldn't find sufficient supporting evidence in the indexed institutional documents to answer this question reliably.
+            </p>
+          </div>
+        )}
+
+        {!isUser && isLanguageUnavailable && (
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-start gap-2">
+            <Globe size={15} className="text-amber-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] text-amber-200/90 leading-relaxed">
+              Multilingual model inference service is currently unavailable for the requested language. You can switch the Response language to English or configure a multilingual LLM API key.
+            </p>
+          </div>
+        )}
+
+        {/* Primary Answer Content */}
+        <div className="prose prose-invert max-w-none text-xs sm:text-sm leading-relaxed font-normal text-gray-100">
+          {isUser ? (
+            <p className="whitespace-pre-wrap">{msg.content}</p>
+          ) : (
+            <MarkdownRenderer content={msg.content} />
+          )}
+        </div>
+
+        {/* Citations & Evidence Section — ONLY for strictly grounded answers */}
+        {!isUser && isGrounded && msg.citations && msg.citations.length > 0 && (
+          <CitationsSection citations={msg.citations} />
+        )}
+
+        {/* Technical Details Panel — Collapsed by default */}
+        {!isUser && (
+          <TechnicalDetailsPanel msg={{
+            ...msg,
+            response_state: responseState,
+          }} />
+        )}
+
+        {/* TTS Speak Button — Available on assistant messages */}
+        {!isUser && msg.content && (
+          <div className="pt-2 border-t border-surface-border/40 flex items-center gap-2">
+            <SpeakButton
+              text={msg.content}
+              locale={TTS_LOCALE_MAP[msg.detected_language] || 'en-US'}
+            />
+          </div>
+        )}
+
+        {/* User Quality Feedback Widget */}
+        {!isUser && msg.query_id && isGrounded && (
+          <FeedbackWidget queryId={msg.query_id} />
+        )}
+
+        {/* Message Timestamp */}
+        <div className="flex items-center justify-between text-[10px] text-gray-400/80 pt-0.5">
+          <span>{msg.timestamp}</span>
+        </div>
+      </div>
+
+      {isUser && (
+        <div className="flex flex-col items-center gap-1">
+          <div className="w-8 h-8 rounded-xl bg-surface-card border border-surface-border flex items-center justify-center text-gray-300 shrink-0">
+            <User size={16} />
+          </div>
+          {msg.inputMode === 'voice' && (
+            <span
+              title="Sent via voice input"
+              className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-[10px]"
+            >
+              <Mic size={10} />
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+});
+
 export default function AskAI() {
   const [messages, setMessages] = useState([]);
   const [inputQuery, setInputQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('auto');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  // Phase 9.3: Dedicated voice language (controls speech locale only, separate from RAG language)
   const [voiceLanguage, setVoiceLanguage] = useState('en');
-  const [voiceActive, setVoiceActive] = useState(false); // true while mic is active
-  // Phase 9.6: Voice Response Mode (default OFF)
+  const [voiceActive, setVoiceActive] = useState(false);
   const [voiceResponseEnabled, setVoiceResponseEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [docCount, setDocCount] = useState(null);
 
-  const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
-  // Phase 9.4: Track whether current input was populated by voice or typed manually.
-  // This is frontend-only metadata — does not modify the backend API contract.
-  const inputModeRef = useRef('typed'); // 'typed' | 'voice'
-  const isSubmittingRef = useRef(false); // Synchronous submission lock to prevent duplicate requests
+  const inputModeRef = useRef('typed');
+  const isSubmittingRef = useRef(false);
   const isMountedRef = useRef(true);
+  const isNearBottomRef = useRef(true);
+  const prevMessageCountRef = useRef(0);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -134,14 +370,27 @@ export default function AskAI() {
     };
   }, []);
 
+  const handleChatScroll = () => {
+    if (!chatContainerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+    isNearBottomRef.current = scrollHeight - scrollTop - clientHeight < 120;
+  };
+
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTo({
-        top: chatContainerRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
+    if (!chatContainerRef.current) return;
+    const count = messages.length;
+    if (count > prevMessageCountRef.current) {
+      const lastMsg = messages[count - 1];
+      if (lastMsg?.role === 'user' || isNearBottomRef.current) {
+        chatContainerRef.current.scrollTo({
+          top: chatContainerRef.current.scrollHeight,
+          behavior: 'smooth',
+        });
+        isNearBottomRef.current = true;
+      }
     }
-  }, [messages, loading]);
+    prevMessageCountRef.current = count;
+  }, [messages]);
 
   async function handleSend(queryToSend = null, langOverride = null, catOverride = null) {
     const text = (queryToSend !== null ? queryToSend : inputQuery).trim();
@@ -149,13 +398,9 @@ export default function AskAI() {
     if (isSubmittingRef.current) return;
 
     isSubmittingRef.current = true;
-
-    // Phase 9.4 & 9.6: Capture inputMode and voiceResponseEnabled at submission time,
-    // then reset inputMode to typed for next message.
-    // queryToSend (from starter prompts) is always 'typed'.
     const submitMode = queryToSend !== null ? 'typed' : inputModeRef.current;
     const submitVoiceResponse = voiceResponseEnabled;
-    inputModeRef.current = 'typed'; // reset for next message
+    inputModeRef.current = 'typed';
 
     setError(null);
     setInputQuery('');
@@ -165,7 +410,7 @@ export default function AskAI() {
       id: userMsgId,
       role: 'user',
       content: text,
-      inputMode: submitMode, // 'typed' | 'voice' — frontend only, not sent to backend
+      inputMode: submitMode,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
@@ -192,6 +437,15 @@ export default function AskAI() {
         query_id: res.query_id,
         content: res.answer_text,
         is_fallback: res.is_fallback,
+        grounded: res.grounded !== undefined ? res.grounded : !res.is_fallback,
+        fallback_reason: res.fallback_reason,
+        response_state: res.response_state || (
+          (res.fallback_reason === 'MISSING_TARGET_SCRIPT' || res.fallback_reason === 'LANGUAGE_UNAVAILABLE' ||
+           res.answer_text?.includes('सेवा वर्तमान में अनुपलब्ध') ||
+           res.answer_text?.includes('ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ') ||
+           res.answer_text?.includes('సేవ ప్రస్తుతం అందుబాటులో లేదు')) ? 'LANGUAGE_UNAVAILABLE' :
+          res.is_fallback ? 'INSUFFICIENT_EVIDENCE' : 'GROUNDED'
+        ),
         detected_language: res.detected_language,
         citations: res.citations || [],
         total_latency_ms: res.total_latency_ms,
@@ -202,8 +456,10 @@ export default function AskAI() {
 
       setMessages((prev) => [...prev, assistantMsg]);
 
-      // Phase 9.6: Automatic TTS when Voice Response Mode is ON and query originated from voice
-      if (submitVoiceResponse && submitMode === 'voice' && res.answer_text) {
+      // Automatic TTS only for strictly grounded answers when Voice Response is ON
+      const isLanguageUnavailable = assistantMsg.response_state === 'LANGUAGE_UNAVAILABLE';
+      const isInsufficientEvidence = assistantMsg.response_state === 'INSUFFICIENT_EVIDENCE';
+      if (submitVoiceResponse && submitMode === 'voice' && !isLanguageUnavailable && !isInsufficientEvidence && res.answer_text) {
         stopAllSpeech();
         const langKey = (selectedLanguage !== 'auto' && selectedLanguage) || res.detected_language || 'en';
         const ttsLocale = TTS_LOCALE_MAP[langKey] || TTS_LOCALE_MAP[res.detected_language] || 'en-US';
@@ -235,7 +491,6 @@ export default function AskAI() {
 
   const handleVoiceTranscript = (transcript) => {
     if (!transcript) return;
-    // Phase 9.4: mark this input as voice-originated (frontend metadata only)
     inputModeRef.current = 'voice';
     setInputQuery((prev) => {
       const trimmed = prev.trim();
@@ -257,31 +512,34 @@ export default function AskAI() {
     setMessages([]);
     setInputQuery('');
     setError(null);
-    // Phase 9.3/9.4: reset voice state on new chat
     setVoiceActive(false);
     inputModeRef.current = 'typed';
     isSubmittingRef.current = false;
-    // Phase 9.5: stop any active TTS on new chat
+    isNearBottomRef.current = true;
+    prevMessageCountRef.current = 0;
     stopAllSpeech();
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
+    }
     if (textareaRef.current) {
       textareaRef.current.focus();
     }
   }
 
-  function copyToClipboard(text, idx) {
+  const copyToClipboard = useCallback((text, idx) => {
     if (!navigator.clipboard) return;
     navigator.clipboard.writeText(text);
     setCopiedIndex(idx);
     setTimeout(() => setCopiedIndex(null), 2000);
-  }
+  }, []);
 
   return (
     <ErrorBoundary onReset={clearConversation}>
       <div className="flex flex-col h-[calc(100vh-6.5rem)] max-w-5xl lg:max-w-6xl mx-auto w-full animate-fadeIn">
         {/* Top Controls Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 border-b border-surface-border pb-4 mb-4 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-3 mb-3 shrink-0">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-400 mb-0.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand-400 mb-0.5">
               <BotMessageSquare size={14} />
               <span>AI Document Intelligence</span>
             </div>
@@ -291,7 +549,7 @@ export default function AskAI() {
           </div>
 
           {/* Filters & Actions */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2">
             {/* Response Language Selector */}
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-card border border-surface-border text-xs" title="RAG Response Language">
               <Globe size={13} className="text-indigo-400 shrink-0" />
@@ -328,14 +586,14 @@ export default function AskAI() {
               </select>
             </div>
 
-            {/* Phase 9.6: Voice Response Mode Toggle */}
+            {/* Voice Response Mode Toggle */}
             <button
               type="button"
               onClick={() => setVoiceResponseEnabled((prev) => !prev)}
               aria-label={voiceResponseEnabled ? 'Voice Response Mode enabled' : 'Voice Response Mode disabled'}
               aria-pressed={voiceResponseEnabled}
               title={voiceResponseEnabled ? 'Voice Response Mode is ON — Spoken queries will be answered with automatic voice speech' : 'Voice Response Mode is OFF — Spoken queries will return text only'}
-              className={"inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500/50 active:scale-95 " + (voiceResponseEnabled ? "bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm shadow-indigo-500/20" : "bg-surface-card hover:bg-surface-card/80 text-gray-400 hover:text-gray-200 border-surface-border")}
+              className={"inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-medium transition focus:outline-none focus:ring-2 focus:ring-indigo-500/50 active:scale-95 " + (voiceResponseEnabled ? "bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm shadow-indigo-500/20" : "bg-surface-card hover:bg-surface-card/80 text-gray-400 hover:text-gray-200 border-surface-border")}
             >
               <Volume2 size={13} className={voiceResponseEnabled ? 'text-indigo-400' : 'text-gray-400'} />
               <span className="hidden sm:inline">Voice Response:</span>
@@ -361,10 +619,11 @@ export default function AskAI() {
         {/* Main Conversation Thread */}
         <div
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto pr-1 space-y-6 scrollbar-thin min-h-0"
+          onScroll={handleChatScroll}
+          className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-thin min-h-0"
         >
           {docCount === 0 && (
-            <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-center justify-between">
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Info size={16} className="text-amber-400 shrink-0" />
                 <span>No documents currently indexed in knowledge base. Upload documents to enable grounded retrieval.</span>
@@ -380,12 +639,12 @@ export default function AskAI() {
 
           {messages.length === 0 ? (
             /* Empty Initial State with Starter Cards */
-            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-6">
-              <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-indigo-600/30 to-brand-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shadow-2xl shadow-indigo-500/10">
-                <Sparkles size={32} />
+            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-5">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600/30 to-brand-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center shadow-2xl shadow-indigo-500/10">
+                <Sparkles size={28} />
               </div>
 
-              <div className="space-y-2 max-w-md">
+              <div className="space-y-1.5 max-w-md">
                 <h2 className="text-lg sm:text-xl font-bold text-white">
                   Ask questions about your indexed documents
                 </h2>
@@ -395,7 +654,7 @@ export default function AskAI() {
               </div>
 
               {/* Starter Prompts */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full max-w-3xl pt-2 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-3xl pt-1 text-left">
                 {STARTER_PROMPTS.map((prompt, idx) => (
                   <button
                     key={idx}
@@ -404,7 +663,7 @@ export default function AskAI() {
                       setSelectedLanguage(prompt.lang);
                       handleSend(prompt.query, prompt.lang, prompt.category);
                     }}
-                    className="p-4 rounded-2xl bg-surface-card hover:bg-surface-card/80 border border-surface-border hover:border-indigo-500/40 text-left transition group shadow-md space-y-1.5"
+                    className="p-3.5 rounded-2xl bg-surface-card hover:bg-surface-card/80 border border-surface-border hover:border-indigo-500/40 text-left transition group shadow-md space-y-1"
                   >
                     <div className="flex items-center justify-between text-[11px] font-bold text-indigo-400">
                       <span>{prompt.title}</span>
@@ -419,155 +678,24 @@ export default function AskAI() {
             </div>
           ) : (
             /* Message List */
-            messages.map((msg, idx) => {
-              const isUser = msg.role === 'user';
-              const isGrounded = !msg.is_fallback;
-
-              return (
-                <div
-                  key={msg.id || idx}
-                  className={`flex gap-3.5 sm:gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}
-                >
-                  {!isUser && (
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-brand-500 flex items-center justify-center text-white shrink-0 shadow-md shadow-indigo-500/20 mt-1">
-                      <Sparkles size={16} />
-                    </div>
-                  )}
-
-                  <div
-                    className={`max-w-3xl sm:max-w-4xl rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 ${
-                      isUser
-                        ? 'bg-brand-600 text-white rounded-tr-sm'
-                        : 'bg-surface-card border border-surface-border text-gray-100 rounded-tl-sm'
-                    }`}
-                  >
-                    {/* Assistant Header Badge */}
-                    {!isUser && (
-                      <div className="flex items-center justify-between border-b border-surface-border/60 pb-2 text-[11px]">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                              isGrounded
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                            }`}
-                          >
-                            {isGrounded ? <ShieldCheck size={12} /> : <Info size={12} />}
-                            <span>
-                              {isGrounded
-                                ? `Grounded in ${msg.citations?.length || 1} ${
-                                    msg.citations?.length === 1 ? 'Source' : 'Sources'
-                                  }`
-                                : 'Fallback / Insufficient Evidence'}
-                            </span>
-                          </span>
-
-                          {msg.detected_language && (
-                            <span className="text-[10px] text-indigo-300 font-medium px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
-                              {LANGUAGE_DISPLAY_NAMES[msg.detected_language] || msg.detected_language}
-                            </span>
-                          )}
-                        </div>
-
-                        <button
-                          onClick={() => copyToClipboard(msg.content, idx)}
-                          className="inline-flex items-center gap-1 text-[11px] text-gray-400 hover:text-white transition"
-                          title="Copy answer"
-                        >
-                          {copiedIndex === idx ? (
-                            <>
-                              <Check size={12} className="text-emerald-400" />
-                              <span className="text-emerald-400 font-semibold">Copied</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={12} />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
-
-                    {/* Fallback Notice Banner */}
-                    {!isUser && msg.is_fallback && (
-                      <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-start gap-2">
-                        <Info size={15} className="text-amber-400 shrink-0 mt-0.5" />
-                        <p className="text-[11px] text-amber-200/90 leading-relaxed">
-                          I couldn't find sufficient supporting evidence in the indexed institutional documents to answer this question reliably.
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Message Content */}
-                    <div className="prose prose-invert max-w-none text-xs sm:text-sm leading-relaxed">
-                      {isUser ? (
-                        <p className="whitespace-pre-wrap">{msg.content}</p>
-                      ) : (
-                        <MarkdownRenderer content={msg.content} />
-                      )}
-                    </div>
-
-                    {/* Advanced Citations & Evidence Section (Phase 8.4) */}
-                    {!isUser && isGrounded && msg.citations && msg.citations.length > 0 && (
-                      <CitationsSection citations={msg.citations} />
-                    )}
-
-                    {/* Technical Details Panel (Phase 8.4) */}
-                    {!isUser && (
-                      <TechnicalDetailsPanel msg={msg} />
-                    )}
-
-                    {/* TTS Speak Button (Phase 9.5) — only on assistant messages */}
-                    {!isUser && msg.content && (
-                      <div className="pt-2 border-t border-surface-border/40 flex items-center gap-2">
-                        <SpeakButton
-                          text={msg.content}
-                          locale={TTS_LOCALE_MAP[msg.detected_language] || 'en-US'}
-                        />
-                      </div>
-                    )}
-
-                    {/* User Quality Feedback Widget (Phase 8.4) */}
-                    {!isUser && msg.query_id && (
-                      <FeedbackWidget queryId={msg.query_id} />
-                    )}
-
-                    {/* Message Timestamp */}
-                    <div className="flex items-center justify-between text-[10px] text-gray-400/80 pt-1">
-                      <span>{msg.timestamp}</span>
-                    </div>
-                  </div>
-
-                  {isUser && (
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="w-8 h-8 rounded-xl bg-surface-card border border-surface-border flex items-center justify-center text-gray-300 shrink-0">
-                        <User size={16} />
-                      </div>
-                      {/* Phase 9.4: subtle voice indicator badge below avatar */}
-                      {msg.inputMode === 'voice' && (
-                        <span
-                          title="Sent via voice input"
-                          className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30"
-                          aria-label="Sent via voice input"
-                        >
-                          <Mic size={9} />
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })
+            messages.map((msg, idx) => (
+              <ChatMessageItem
+                key={msg.id || idx}
+                msg={msg}
+                idx={idx}
+                copiedIndex={copiedIndex}
+                copyToClipboard={copyToClipboard}
+              />
+            ))
           )}
 
           {/* Loading Indicator */}
           {loading && (
-            <div className="flex gap-3.5 sm:gap-4 items-start animate-fadeIn">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-brand-500 flex items-center justify-center text-white shrink-0 shadow-md shadow-indigo-500/20 mt-1">
+            <div className="flex gap-3 sm:gap-3.5 items-start animate-fadeIn">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-brand-500 flex items-center justify-center text-white shrink-0 shadow-md shadow-indigo-500/20 mt-0.5">
                 <Sparkles size={16} />
               </div>
-              <div className="p-4 rounded-3xl bg-surface-card border border-surface-border text-xs text-gray-300 flex items-center gap-3 shadow-xl">
+              <div className="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-surface-card border border-surface-border text-xs text-gray-300 flex items-center gap-3 shadow-lg">
                 <Loader2 size={16} className="animate-spin text-indigo-400 shrink-0" />
                 <div className="space-y-0.5">
                   <p className="font-semibold text-white">Searching indexed documents...</p>
@@ -579,9 +707,9 @@ export default function AskAI() {
 
           {/* Error Banner with Retry */}
           {error && (
-            <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center justify-between gap-3 animate-fadeIn">
+            <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center justify-between gap-3 animate-fadeIn">
               <div className="flex items-center gap-2">
-                <AlertCircle size={16} className="text-rose-400 shrink-0" />
+                <Info size={16} className="text-rose-400 shrink-0" />
                 <span>{error.message}</span>
               </div>
               {error.query && (
@@ -597,7 +725,7 @@ export default function AskAI() {
         </div>
 
         {/* Input Form Bar */}
-        <div className="mt-3 pt-3 border-t border-surface-border shrink-0">
+        <div className="mt-2.5 pt-2.5 border-t border-surface-border shrink-0">
           <div className="relative rounded-2xl bg-surface-card border border-surface-border focus-within:border-brand-500 transition shadow-xl p-2 flex items-end gap-2">
             <textarea
               ref={textareaRef}
@@ -614,7 +742,7 @@ export default function AskAI() {
               className="flex-1 bg-transparent text-white placeholder-gray-500 text-xs sm:text-sm px-3 py-1.5 focus:outline-none resize-none disabled:opacity-50"
             />
 
-            {/* Phase 9.3: Voice Language Selector (controls speech locale only) */}
+            {/* Voice Language Selector */}
             <div className="flex items-center gap-1 px-2 py-1 rounded-xl bg-surface-base/60 border border-surface-border">
               <VoiceLanguageSelector
                 value={voiceLanguage}
@@ -627,7 +755,7 @@ export default function AskAI() {
                 languageLabel={getVoiceLanguageLabel(voiceLanguage)}
                 onVoiceStateChange={(active) => {
                   if (active) {
-                    stopAllSpeech(); // Phase 9.6: turn-taking — stop TTS when user starts speaking
+                    stopAllSpeech();
                   }
                   setVoiceActive(active);
                 }}
@@ -645,7 +773,7 @@ export default function AskAI() {
             </button>
           </div>
 
-          <div className="flex items-center justify-between px-2 pt-2 text-[10px] text-gray-500">
+          <div className="flex items-center justify-between px-2 pt-1.5 text-[10px] text-gray-500">
             <span>Press <strong>Enter</strong> to send • <strong>Shift + Enter</strong> for new line</span>
             <span>Zero-Raw-Data Privacy Active</span>
           </div>

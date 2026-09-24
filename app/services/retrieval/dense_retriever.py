@@ -93,13 +93,18 @@ class DenseRetriever:
             results = self.collection.query(**kwargs)
 
             candidates: List[CandidateChunk] = []
-            if not results or not results["ids"] or not results["ids"][0]:
+            if not results or not results.get("ids") or not results["ids"][0]:
                 return candidates
 
             ids = results["ids"][0]
-            docs = results["documents"][0] if results["documents"] else [""] * len(ids)
-            metadatas = results["metadatas"][0] if results["metadatas"] else [{}] * len(ids)
-            distances = results["distances"][0] if results["distances"] else [1.0] * len(ids)
+            raw_docs = results.get("documents")
+            docs = raw_docs[0] if (raw_docs and raw_docs[0] is not None) else [""] * len(ids)
+
+            raw_metas = results.get("metadatas")
+            metadatas = raw_metas[0] if (raw_metas and raw_metas[0] is not None) else [{}] * len(ids)
+
+            raw_dists = results.get("distances")
+            distances = raw_dists[0] if (raw_dists and raw_dists[0] is not None) else [1.0] * len(ids)
 
             for rank_idx, (chunk_id, doc_text, raw_meta, dist) in enumerate(zip(ids, docs, metadatas, distances), start=1):
                 # Convert cosine distance to cosine similarity score: score = 1.0 - distance

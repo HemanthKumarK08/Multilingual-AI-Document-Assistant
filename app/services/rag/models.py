@@ -24,12 +24,16 @@ class SourceCitation(BaseModel):
 
 
 class EvidenceGateResult(BaseModel):
-    """Outcome of the pre-generation evidence sufficiency evaluation."""
+    """Outcome of the pre-generation evidence answerability and sufficiency evaluation."""
     is_sufficient: bool
+    answerability_status: str = "ANSWERABLE"  # "ANSWERABLE", "PARTIALLY_ANSWERABLE", "UNANSWERABLE"
     reason: Optional[str] = None
     selected_candidates: List[CandidateChunk] = Field(default_factory=list)
     minimum_score: float = 0.35
     observed_best_score: float = 0.0
+    confidence_score: float = 0.0
+    agreement_score: float = 0.0
+    term_coverage_score: float = 0.0
     warnings: List[str] = Field(default_factory=list)
 
 

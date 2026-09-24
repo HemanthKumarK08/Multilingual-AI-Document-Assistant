@@ -71,6 +71,8 @@ if [ ! -d "$PROJECT_ROOT/frontend/dist" ] && command -v npm &>/dev/null; then
     echo -e "  ${YELLOW}!${NC} Building frontend application shell (Vite)..."
     npm --prefix "$PROJECT_ROOT/frontend" run build
     echo -e "  ${GREEN}✓${NC} Frontend build complete."
+elif [ -d "$PROJECT_ROOT/frontend/dist" ]; then
+    echo -e "  ${GREEN}✓${NC} Frontend build verified and current."
 fi
 
 # 4. Check Environment Variables (.env)
@@ -88,12 +90,21 @@ fi
 
 # 5. Check Port Availability & Clean Stale Processes
 echo -e "\n${BOLD}[5/6] Checking Port 8000...${NC}"
-PORT_PID=$(lsof -ti :8000 2>/dev/null || true)
-if [ -n "$PORT_PID" ]; then
-    echo -e "  ${YELLOW}!${NC} Port 8000 is currently occupied by PID: $PORT_PID"
-    echo -e "  ${YELLOW}!${NC} Terminating stale process to allow clean startup..."
-    kill -15 $PORT_PID 2>/dev/null || kill -9 $PORT_PID 2>/dev/null || true
+PORT_PIDS=$(lsof -ti :8000 2>/dev/null || true)
+if [ -n "$PORT_PIDS" ]; then
+    echo -e "  ${YELLOW}!${NC} Port 8000 is currently occupied by PID(s): $PORT_PIDS"
+    echo -e "  ${YELLOW}!${NC} Terminating stale process(es) to allow clean startup..."
+    for p in $PORT_PIDS; do
+        kill -15 "$p" 2>/dev/null || true
+    done
     sleep 1
+    STILL_ALIVE=$(lsof -ti :8000 2>/dev/null || true)
+    if [ -n "$STILL_ALIVE" ]; then
+        for p in $STILL_ALIVE; do
+            kill -9 "$p" 2>/dev/null || true
+        done
+        sleep 0.5
+    fi
     echo -e "  ${GREEN}✓${NC} Port 8000 cleared."
 else
     echo -e "  ${GREEN}✓${NC} Port 8000 is free."
@@ -109,38 +120,55 @@ echo -e "\n${BOLD}[6/6] Starting Multilingual AI Document Assistant...${NC}"
 
 # Cleanup handler on exit or Ctrl+C
 cleanup() {
+    trap - SIGINT SIGTERM EXIT
     echo -e "\n\n${YELLOW}================================================================================${NC}"
     echo -e "${YELLOW} Stopping Application Services cleanly...${NC}"
-    if [ -n "$SERVER_PID" ] && kill -0 $SERVER_PID 2>/dev/null; then
-        kill -15 $SERVER_PID 2>/dev/null || true
-        wait $SERVER_PID 2>/dev/null || true
+    if [ -n "$SERVER_PID" ] && kill -0 "$SERVER_PID" 2>/dev/null; then
+        kill -15 "$SERVER_PID" 2>/dev/null || true
+        wait "$SERVER_PID" 2>/dev/null || true
     fi
     echo -e "${GREEN} Application stopped cleanly. Goodbye!${NC}"
     echo -e "${YELLOW}================================================================================${NC}"
     exit 0
 }
 
-trap cleanup SIGINT SIGTERM EXIT
+trap cleanup SIGINT SIGTERM
 
 # Launch Uvicorn in background
 "$VENV_PYTHON" -m uvicorn app.main:app --host 0.0.0.0 --port 8000 &
 SERVER_PID=$!
 
 echo -e "  ${CYAN}Starting backend on PID $SERVER_PID...${NC}"
+echo -e "  ${YELLOW}Waiting for application readiness (pre-warming embedding models & indexes)...${NC}"
 
-# Wait for server readiness
+# Poll readiness with realistic prewarming timeout (up to 60 seconds)
 SERVER_READY=false
-for i in {1..30}; do
+MAX_WAIT_SECONDS=60
+ELAPSED=0
+
+while [ $ELAPSED -lt $MAX_WAIT_SECONDS ]; do
+    # Check if backend process crashed prematurely
+    if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+        echo -e "\n${RED}✗ Backend server process (PID $SERVER_PID) terminated unexpectedly.${NC}"
+        SERVER_READY=false
+        break
+    fi
+
     if curl -s -f http://127.0.0.1:8000/health >/dev/null 2>&1; then
         SERVER_READY=true
         break
     fi
-    sleep 0.5
+
+    sleep 1
+    ELAPSED=$((ELAPSED + 1))
+    if [ $((ELAPSED % 5)) -eq 0 ]; then
+        echo -e "  ${YELLOW}Initializing services (${ELAPSED}s / ${MAX_WAIT_SECONDS}s)...${NC}"
+    fi
 done
 
 if [ "$SERVER_READY" = true ]; then
     echo -e "\n${GREEN}${BOLD}================================================================================${NC}"
-    echo -e "${GREEN}${BOLD} ✓ APPLICATION STARTED SUCCESSFULLY!                                            ${NC}"
+    echo -e "${GREEN}${BOLD} ✓ APPLICATION STARTED SUCCESSFULLY & HEALTH CHECK PASSED!                     ${NC}"
     echo -e "${GREEN}${BOLD}================================================================================${NC}"
     echo -e "  • User Application Shell (SPA)  : ${CYAN}${BOLD}http://localhost:8000/${NC}"
     echo -e "  • Interactive API Documentation : ${CYAN}http://localhost:8000/docs${NC}"
@@ -148,16 +176,18 @@ if [ "$SERVER_READY" = true ]; then
     echo -e "  • Analytics Health Endpoint     : ${CYAN}http://localhost:8000/api/v1/analytics/health${NC}"
     echo -e "  • Analytics Summary KPIs        : ${CYAN}http://localhost:8000/api/v1/analytics/summary${NC}"
     echo -e "  • Grounded QA Endpoint          : ${CYAN}POST http://localhost:8000/api/v1/qa/query${NC}"
-    echo -e "\n${BOLD}Opening user-facing application in default web browser...${NC}"
+    echo -e "\n${BOLD}Opening user-facing application in default web browser: http://localhost:8000/${NC}"
     
-    # Automatically open browser to root page
+    # Automatically open default web browser to the root SPA
     if command -v open &>/dev/null; then
         open "http://localhost:8000/"
     fi
 
     echo -e "\n${BOLD}Server is running and streaming logs below. Press [Ctrl+C] to stop anytime.${NC}\n"
 else
-    echo -e "\n${RED}✗ Backend server failed to respond on http://127.0.0.1:8000/health within 15 seconds.${NC}"
+    echo -e "\n${RED}✗ Backend server failed to respond on http://127.0.0.1:8000/health within ${MAX_WAIT_SECONDS} seconds.${NC}"
+    cleanup
+    exit 1
 fi
 
 # Keep launcher alive and wait on server process

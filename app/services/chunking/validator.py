@@ -79,7 +79,35 @@ class ChunkValidator:
         if source_text and source_text.strip():
             ChunkValidator._verify_coverage(chunks, source_text)
 
+        # 9. Suspicious Chunk Starts Check (Diagnostic / Extraction Notes)
+        suspicious = ChunkValidator.detect_suspicious_chunk_starts(chunks)
+        if suspicious:
+            for c in chunks:
+                if c.chunk_id in suspicious:
+                    c.extraction_notes.append(f"Suspicious chunk start detected: {suspicious[c.chunk_id]}")
+
         return True
+
+    @staticmethod
+    def detect_suspicious_chunk_starts(chunks: List[DocumentChunk]) -> Dict[str, str]:
+        """
+        Detects chunks that start with orphan conjunctions, verbs, or fragments
+        (e.g., 'is less to...', 'fee.', 'and', 'or', 'whichever').
+        Returns mapping of chunk_id -> snippet reason.
+        """
+        orphan_pattern = re.compile(
+            r"^(?:is\b|are\b|was\b|were\b|and\b|or\b|but\b|to\b|of\b|for\b|less to\b|fee\.|whichever\b)",
+            re.IGNORECASE,
+        )
+        suspicious = {}
+        for chunk in chunks:
+            text = chunk.text_content.strip()
+            if not text:
+                continue
+            match = orphan_pattern.match(text)
+            if match:
+                suspicious[chunk.chunk_id] = f"Starts with orphan fragment '{match.group(0)}'"
+        return suspicious
 
     def validate_document_chunks(
         self,
@@ -120,3 +148,4 @@ class ChunkValidator:
                 raise SourceCoverageError(
                     f"Source word '{word}' from source index {idx} was not found in generated chunks."
                 )
+

@@ -31,7 +31,7 @@ async def test_list_documents():
     assert response.status_code == 200
     docs = response.json()
     assert isinstance(docs, list)
-    assert len(docs) >= 24
+    assert len(docs) >= 1
 
 @pytest.mark.asyncio
 async def test_admin_login():

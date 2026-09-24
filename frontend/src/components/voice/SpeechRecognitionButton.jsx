@@ -41,6 +41,7 @@ export default function SpeechRecognitionButton({
   const isRestartingRef = useRef(false);
   const activeLanguageRef = useRef(language);
   const accumulatedTranscriptRef = useRef("");
+  const lastEmittedTranscriptRef = useRef("");
 
   // Check browser capability on mount
   useEffect(() => {
@@ -86,6 +87,7 @@ export default function SpeechRecognitionButton({
     setInterimText("");
     setErrorMessage(null);
     accumulatedTranscriptRef.current = "";
+    lastEmittedTranscriptRef.current = "";
     if (recognizerRef.current) {
       recognizerRef.current.abort();
       recognizerRef.current = null;
@@ -139,8 +141,11 @@ export default function SpeechRecognitionButton({
         if (!isCancelledRef.current && finalText) {
           accumulatedTranscriptRef.current = finalText;
           setInterimText("");
-          if (onTranscript) {
-            onTranscript(finalText);
+          if (finalText !== lastEmittedTranscriptRef.current) {
+            lastEmittedTranscriptRef.current = finalText;
+            if (onTranscript) {
+              onTranscript(finalText);
+            }
           }
         }
       },
@@ -170,7 +175,12 @@ export default function SpeechRecognitionButton({
           stopTimer();
           setInterimText("");
           setState("transcript_ready");
-          if (onTranscript && accumulatedTranscriptRef.current) {
+          if (
+            onTranscript &&
+            accumulatedTranscriptRef.current &&
+            accumulatedTranscriptRef.current !== lastEmittedTranscriptRef.current
+          ) {
+            lastEmittedTranscriptRef.current = accumulatedTranscriptRef.current;
             onTranscript(accumulatedTranscriptRef.current);
           }
           setTimeout(() => {
@@ -209,12 +219,16 @@ export default function SpeechRecognitionButton({
   }, [onInterimTranscript, onTranscript, onVoiceStateChange, startTimer, stopTimer]);
 
   const handleStartListening = useCallback(() => {
+    const isUnsupported = !supported;
+    const isStarting = state === "starting";
+    const isProcessing = state === "processing";
+
     if (
       disabled ||
-      !supported ||
-      state === "starting" ||
-      state === "listening" ||
-      state === "processing"
+      isUnsupported ||
+      isStarting ||
+      isProcessing ||
+      state === "listening"
     ) {
       return; // Duplicate click protection
     }
@@ -223,6 +237,7 @@ export default function SpeechRecognitionButton({
     isManualStopRef.current = false;
     isRestartingRef.current = false;
     accumulatedTranscriptRef.current = "";
+    lastEmittedTranscriptRef.current = "";
     setErrorMessage(null);
     setInterimText("");
     setState("starting");

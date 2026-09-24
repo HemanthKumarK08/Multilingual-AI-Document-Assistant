@@ -96,18 +96,43 @@ class InMemoryBM25Index:
         return score
 
 
+_SHARED_BM25_INDEX_CACHE: Dict[str, InMemoryBM25Index] = {}
+
+
+def invalidate_lexical_cache(processed_dir: Optional[str | Path] = None) -> None:
+    """Invalidates the shared in-memory BM25 index cache."""
+    global _SHARED_BM25_INDEX_CACHE
+    if processed_dir:
+        key = str(Path(processed_dir).resolve())
+        _SHARED_BM25_INDEX_CACHE.pop(key, None)
+    else:
+        _SHARED_BM25_INDEX_CACHE.clear()
+    logger.info("Lexical BM25 index cache invalidated.")
+
+
 class LexicalRetriever:
     """
     Retrieves candidates using in-memory BM25 scoring over chunk artifacts.
+    Reuses a process-wide cached BM25 index across queries.
     """
 
     def __init__(self, processed_dir: Optional[str] = None):
-        self.processed_dir = Path(processed_dir or (PROJECT_ROOT / "data" / "processed"))
-        self.index = InMemoryBM25Index()
+        self.processed_dir = Path(processed_dir or (PROJECT_ROOT / "data" / "processed")).resolve()
         self._load_and_build_index()
 
+    @property
+    def index(self) -> InMemoryBM25Index:
+        key = str(self.processed_dir)
+        if key not in _SHARED_BM25_INDEX_CACHE:
+            self._load_and_build_index()
+        return _SHARED_BM25_INDEX_CACHE[key]
+
     def _load_and_build_index(self) -> None:
-        """Loads all `*_chunks.json` from data/processed and builds the BM25 index."""
+        """Loads all `*_chunks.json` from data/processed and builds the BM25 index if not cached."""
+        key = str(self.processed_dir)
+        if key in _SHARED_BM25_INDEX_CACHE:
+            return
+
         all_chunks: List[Dict] = []
         if self.processed_dir.exists():
             for chunk_file in sorted(self.processed_dir.glob("*_chunks.json")):
@@ -119,14 +144,20 @@ class LexicalRetriever:
                 except Exception as e:
                     logger.warning(f"Could not load chunk file {chunk_file}: {e}")
 
-        self.index.index_chunks(all_chunks)
-        logger.info(f"LexicalRetriever initialized with {len(all_chunks)} chunks.")
+        idx = InMemoryBM25Index()
+        idx.index_chunks(all_chunks)
+        _SHARED_BM25_INDEX_CACHE[key] = idx
+        logger.info(f"LexicalRetriever initialized and cached with {len(all_chunks)} chunks for {key}.")
 
     def reload(self, chunks: Optional[List[Dict]] = None) -> None:
         """Manually reloads index with provided chunks or from disk."""
+        key = str(self.processed_dir)
         if chunks is not None:
-            self.index.index_chunks(chunks)
+            idx = InMemoryBM25Index()
+            idx.index_chunks(chunks)
+            _SHARED_BM25_INDEX_CACHE[key] = idx
         else:
+            invalidate_lexical_cache(self.processed_dir)
             self._load_and_build_index()
 
     def retrieve(

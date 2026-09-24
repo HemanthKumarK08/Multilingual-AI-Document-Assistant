@@ -24,6 +24,23 @@ async def lifespan(app: FastAPI):
     await init_db()
     logger.info("Database tables verified/initialized.")
 
+    # Pre-warm existing SentenceTransformerEmbeddingProvider, vector store, and lexical index
+    try:
+        import time
+        t0 = time.perf_counter()
+        from app.api.routes.qa import _rag_coordinator
+        logger.info("Pre-warming embedding model, ChromaDB collection, and BM25 index...")
+        if _rag_coordinator and _rag_coordinator.retrieval_coordinator:
+            rc = _rag_coordinator.retrieval_coordinator
+            if rc.dense_retriever:
+                rc.dense_retriever.embedding_provider.embed_query("warmup query")
+            if rc.lexical_retriever:
+                _ = rc.lexical_retriever.index
+        warmup_ms = (time.perf_counter() - t0) * 1000.0
+        logger.info(f"Embedding model, ChromaDB collection, and BM25 index pre-warmed in {warmup_ms:.2f}ms.")
+    except Exception as e:
+        logger.warning(f"Pre-warming encountered an issue (non-fatal): {e}")
+
     yield
 
     # Clean shutdown
@@ -63,7 +80,14 @@ if FRONTEND_ASSETS.exists():
 
 def serve_frontend_or_landing():
     if FRONTEND_INDEX.exists():
-        return FileResponse(str(FRONTEND_INDEX))
+        return FileResponse(
+            str(FRONTEND_INDEX),
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+                "Pragma": "no-cache",
+                "Expires": "0",
+            }
+        )
     return HTMLResponse(content=get_landing_page_html())
 
 @app.get("/", response_class=HTMLResponse)

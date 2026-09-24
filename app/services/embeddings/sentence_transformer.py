@@ -25,10 +25,14 @@ from app.services.embeddings.exceptions import (
 from app.services.embeddings.models import EmbeddingConfig
 
 
+# Global singleton cache for loaded SentenceTransformer model instances
+_GLOBAL_MODEL_CACHE = {}
+
+
 class SentenceTransformerEmbeddingProvider:
     """
     Sentence Transformers wrapper implementing the EmbeddingProvider protocol.
-    Supports lazy loading and E5-specific prefix conventions.
+    Supports lazy loading, shared process-level model cache, and E5-specific prefix conventions.
     """
 
     def __init__(self, config: Optional[EmbeddingConfig] = None):
@@ -60,22 +64,29 @@ class SentenceTransformerEmbeddingProvider:
         return self.config.batch_size
 
     def _get_model(self):
-        """Lazy loader for the SentenceTransformer model instance."""
+        """Lazy loader for the SentenceTransformer model instance using shared global cache."""
+        cache_key = (self.model_name, self.device, str(self.config.model_cache_dir or ""))
+        if cache_key in _GLOBAL_MODEL_CACHE:
+            self._model = _GLOBAL_MODEL_CACHE[cache_key]
+            return self._model
+
         if self._model is None:
             try:
                 from sentence_transformers import SentenceTransformer
                 logger.info(
                     f"Loading embedding model [{self.model_name}] on device [{self.device}]..."
                 )
-                self._model = SentenceTransformer(
+                model_inst = SentenceTransformer(
                     self.model_name,
                     device=self.device,
                     cache_folder=self.config.model_cache_dir,
                 )
                 # Set max sequence length
-                if hasattr(self._model, "max_seq_length"):
-                    self._model.max_seq_length = self.max_length
+                if hasattr(model_inst, "max_seq_length"):
+                    model_inst.max_seq_length = self.max_length
                 logger.info(f"Model [{self.model_name}] successfully loaded (dimension={self.dimension}).")
+                _GLOBAL_MODEL_CACHE[cache_key] = model_inst
+                self._model = model_inst
             except Exception as e:
                 logger.error(f"Failed to load embedding model {self.model_name}: {str(e)}")
                 raise ModelLoadError(f"Failed to load embedding model {self.model_name}: {str(e)}") from e
