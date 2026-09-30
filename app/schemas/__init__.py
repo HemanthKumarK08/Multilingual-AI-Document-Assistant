@@ -67,15 +67,19 @@ class QueryResponse(BaseModel):
     query_id: str
     query_text: str
     detected_language: str
+    target_language: Optional[str] = None
+    response_language: Optional[str] = None
     answer_text: str
     is_fallback: bool
     grounded: bool = True
     fallback_reason: Optional[str] = None
     response_state: str = "GROUNDED"
+    generation_path: Optional[str] = "direct"
     citations: List[Citation]
     retrieval_latency_ms: float
     generation_latency_ms: float
     total_latency_ms: float
+
 
 # --- Feedback Schema ---
 class FeedbackRequest(BaseModel):
@@ -103,3 +107,6 @@ class HealthResponse(BaseModel):
     database_status: str
     vector_store_configured: bool
     llm_primary_provider: str
+
+# --- TTS Schemas ---
+from app.schemas.tts import TTSSynthesizeRequest, TTSSynthesizeResponse

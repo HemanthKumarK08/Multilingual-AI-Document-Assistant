@@ -81,8 +81,8 @@ class Settings(BaseSettings):
     # --- LLM Generation Engine ---
     LLM_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "gemini"
     LLM_PRIMARY_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "gemini"
-    LLM_FALLBACK_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "ollama"
-    LLM_MODEL_NAME: str = "gemini-2.5-flash"
+    LLM_FALLBACK_PROVIDER: Literal["gemini", "groq", "ollama", "mock"] = "groq"
+    LLM_MODEL_NAME: str = "gemini-3.6-flash"
     LLM_TEMPERATURE: float = 0.0
     LLM_MAX_OUTPUT_TOKENS: int = 512
     LLM_TIMEOUT_SECONDS: int = 60
@@ -90,10 +90,20 @@ class Settings(BaseSettings):
     # API Keys (Loaded from environment, never committed)
     GEMINI_API_KEY: str = Field(default="", repr=False)
     GROQ_API_KEY: str = Field(default="", repr=False)
+    GROQ_MODEL_NAME: str = "qwen/qwen3.8-27b"
 
     # Local Ollama Settings (Offline Mode)
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_MODEL_NAME: str = "llama3.2:3b-instruct-q4_K_M"
+
+    # --- Professional TTS Engine (Sarvam Bulbul v3) ---
+    SARVAM_API_KEY: str = Field(default="", repr=False)
+    SARVAM_TTS_URL: str = "https://api.sarvam.ai/text-to-speech"
+    SARVAM_TTS_MODEL: str = "bulbul:v3"
+    SARVAM_SPEAKER_EN: str = "ratan"
+    SARVAM_SPEAKER_HI: str = "priya"
+    SARVAM_SPEAKER_TE: str = "neha"
+    SARVAM_SPEAKER_KN: str = "ishita"
 
     # --- Security & Authentication ---
     ADMIN_TOKEN_SECRET: str = Field(

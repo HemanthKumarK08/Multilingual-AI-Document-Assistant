@@ -50,3 +50,9 @@ bigdata = [
 all = [
     "multilingual-doc-assistant[dev,ml,bigdata]"
 ]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "live_llm: tests that make live network calls to external LLM providers (e.g. Gemini, Groq)",
+]

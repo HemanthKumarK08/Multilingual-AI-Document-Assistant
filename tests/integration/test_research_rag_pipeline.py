@@ -32,6 +32,7 @@ def benchmark_data():
         return json.load(f)
 
 
+@pytest.mark.live_llm
 @pytest.mark.asyncio
 async def test_critical_failure_01_nirf_management_fee_no_fragment():
     """Critical Test 1: 'NIRF management fee' must return full answer without fragments."""
@@ -50,6 +51,7 @@ async def test_critical_failure_01_nirf_management_fee_no_fragment():
     assert "90%" in ans or "10,000" in ans or "1.0 lakh" in ans
 
 
+@pytest.mark.live_llm
 @pytest.mark.asyncio
 async def test_critical_failure_02_attendance_no_ballpoint_pen():
     """Critical Test 2: 'What is the minimum attendance required for registered courses?' must not retrieve ballpoint pen."""
@@ -68,6 +70,7 @@ async def test_critical_failure_02_attendance_no_ballpoint_pen():
     assert "pen" not in ans.lower()
 
 
+@pytest.mark.live_llm
 @pytest.mark.asyncio
 async def test_critical_failure_03_cgtmse_url_preservation():
     """Critical Test 3: 'in which website credit guarantee scheme can be applied' must preserve https://www.cgtmse.in."""
@@ -82,6 +85,7 @@ async def test_critical_failure_03_cgtmse_url_preservation():
     assert "https://www.cgtmse.in" in data["answer_text"]
 
 
+@pytest.mark.live_llm
 @pytest.mark.asyncio
 async def test_critical_failure_04_cross_lingual_script_or_unavailable():
     """Critical Test 4: English -> Indic targets must produce native Indic script or LANGUAGE_UNAVAILABLE."""
@@ -170,6 +174,7 @@ async def test_critical_failure_06_nonsense_query_abstention():
     assert len(data.get("citations", [])) == 0
 
 
+@pytest.mark.live_llm
 @pytest.mark.asyncio
 async def test_critical_failure_07_full_100_cases_benchmark(benchmark_data):
     """Critical Test 7: Executes all 100+ cases from research_rag_benchmark.json and asserts state validity."""

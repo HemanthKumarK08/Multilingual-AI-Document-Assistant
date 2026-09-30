@@ -24,7 +24,7 @@ from app.services.ingestion.normalization import normalize_text, clean_heading_t
 from app.services.ingestion.language import detect_script_and_language
 
 _HEADING_REGEX = re.compile(
-    r"^(?:(?:Section|Chapter|Article|Clause|Part)\s+\d+|(?:\d+\.)+\d*|[A-Z][A-Z\s\-_:]{3,60}$)",
+    r"^(?:(?:Section|Chapter|Article|Clause|Part)\s+\d+[\.\s:]|(?:\d+\.)+\d*\s+[A-Z][a-zA-Z\s]{2,})",
     re.IGNORECASE,
 )
 
@@ -129,7 +129,14 @@ class PyMuPDFParser(BaseParser):
                         lines = [l.strip() for l in blk_text.split("\n") if l.strip()]
                         if len(lines) == 1 and len(lines[0]) < 80:
                             line = lines[0]
-                            if _HEADING_REGEX.match(line) or (line.isupper() and len(line) > 4):
+                            is_uppercase_heading = (
+                                line.isupper()
+                                and len(line) >= 4
+                                and len(line.split()) >= 2
+                                and not line.endswith(":")
+                                and not re.match(r"^[\d\W]+$", line)
+                            )
+                            if _HEADING_REGEX.match(line) or is_uppercase_heading:
                                 is_heading = True
                                 current_heading = clean_heading_text(line)
                                 current_heading_level = 2 if re.match(r"^\d+\.\d+", line) else 1

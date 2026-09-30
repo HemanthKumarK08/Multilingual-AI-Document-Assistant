@@ -102,7 +102,8 @@ function ChatMessageItem({
   const isError = responseState === 'ERROR';
 
   const citationCount = Array.isArray(msg.citations) ? msg.citations.length : 0;
-  const langLabel = languageDisplayNames[msg.detected_language] || msg.detected_language || 'English';
+  const authoritativeLang = msg.target_language || msg.response_language || msg.detected_language || 'en';
+  const langLabel = languageDisplayNames[authoritativeLang] || authoritativeLang || 'English';
 
   return (
     <div
@@ -115,11 +116,10 @@ function ChatMessageItem({
       )}
 
       <div
-        className={`max-w-3xl sm:max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-lg space-y-3 ${
-          isUser
+        className={`max-w-3xl sm:max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-lg space-y-3 ${isUser
             ? 'bg-brand-600 text-white rounded-tr-sm'
             : 'bg-surface-card border border-surface-border text-gray-100 rounded-tl-sm'
-        }`}
+          }`}
       >
         {/* Assistant Header Status Bar */}
         {!isUser && (
@@ -168,13 +168,14 @@ function ChatMessageItem({
                 </span>
               )}
 
-              {/* Language Pill */}
-              {msg.detected_language && (
-                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
-                  isLanguageUnavailable
-                    ? 'text-amber-300 bg-amber-500/10 border-amber-500/20'
-                    : 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20'
-                }`}>
+              {/* Authoritative Language Badge */}
+              {authoritativeLang && (
+                <span
+                  data-testid="language-badge"
+                  className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${isLanguageUnavailable
+                      ? 'text-amber-300 bg-amber-500/10 border-amber-500/20'
+                      : 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20'
+                    }`}>
                   {langLabel}
                 </span>
               )}
@@ -244,12 +245,12 @@ function ChatMessageItem({
           }} />
         )}
 
-        {/* TTS Speak Button — Available on assistant messages */}
-        {!isUser && msg.content && (
+        {/* TTS Speak Button — Available on assistant messages for grounded answers */}
+        {!isUser && msg.content && isGrounded && (
           <div className="pt-2 border-t border-surface-border/40 flex items-center gap-2">
             <SpeakButton
               text={msg.content}
-              locale={ttsLocaleMap[msg.detected_language] || 'en-US'}
+              locale={ttsLocaleMap[authoritativeLang] || 'en-US'}
             />
           </div>
         )}

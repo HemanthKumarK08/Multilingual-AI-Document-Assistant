@@ -107,6 +107,12 @@ def invalidate_lexical_cache(processed_dir: Optional[str | Path] = None) -> None
         _SHARED_BM25_INDEX_CACHE.pop(key, None)
     else:
         _SHARED_BM25_INDEX_CACHE.clear()
+    try:
+        from app.services.retrieval.coordinator import clear_bm25_cache
+        clear_bm25_cache()
+    except Exception:
+        pass
+
     logger.info("Lexical BM25 index cache invalidated.")
 
 

@@ -385,11 +385,13 @@ def test_vr_43_no_microphone_recording_persistence(speech_recognition_button_jsx
     assert "AudioContext" not in speech_recognition_button_jsx
 
 
-# ── VR-44: No External TTS API ───────────────────────────────────────────────
+# ── VR-44: Backend Proxy for TTS (No Direct Third-Party API from Frontend) ─────
 
 def test_vr_44_no_external_tts_api(tts_js: str, api_service_js: str):
-    """VR-44: TTS uses browser-native window.speechSynthesis, zero external cloud TTS calls."""
-    assert "/api/v1/tts" not in api_service_js
+    """VR-44: Frontend calls backend proxy /api/v1/tts/synthesize, zero direct external cloud API calls or API keys."""
+    assert "/api/v1/tts/synthesize" in api_service_js
+    assert "api.sarvam.ai" not in api_service_js
+    assert "api.sarvam.ai" not in tts_js
     assert "speechSynthesis" in tts_js
 
 

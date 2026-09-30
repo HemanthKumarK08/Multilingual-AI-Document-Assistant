@@ -42,9 +42,12 @@ class TestMultilingualRetrievalIntegration:
         top_cand = result.candidates[0]
         assert "ATTN" in top_cand.doc_id or "HOST" in top_cand.doc_id or "COORD" in top_cand.doc_id or "attendance" in top_cand.text_content.lower() or "hostel" in top_cand.text_content.lower()
 
-    def test_query_expansion_adds_variant_diagnostics(self, coordinator):
+    def test_single_pass_direct_retrieval_diagnostics(self, coordinator):
         query = "MCA degree total credits required"
-        result = coordinator.retrieve(query, enable_query_expansion=True)
-        assert result.query_variant_count >= 1
-        assert result.query.query_variants
-        assert result.query.query_variants[0].variant_type == "original"
+        result = coordinator.retrieve(query)
+        assert result.candidates
+        assert result.query.raw_query == query
+        assert result.query.language == "en"
+        assert result.query.script == "Latin"
+        assert result.query_variant_count == 1
+        assert any("DOC-ACAD" in c.doc_id or "credits" in c.text_content.lower() for c in result.candidates)

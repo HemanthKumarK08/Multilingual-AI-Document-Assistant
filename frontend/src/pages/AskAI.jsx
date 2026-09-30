@@ -151,7 +151,8 @@ export const ChatMessageItem = React.memo(function ChatMessageItem({
   const isError = responseState === 'ERROR';
 
   const citationCount = Array.isArray(msg.citations) ? msg.citations.length : 0;
-  const langLabel = LANGUAGE_DISPLAY_NAMES[msg.detected_language] || msg.detected_language || 'English';
+  const authoritativeLang = msg.target_language || msg.response_language || msg.detected_language || 'en';
+  const langLabel = LANGUAGE_DISPLAY_NAMES[authoritativeLang] || authoritativeLang || 'English';
 
   return (
     <div
@@ -164,11 +165,10 @@ export const ChatMessageItem = React.memo(function ChatMessageItem({
       )}
 
       <div
-        className={`max-w-3xl sm:max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-lg space-y-3 ${
-          isUser
+        className={`max-w-3xl sm:max-w-4xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-lg space-y-3 ${isUser
             ? 'bg-brand-600 text-white rounded-tr-sm'
             : 'bg-surface-card border border-surface-border text-gray-100 rounded-tl-sm'
-        }`}
+          }`}
       >
         {/* Assistant Header Status Bar */}
         {!isUser && (
@@ -216,12 +216,14 @@ export const ChatMessageItem = React.memo(function ChatMessageItem({
                 </span>
               )}
 
-              {msg.detected_language && (
-                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
-                  isLanguageUnavailable
-                    ? 'text-amber-300 bg-amber-500/10 border-amber-500/20'
-                    : 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20'
-                }`}>
+              {/* Authoritative Language Badge */}
+              {authoritativeLang && (
+                <span
+                  data-testid="language-badge"
+                  className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${isLanguageUnavailable
+                      ? 'text-amber-300 bg-amber-500/10 border-amber-500/20'
+                      : 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20'
+                    }`}>
                   {langLabel}
                 </span>
               )}
@@ -288,12 +290,12 @@ export const ChatMessageItem = React.memo(function ChatMessageItem({
           }} />
         )}
 
-        {/* TTS Speak Button — Available on assistant messages */}
-        {!isUser && msg.content && (
+        {/* TTS Speak Button — Available on assistant messages for grounded answers */}
+        {!isUser && msg.content && isGrounded && (
           <div className="pt-2 border-t border-surface-border/40 flex items-center gap-2">
             <SpeakButton
               text={msg.content}
-              locale={TTS_LOCALE_MAP[msg.detected_language] || 'en-US'}
+              locale={TTS_LOCALE_MAP[authoritativeLang] || 'en-US'}
             />
           </div>
         )}
@@ -441,11 +443,13 @@ export default function AskAI() {
         fallback_reason: res.fallback_reason,
         response_state: res.response_state || (
           (res.fallback_reason === 'MISSING_TARGET_SCRIPT' || res.fallback_reason === 'LANGUAGE_UNAVAILABLE' ||
-           res.answer_text?.includes('सेवा वर्तमान में अनुपलब्ध') ||
-           res.answer_text?.includes('ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ') ||
-           res.answer_text?.includes('సేవ ప్రస్తుతం అందుబాటులో లేదు')) ? 'LANGUAGE_UNAVAILABLE' :
-          res.is_fallback ? 'INSUFFICIENT_EVIDENCE' : 'GROUNDED'
+            res.answer_text?.includes('सेवा वर्तमान में अनुपलब्ध') ||
+            res.answer_text?.includes('ಸೇವೆಯು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ') ||
+            res.answer_text?.includes('సేవ ప్రస్తుతం అందుబాటులో లేదు')) ? 'LANGUAGE_UNAVAILABLE' :
+            res.is_fallback ? 'INSUFFICIENT_EVIDENCE' : 'GROUNDED'
         ),
+        target_language: res.target_language || res.response_language || res.detected_language,
+        response_language: res.response_language || res.target_language || res.detected_language,
         detected_language: res.detected_language,
         citations: res.citations || [],
         total_latency_ms: res.total_latency_ms,
@@ -461,8 +465,8 @@ export default function AskAI() {
       const isInsufficientEvidence = assistantMsg.response_state === 'INSUFFICIENT_EVIDENCE';
       if (submitVoiceResponse && submitMode === 'voice' && !isLanguageUnavailable && !isInsufficientEvidence && res.answer_text) {
         stopAllSpeech();
-        const langKey = (selectedLanguage !== 'auto' && selectedLanguage) || res.detected_language || 'en';
-        const ttsLocale = TTS_LOCALE_MAP[langKey] || TTS_LOCALE_MAP[res.detected_language] || 'en-US';
+        const langKey = res.target_language || res.response_language || (selectedLanguage !== 'auto' && selectedLanguage) || res.detected_language || 'en';
+        const ttsLocale = TTS_LOCALE_MAP[langKey] || 'en-US';
         const autoTTS = createTTSController({
           text: res.answer_text,
           locale: ttsLocale,
@@ -535,7 +539,7 @@ export default function AskAI() {
 
   return (
     <ErrorBoundary onReset={clearConversation}>
-      <div className="flex flex-col h-[calc(100vh-6.5rem)] max-w-5xl lg:max-w-6xl mx-auto w-full animate-fadeIn">
+      <div className="flex flex-col flex-1 h-full min-h-0 max-w-5xl lg:max-w-6xl mx-auto w-full animate-fadeIn">
         {/* Top Controls Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-surface-border pb-3 mb-3 shrink-0">
           <div>

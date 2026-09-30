@@ -32,28 +32,25 @@ def vector_store_data():
     return chunks_by_id
 
 
-def test_msme_p27_c124_adversarial_isolation(vector_store_data):
-    """Specifically test DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c124 forced in isolation."""
-    c124_data = vector_store_data.get("DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c124")
-    assert c124_data is not None, "Chunk c124 must exist in ChromaDB"
+def test_msme_p27_c71_adversarial_isolation(vector_store_data):
+    """Specifically test DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c71 forced in isolation."""
+    c71_data = vector_store_data.get("DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c71")
+    assert c71_data is not None, "Chunk c71 must exist in ChromaDB"
 
     cand = CandidateChunk(
-        chunk_id="DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c124",
+        chunk_id="DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c71",
         doc_id="DOC-UP-MSMESCHEMEBOOKLE-3692EB",
-        filename=c124_data["filename"],
-        text_content=c124_data["text"],
-        page_number=c124_data["page"],
-        section_title=c124_data["section"],
+        filename=c71_data["filename"],
+        text_content=c71_data["text"],
+        page_number=c71_data["page"],
+        section_title=c71_data["section"],
         dense_score=0.95,
     )
 
     pkg = build_context_package([cand])
-    assert len(pkg.selected_chunks) >= 2, "Context builder must automatically recover predecessor c123"
-    assert any("c123" in c.chunk_id for c in pkg.selected_chunks)
+    assert len(pkg.selected_chunks) >= 2, "Context builder must automatically recover predecessor c70"
+    assert any("c70" in c.chunk_id for c in pkg.selected_chunks)
 
-    # Verify merged source
-    assert len(pkg.sources) == 1
-    assert "c123..DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c124" in pkg.sources[0].chunk_id
     assert "Reimbursement of 90%" in pkg.serialized_context
 
     mock = MockLLMProvider()

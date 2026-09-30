@@ -32,9 +32,8 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed lg:sticky top-0 lg:top-16 z-50 lg:z-0 h-screen lg:h-[calc(100vh-4rem)] w-64 bg-surface-sidebar/95 lg:bg-surface-sidebar/50 backdrop-blur-md border-r border-surface-border flex flex-col justify-between transition-transform duration-200 ease-in-out ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
+        className={`fixed lg:sticky top-0 z-50 lg:z-0 h-screen lg:h-full w-64 shrink-0 bg-surface-sidebar/95 lg:bg-surface-sidebar/50 backdrop-blur-md border-r border-surface-border flex flex-col justify-between transition-transform duration-200 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}
       >
         <div className="p-4 space-y-6">
           {/* Institution / Project Badge */}
@@ -63,10 +62,9 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                   end={item.path === '/'}
                   onClick={() => setIsSidebarOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-                      isActive
-                        ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
-                        : 'text-gray-400 hover:text-white hover:bg-surface-card'
+                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${isActive
+                      ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                      : 'text-gray-400 hover:text-white hover:bg-surface-card'
                     }`
                   }
                 >
@@ -94,8 +92,8 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           </div>
 
           <div className="flex items-center justify-between px-2 text-[11px] text-gray-500">
-            <span>FastAPI • ChromaDB • PySpark</span>
-            <span>v0.1.0</span>
+            <span>Hemanth Kumar K</span>
+            <span>MCA</span>
           </div>
         </div>
       </aside>

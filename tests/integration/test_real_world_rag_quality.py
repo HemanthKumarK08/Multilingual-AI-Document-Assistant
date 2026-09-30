@@ -6,6 +6,8 @@ import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
+pytestmark = pytest.mark.live_llm
+
 CGTMSE_URL = "https://www.cgtmse.in"
 MSME_DOC_ID = "DOC-UP-MSMESCHEMEBOOKLE-3692EB"
 

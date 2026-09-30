@@ -112,14 +112,46 @@ class PageAwareBoundaryManager:
                 if current_group["texts"]:
                     section_groups.append(current_group)
 
-                # Chunk each section group independently
+                # Merge short / fragmentary section groups into neighboring content on the same page
+                merged_groups: List[Dict[str, Any]] = []
                 for grp in section_groups:
+                    grp_text = "\n\n".join(grp["texts"]).strip()
+                    if not grp_text:
+                        continue
+                    # If this group is very short (< 40 chars) and previous group exists on same page
+                    if merged_groups and len(grp_text) < 40 and grp.get("heading_level", 2) > 1:
+                        merged_groups[-1]["texts"].extend(grp["texts"])
+                    else:
+                        merged_groups.append(grp)
+
+                # Secondary pass: if leading or trailing group on page is tiny (< 30 chars), merge with neighbor
+                final_groups: List[Dict[str, Any]] = []
+                for grp in merged_groups:
+                    grp_text = "\n\n".join(grp["texts"]).strip()
+                    if not grp_text:
+                        continue
+                    if len(grp_text) < 30 and final_groups:
+                        final_groups[-1]["texts"].extend(grp["texts"])
+                    else:
+                        final_groups.append(grp)
+
+                # Chunk each section group independently
+                for grp in final_groups:
                     sec_text = "\n\n".join(grp["texts"]).strip()
                     if not sec_text:
                         continue
 
                     raw_chunks = self.chunker.split_text_with_offsets(sec_text)
-                    for chunk_text, start_off, end_off in raw_chunks:
+                    # Merge any trailing micro-chunk (< 30 chars) into previous chunk if within budget
+                    processed_chunks = []
+                    for c_text, start_off, end_off in raw_chunks:
+                        if processed_chunks and len(c_text) < 30 and (len(processed_chunks[-1][0]) + len(c_text) + 2 <= self.config.chunk_size):
+                            prev_text, prev_start, _ = processed_chunks[-1]
+                            processed_chunks[-1] = (f"{prev_text}\n\n{c_text}", prev_start, end_off)
+                        else:
+                            processed_chunks.append((c_text, start_off, end_off))
+
+                    for chunk_text, start_off, end_off in processed_chunks:
                         chunk_obj = DocumentChunk(
                             chunk_id=f"{doc_id}:p{page_num}:c{global_chunk_index}",
                             doc_id=doc_id,
@@ -144,6 +176,7 @@ class PageAwareBoundaryManager:
                         )
                         chunks.append(chunk_obj)
                         global_chunk_index += 1
+
             else:
                 # Page has no blocks; chunk raw page text directly
                 page_text = page.text.strip()

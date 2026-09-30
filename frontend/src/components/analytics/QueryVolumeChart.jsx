@@ -64,7 +64,7 @@ export default function QueryVolumeChart({ timeseries, volume, loading, error, o
   const totalQueries = dailyData.reduce((acc, curr) => acc + curr.queries, 0);
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-surface-card border border-surface-border shadow-sm space-y-4">
+    <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-card border border-surface-border shadow-sm space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">

@@ -28,14 +28,9 @@ async def lifespan(app: FastAPI):
     try:
         import time
         t0 = time.perf_counter()
-        from app.api.routes.qa import _rag_coordinator
+        from app.services.retrieval.coordinator import simple_retrieve
         logger.info("Pre-warming embedding model, ChromaDB collection, and BM25 index...")
-        if _rag_coordinator and _rag_coordinator.retrieval_coordinator:
-            rc = _rag_coordinator.retrieval_coordinator
-            if rc.dense_retriever:
-                rc.dense_retriever.embedding_provider.embed_query("warmup query")
-            if rc.lexical_retriever:
-                _ = rc.lexical_retriever.index
+        _ = simple_retrieve("warmup query", top_k=1, n_candidates=1)
         warmup_ms = (time.perf_counter() - t0) * 1000.0
         logger.info(f"Embedding model, ChromaDB collection, and BM25 index pre-warmed in {warmup_ms:.2f}ms.")
     except Exception as e:

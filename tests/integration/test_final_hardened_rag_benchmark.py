@@ -10,6 +10,7 @@ from app.main import app
 from benchmark_rag_hardening import BENCHMARK_CASES
 
 
+@pytest.mark.live_llm
 @pytest.mark.asyncio
 async def test_full_80_cases_rag_quality_and_grounding():
     """Executes all 80 benchmark queries and asserts strict grounding and response validity."""

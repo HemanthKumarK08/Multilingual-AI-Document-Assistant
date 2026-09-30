@@ -1,5 +1,5 @@
 [
-  {"id": "EF-01", "category": "english_factual", "query": "What is the backend framework used in the IntelliExam platform?", "expected_keywords": ["FastAPI", "Python"], "expected_state": "GROUNDED"},
+  {"id": "EF-01", "category": "english_factual", "query": "What is the backend framework used in the IntelliExam platform?", "expected_keywords": ["Node.js", "Express"], "expected_state": "GROUNDED"},
   {"id": "EF-02", "category": "english_factual", "query": "Which relational database is used for storing student assessment data?", "expected_keywords": ["MySQL"], "expected_state": "GROUNDED"},
   {"id": "EF-03", "category": "english_factual", "query": "What AI vision features are used for automated proctoring?", "expected_keywords": ["proctoring", "detection"], "expected_state": "GROUNDED"},
   {"id": "EF-04", "category": "english_factual", "query": "What desktop framework is used for the student examination client?", "expected_keywords": ["Electron"], "expected_state": "GROUNDED"},

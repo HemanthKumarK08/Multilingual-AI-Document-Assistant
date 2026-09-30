@@ -261,9 +261,9 @@ async def delete_document(doc_id: str, db: AsyncSession = Depends(get_db)):
         await db.commit()
         logger.info(f"Successfully deleted document record {doc_id} from SQLite database.")
 
-        # 4. Invalidate shared BM25 index cache
-        from app.services.retrieval.lexical_retriever import invalidate_lexical_cache
-        invalidate_lexical_cache()
+        # 4. Invalidate active BM25 index cache
+        from app.services.retrieval.coordinator import clear_bm25_cache
+        clear_bm25_cache()
 
     except Exception as db_err:
         await db.rollback()
@@ -397,9 +397,9 @@ async def upload_document(
                         await db.commit()
                         result.status = "indexed"
 
-                    # Invalidate shared BM25 index cache
-                    from app.services.retrieval.lexical_retriever import invalidate_lexical_cache
-                    invalidate_lexical_cache()
+                    # Invalidate active BM25 index cache
+                    from app.services.retrieval.coordinator import clear_bm25_cache
+                    clear_bm25_cache()
             except Exception as index_err:
                 logger.warning(f"Vector indexing skipped/failed for {doc_id}: {str(index_err)}")
 

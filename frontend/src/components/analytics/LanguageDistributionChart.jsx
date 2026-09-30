@@ -74,7 +74,7 @@ export default function LanguageDistributionChart({ languages, loading, error, o
   const codeMixedCount = languages?.code_mixed_queries_count || 0;
 
   return (
-    <div className="p-5 sm:p-6 rounded-2xl bg-surface-card border border-surface-border shadow-sm space-y-4 flex flex-col justify-between">
+    <div className="relative p-5 sm:p-6 rounded-2xl bg-surface-card border border-surface-border shadow-sm space-y-4 flex flex-col justify-between">
       <div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

@@ -1,16 +1,25 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Volume2, VolumeX, Pause, Play, Loader2 } from 'lucide-react';
-import { createTTSController, isTTSSupported, stopAllSpeech } from './textToSpeech';
+import {
+  createTTSController,
+  isTTSSupported,
+  isVoiceAvailableForLocale,
+  getTTSUnavailableMessage,
+  stopAllSpeech,
+} from './textToSpeech';
 
 /**
- * SpeakButton Component (Phase 9.5)
+ * SpeakButton Component (Multilingual Quality Repair)
  * Renders a compact TTS control for a single AI answer.
- * Uses browser-native speechSynthesis — no cloud API, no audio storage.
  *
- * States: idle → starting → speaking → paused → idle (or error)
+ * Guarantees:
+ * - Checks voice availability specifically for requested locale.
+ * - For Indic languages without a native browser voice, gracefully shows
+ *   a localized unavailable message and PREVENTS fallback to English voice.
+ * - Deterministic single-answer playback with pause/resume/stop.
  *
  * @param {string}  props.text           - The AI answer text (Markdown OK, stripped for speech)
- * @param {string}  [props.locale]       - BCP-47 locale for voice selection (e.g. "en-US")
+ * @param {string}  [props.locale]       - BCP-47 locale for voice selection (e.g. "en-US", "hi-IN", "te-IN")
  * @param {boolean} [props.disabled]     - External disable flag
  * @param {string}  [props.className]    - Additional CSS classes
  */
@@ -25,20 +34,38 @@ export default function SpeakButton({
   // state: 'idle' | 'starting' | 'speaking' | 'paused' | 'error'
   const [ttsState, setTtsState] = useState('idle');
   const [errorMsg, setErrorMsg] = useState(null);
+  const [voiceAvailable, setVoiceAvailable] = useState(() => isVoiceAvailableForLocale(locale));
 
   const controllerRef = useRef(null);
   const isMountedRef = useRef(true);
 
-  // Mark unmounted to prevent state updates after cleanup
+  // Sync voice availability when voices load or locale changes
   useEffect(() => {
     isMountedRef.current = true;
+    const checkAvailability = () => {
+      if (isMountedRef.current) {
+        setVoiceAvailable(isVoiceAvailableForLocale(locale));
+      }
+    };
+
+    checkAvailability();
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.addEventListener('voiceschanged', checkAvailability);
+      return () => {
+        isMountedRef.current = false;
+        window.speechSynthesis.removeEventListener('voiceschanged', checkAvailability);
+        stopAllSpeech();
+        controllerRef.current = null;
+      };
+    }
+
     return () => {
       isMountedRef.current = false;
-      // Stop speech on unmount (navigation away)
       stopAllSpeech();
       controllerRef.current = null;
     };
-  }, []);
+  }, [locale]);
 
   const safeSetState = useCallback((newState) => {
     if (isMountedRef.current) setTtsState(newState);
@@ -61,8 +88,12 @@ export default function SpeakButton({
     });
   }, [text, locale, safeSetState]);
 
+  const langPrefix = (locale || '').toLowerCase().split('-')[0];
+  const isBackendSupported = ['en', 'hi', 'kn', 'te'].includes(langPrefix);
+  const effectiveAvailable = isBackendSupported || voiceAvailable;
+
   const handleSpeak = useCallback(() => {
-    if (!supported || disabled || ttsState === 'starting') return;
+    if (!supported || disabled || !effectiveAvailable || ttsState === 'starting') return;
 
     // Stop any other answer that may be speaking
     stopAllSpeech();
@@ -73,7 +104,7 @@ export default function SpeakButton({
     const ctrl = buildController();
     controllerRef.current = ctrl;
     ctrl.speak();
-  }, [supported, disabled, ttsState, buildController, safeSetState]);
+  }, [supported, disabled, effectiveAvailable, ttsState, buildController, safeSetState]);
 
   const handleStop = useCallback(() => {
     if (controllerRef.current) {
@@ -113,13 +144,28 @@ export default function SpeakButton({
     );
   }
 
+  // Graceful degradation when no compatible voice exists in backend or browser for this language
+  if (!effectiveAvailable) {
+    const unavailMsg = getTTSUnavailableMessage(locale);
+    const shortLabel = unavailMsg.split('(')[0].trim();
+    return (
+      <div
+        className={'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-medium text-amber-300/80 bg-amber-500/10 border border-amber-500/20 select-none ' + className}
+        title={unavailMsg}
+      >
+        <VolumeX size={12} className="text-amber-400 shrink-0" />
+        <span className="truncate max-w-[260px] sm:max-w-xs">{shortLabel}</span>
+      </div>
+    );
+  }
+
   const isIdle = ttsState === 'idle' || ttsState === 'error';
   const isStarting = ttsState === 'starting';
   const isSpeaking = ttsState === 'speaking';
   const isPaused = ttsState === 'paused';
 
   return (
-    <div className={'inline-flex items-center gap-1 ' + className}>
+    <div className={'relative inline-flex items-center gap-1 ' + className}>
       {/* Primary speak/stop/resume button */}
       {isIdle && (
         <button
@@ -217,7 +263,7 @@ export default function SpeakButton({
           className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-medium text-rose-400 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 transition focus:outline-none focus:ring-2 focus:ring-rose-500/50"
         >
           <VolumeX size={13} />
-          <span className="hidden sm:inline max-w-[120px] truncate">Speech error</span>
+          <span className="hidden sm:inline max-w-[140px] truncate">Speech error</span>
         </button>
       )}
 

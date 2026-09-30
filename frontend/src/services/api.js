@@ -3,7 +3,7 @@
  * Consumes the Phase 0-7 FastAPI backend without hardcoded credentials or scattered fetch calls.
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) || '';
 
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
@@ -139,6 +139,17 @@ export const apiService = {
         query_id: queryId,
         feedback: feedback,
         comment: comment,
+      }),
+    });
+  },
+
+  // Professional Neural TTS (Sarvam Bulbul v3)
+  async synthesizeSpeech(text, language = 'en') {
+    return request('/api/v1/tts/synthesize', {
+      method: 'POST',
+      body: JSON.stringify({
+        text: text,
+        language: language,
       }),
     });
   },

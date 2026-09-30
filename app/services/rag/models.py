@@ -53,12 +53,15 @@ class GroundedAnswer(BaseModel):
     query_id: str
     answer_text: str
     response_language: str = "en"
+    target_language: str = "en"
     grounded: bool = True
     fallback_used: bool = False
     fallback_reason: Optional[str] = None
+    generation_path: str = "direct"
     retrieval_id: Optional[str] = None
     sources: List[SourceCitation] = Field(default_factory=list)
     confidence_label: Optional[str] = None
     warnings: List[str] = Field(default_factory=list)
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     latency_ms: float = 0.0
+

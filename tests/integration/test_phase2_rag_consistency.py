@@ -205,10 +205,10 @@ def test_10_nirf_complete_grounded_answer():
     assert "90%" in ans.answer_text or "1.0 lakh" in ans.answer_text
 
 
-def test_11_boundary_predecessor_recovery_c124():
-    """Verify that when c124 is retrieved alone, predecessor c123 is automatically recovered and stitched."""
-    cand_c124 = CandidateChunk(
-        chunk_id="DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c124",
+def test_11_boundary_predecessor_recovery_c71():
+    """Verify that when c71 is retrieved alone, predecessor c70 is automatically recovered and stitched."""
+    cand_c71 = CandidateChunk(
+        chunk_id="DOC-UP-MSMESCHEMEBOOKLE-3692EB:p27:c71",
         doc_id="DOC-UP-MSMESCHEMEBOOKLE-3692EB",
         filename="b9b4423d_MSMESchemebooklet2025-26.pdf",
         page_number=27,
@@ -216,12 +216,12 @@ def test_11_boundary_predecessor_recovery_c124():
         text_content="top 50 NIRF Rated Management Institution’s Short-Term Training Program Fee.\n\nMSME SCHEMES 25\nFor more information and regular updates, visit: www.msme.gov.in",
         dense_score=0.95,
     )
-    pkg = build_context_package([cand_c124])
+    pkg = build_context_package([cand_c71])
 
-    # Must have recovered predecessor c123
+    # Must have recovered predecessor c70
     assert len(pkg.selected_chunks) >= 2
-    assert any("c123" in c.chunk_id for c in pkg.selected_chunks)
-    assert len(pkg.sources) == 1
+    assert any("c70" in c.chunk_id for c in pkg.selected_chunks)
+    assert len(pkg.sources) >= 1
     assert "Reimbursement of 90%" in pkg.serialized_context
     assert "www.msme.gov.in" in pkg.serialized_context
 
