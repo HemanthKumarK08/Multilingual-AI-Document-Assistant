@@ -529,5 +529,5 @@ The repository contains **599 automated tests** verifying all layers of the syst
 - **Institution:** Bangalore Institute of Technology (BIT), Bengaluru
 - **Department:** Master of Computer Applications (MCA)
 - **Project Title:** Multilingual AI Document Assistant with Big Data Analytics
-- **Candidate:** Hemanth Kumar K (1BI23MC041)
-- **Academic Year:** 2024–2026
+- **Candidate:** Hemanth Kumar K (1BI25MC039)
+- **Academic Year:** 2025–2027
