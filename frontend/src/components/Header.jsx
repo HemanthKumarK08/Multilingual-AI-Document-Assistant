@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, X, Sparkles, Globe, Activity, Terminal } from 'lucide-react';
+import { Menu, X, Sparkles, Globe } from 'lucide-react';
 import { apiService } from '../services/api';
 
 export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
@@ -42,9 +42,6 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
           <div>
             <h1 className="text-sm sm:text-base font-bold text-white tracking-tight leading-tight flex items-center gap-2">
               Multilingual AI Document Assistant
-              <span className="hidden sm:inline-block px-2.5 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 shadow-sm">
-                Production
-              </span>
             </h1>
             <p className="text-[11px] text-gray-400 hidden sm:block">
               AI-Powered Document Intelligence & Big Data Analytics
@@ -76,18 +73,6 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen }) {
           <Globe size={13} />
           <span>EN • HI • KN • TE</span>
         </div>
-
-        {/* Developer Swagger Quick Link */}
-        <a
-          href="/docs"
-          target="_blank"
-          rel="noreferrer"
-          title="Open Swagger REST API Docs"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card hover:bg-surface-card/80 border border-surface-border text-xs font-medium text-gray-300 hover:text-white transition"
-        >
-          <Terminal size={14} className="text-brand-400" />
-          <span className="hidden sm:inline">Swagger API</span>
-        </a>
       </div>
     </header>
   );

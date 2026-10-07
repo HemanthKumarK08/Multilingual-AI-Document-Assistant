@@ -1,0 +1,202 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_queries_analyzed": 9,
+  "languages": [
+    {
+      "language": "kn",
+      "language_name": "ಕನ್ನಡ (Kannada)",
+      "total_queries": 3,
+      "query_share_pct": 33.3,
+      "grounded_rate": 66.7,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 33.3,
+      "avg_latency_ms": 3846.2,
+      "avg_total_latency_ms": 3846.2,
+      "p95_latency_ms": 4454.2,
+      "p95_total_latency_ms": 4454.2,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 3.33,
+      "avg_citations": 3.33,
+      "code_mixed_count": 1,
+      "code_mixed_rate": 33.3,
+      "romanized_count": 1,
+      "status": "Good",
+      "provider_distribution": {
+        "mock": 3
+      }
+    },
+    {
+      "language": "hi",
+      "language_name": "हिन्दी (Hindi)",
+      "total_queries": 2,
+      "query_share_pct": 22.2,
+      "grounded_rate": 0.0,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 100.0,
+      "avg_latency_ms": 4888.5,
+      "avg_total_latency_ms": 4888.5,
+      "p95_latency_ms": 5816.7,
+      "p95_total_latency_ms": 5816.7,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 0.0,
+      "avg_citations": 0.0,
+      "code_mixed_count": 0,
+      "code_mixed_rate": 0.0,
+      "romanized_count": 0,
+      "status": "Needs Attention",
+      "provider_distribution": {
+        "mock": 2
+      }
+    },
+    {
+      "language": "te",
+      "language_name": "తెలుగు (Telugu)",
+      "total_queries": 2,
+      "query_share_pct": 22.2,
+      "grounded_rate": 100.0,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3799.1,
+      "avg_total_latency_ms": 3799.1,
+      "p95_latency_ms": 4303.0,
+      "p95_total_latency_ms": 4303.0,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 5.0,
+      "avg_citations": 5.0,
+      "code_mixed_count": 0,
+      "code_mixed_rate": 0.0,
+      "romanized_count": 0,
+      "status": "Excellent",
+      "provider_distribution": {
+        "mock": 2
+      }
+    },
+    {
+      "language": "en",
+      "language_name": "English",
+      "total_queries": 2,
+      "query_share_pct": 22.2,
+      "grounded_rate": 100.0,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 17194.4,
+      "avg_total_latency_ms": 17194.4,
+      "p95_latency_ms": 17495.7,
+      "p95_total_latency_ms": 17495.7,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 5.0,
+      "avg_citations": 5.0,
+      "code_mixed_count": 0,
+      "code_mixed_rate": 0.0,
+      "romanized_count": 0,
+      "status": "Excellent",
+      "provider_distribution": {
+        "mock": 2
+      }
+    }
+  ],
+  "by_language": {
+    "kn": {
+      "language": "kn",
+      "language_name": "ಕನ್ನಡ (Kannada)",
+      "total_queries": 3,
+      "query_share_pct": 33.3,
+      "grounded_rate": 66.7,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 33.3,
+      "avg_latency_ms": 3846.2,
+      "avg_total_latency_ms": 3846.2,
+      "p95_latency_ms": 4454.2,
+      "p95_total_latency_ms": 4454.2,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 3.33,
+      "avg_citations": 3.33,
+      "code_mixed_count": 1,
+      "code_mixed_rate": 33.3,
+      "romanized_count": 1,
+      "status": "Good",
+      "provider_distribution": {
+        "mock": 3
+      }
+    },
+    "hi": {
+      "language": "hi",
+      "language_name": "हिन्दी (Hindi)",
+      "total_queries": 2,
+      "query_share_pct": 22.2,
+      "grounded_rate": 0.0,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 100.0,
+      "avg_latency_ms": 4888.5,
+      "avg_total_latency_ms": 4888.5,
+      "p95_latency_ms": 5816.7,
+      "p95_total_latency_ms": 5816.7,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 0.0,
+      "avg_citations": 0.0,
+      "code_mixed_count": 0,
+      "code_mixed_rate": 0.0,
+      "romanized_count": 0,
+      "status": "Needs Attention",
+      "provider_distribution": {
+        "mock": 2
+      }
+    },
+    "te": {
+      "language": "te",
+      "language_name": "తెలుగు (Telugu)",
+      "total_queries": 2,
+      "query_share_pct": 22.2,
+      "grounded_rate": 100.0,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3799.1,
+      "avg_total_latency_ms": 3799.1,
+      "p95_latency_ms": 4303.0,
+      "p95_total_latency_ms": 4303.0,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 5.0,
+      "avg_citations": 5.0,
+      "code_mixed_count": 0,
+      "code_mixed_rate": 0.0,
+      "romanized_count": 0,
+      "status": "Excellent",
+      "provider_distribution": {
+        "mock": 2
+      }
+    },
+    "en": {
+      "language": "en",
+      "language_name": "English",
+      "total_queries": 2,
+      "query_share_pct": 22.2,
+      "grounded_rate": 100.0,
+      "citation_validity_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 17194.4,
+      "avg_total_latency_ms": 17194.4,
+      "p95_latency_ms": 17495.7,
+      "p95_total_latency_ms": 17495.7,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_generation_latency_ms": 0.0,
+      "avg_retrieved_chunks": 5.0,
+      "avg_citations": 5.0,
+      "code_mixed_count": 0,
+      "code_mixed_rate": 0.0,
+      "romanized_count": 0,
+      "status": "Excellent",
+      "provider_distribution": {
+        "mock": 2
+      }
+    }
+  },
+  "data_available": true
+}

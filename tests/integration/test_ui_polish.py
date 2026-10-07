@@ -61,13 +61,6 @@ def analytics_jsx() -> str:
 
 
 @pytest.fixture(scope="module")
-def settings_jsx() -> str:
-    p = PROJECT_ROOT / "frontend" / "src" / "pages" / "Settings.jsx"
-    assert p.exists()
-    return p.read_text(encoding="utf-8")
-
-
-@pytest.fixture(scope="module")
 def citations_section_jsx() -> str:
     p = PROJECT_ROOT / "frontend" / "src" / "components" / "CitationsSection.jsx"
     assert p.exists()
@@ -102,8 +95,8 @@ def test_ui_01_no_outdated_phase_label(header_jsx: str, dashboard_jsx: str, anal
 def test_ui_02_header_branding(header_jsx: str):
     """UI-02: Header displays production branding and platform identity."""
     assert "Multilingual AI Document Assistant" in header_jsx
-    assert "Production" in header_jsx
     assert "AI-Powered Document Intelligence" in header_jsx
+    assert "Swagger API" not in header_jsx
 
 
 # ── UI-03: Ask AI Layout Renders ──────────────────────────────────────────────
@@ -213,24 +206,28 @@ def test_ui_14_documents_functional(documents_jsx: str):
 
 def test_ui_15_analytics_functional(analytics_jsx: str):
     """UI-15: Analytics page renders PySpark analytics KPIs and telemetry charts."""
-    assert "AnalyticsKPIs" in analytics_jsx
-    assert "QueryVolumeChart" in analytics_jsx
-    assert "LanguageDistributionChart" in analytics_jsx
+    assert "UserExecutiveKPIs" in analytics_jsx or "AnalyticsKPIs" in analytics_jsx
+    assert "UserActivityTrendsChart" in analytics_jsx or "QueryVolumeChart" in analytics_jsx
+    assert "MultilingualUsagePanel" in analytics_jsx or "LanguageDistributionChart" in analytics_jsx
+    assert "LanguagePerformanceTable" in analytics_jsx or "RagPerformancePanel" in analytics_jsx
 
 
-# ── UI-16: Settings Page Functional ───────────────────────────────────────────
+# ── UI-16: Settings Page Removed & Clean Navigation ───────────────────────────
 
-def test_ui_16_settings_functional(settings_jsx: str):
-    """UI-16: Settings page renders developer docs, API links, and architecture specifications."""
-    assert "Swagger UI" in settings_jsx
-    assert "ReDoc API" in settings_jsx
+def test_ui_16_settings_removed():
+    """UI-16: Settings page is removed and /settings route redirects safely."""
+    p = PROJECT_ROOT / "frontend" / "src" / "pages" / "Settings.jsx"
+    assert not p.exists(), "Settings.jsx should be removed from user-facing app"
+    
+    app_jsx = (PROJECT_ROOT / "frontend" / "src" / "App.jsx").read_text(encoding="utf-8")
+    assert 'Navigate to="/"' in app_jsx or "Navigate to" in app_jsx
 
 
 # ── UI-17: 375px Responsive Layout ────────────────────────────────────────────
 
 def test_ui_17_responsive_375px(ask_ai_jsx: str, header_jsx: str):
-    """UI-17: Mobile layout handles narrow screens with hidden sm: badges and wrapping."""
-    assert "sm:inline" in header_jsx
+    """UI-17: Mobile layout handles narrow screens with hidden elements and wrapping."""
+    assert "hidden sm:block" in header_jsx or "hidden md:flex" in header_jsx
     assert "flex-wrap" in ask_ai_jsx
 
 

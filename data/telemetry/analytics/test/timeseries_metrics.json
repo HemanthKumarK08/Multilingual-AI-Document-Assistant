@@ -1,0 +1,89 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "daily_trends": [
+    {
+      "date": "2026-09-21",
+      "queries": 146,
+      "active_users": 1,
+      "avg_latency_ms": 2544.83,
+      "fallback_rate": 41.78,
+      "grounded_rate": 58.22,
+      "grounded_count": 85,
+      "fallback_count": 61
+    },
+    {
+      "date": "2026-09-22",
+      "queries": 568,
+      "active_users": 1,
+      "avg_latency_ms": 794.6,
+      "fallback_rate": 4.75,
+      "grounded_rate": 95.25,
+      "grounded_count": 541,
+      "fallback_count": 27
+    },
+    {
+      "date": "2026-09-23",
+      "queries": 595,
+      "active_users": 1,
+      "avg_latency_ms": 345.13,
+      "fallback_rate": 11.6,
+      "grounded_rate": 88.4,
+      "grounded_count": 526,
+      "fallback_count": 69
+    },
+    {
+      "date": "2026-09-24",
+      "queries": 4635,
+      "active_users": 1,
+      "avg_latency_ms": 403.99,
+      "fallback_rate": 18.75,
+      "grounded_rate": 81.25,
+      "grounded_count": 3766,
+      "fallback_count": 869
+    },
+    {
+      "date": "2026-09-25",
+      "queries": 385,
+      "active_users": 1,
+      "avg_latency_ms": 2845.53,
+      "fallback_rate": 27.79,
+      "grounded_rate": 72.21,
+      "grounded_count": 278,
+      "fallback_count": 107
+    },
+    {
+      "date": "2026-09-30",
+      "queries": 155,
+      "active_users": 1,
+      "avg_latency_ms": 3175.82,
+      "fallback_rate": 24.52,
+      "grounded_rate": 75.48,
+      "grounded_count": 117,
+      "fallback_count": 38
+    },
+    {
+      "date": "2026-10-07",
+      "queries": 214,
+      "active_users": 2,
+      "avg_latency_ms": 3588.62,
+      "fallback_rate": 20.09,
+      "grounded_rate": 79.91,
+      "grounded_count": 171,
+      "fallback_count": 43
+    }
+  ],
+  "hourly_distribution": {
+    "8": 1,
+    "9": 327,
+    "10": 489,
+    "11": 103,
+    "12": 1606,
+    "13": 2025,
+    "14": 1829,
+    "15": 42,
+    "16": 16,
+    "17": 260
+  },
+  "data_available": true
+}

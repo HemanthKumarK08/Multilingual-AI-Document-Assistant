@@ -1,0 +1,106 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_unique_users": 2,
+  "avg_queries_per_user": 3349.0,
+  "user_language_profiles": [
+    {
+      "profile": "English Only",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "English + Hindi",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "English + Kannada",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "English + Telugu",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "Multilingual (3+ Languages)",
+      "user_count": 2,
+      "percentage": 100.0
+    },
+    {
+      "profile": "Code-Mixed & Romanized",
+      "user_count": 0,
+      "percentage": 0.0
+    }
+  ],
+  "top_anonymous_users": [
+    {
+      "anonymous_user_id": "USER-98F3AC",
+      "query_count": 114,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "documents_accessed": 13,
+      "grounded_rate": 82.5,
+      "fallback_rate": 17.5,
+      "avg_latency_ms": 5536.2
+    },
+    {
+      "anonymous_user_id": "USER-C4DB1936",
+      "query_count": 100,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "documents_accessed": 12,
+      "grounded_rate": 77.0,
+      "fallback_rate": 23.0,
+      "avg_latency_ms": 1368.4
+    }
+  ],
+  "daily_active_users": [
+    {
+      "date": "2026-09-21",
+      "active_users": 1,
+      "queries": 146
+    },
+    {
+      "date": "2026-09-22",
+      "active_users": 1,
+      "queries": 568
+    },
+    {
+      "date": "2026-09-23",
+      "active_users": 1,
+      "queries": 595
+    },
+    {
+      "date": "2026-09-24",
+      "active_users": 1,
+      "queries": 4635
+    },
+    {
+      "date": "2026-09-25",
+      "active_users": 1,
+      "queries": 385
+    },
+    {
+      "date": "2026-09-30",
+      "active_users": 1,
+      "queries": 155
+    },
+    {
+      "date": "2026-10-07",
+      "active_users": 2,
+      "queries": 214
+    }
+  ],
+  "data_available": true
+}

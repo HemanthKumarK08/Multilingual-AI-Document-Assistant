@@ -33,10 +33,29 @@ def generate_fixture_telemetry(
     target_file = output_raw_dir / "query_completed.jsonl"
     
     languages = ["en", "hi", "kn", "te"]
-    lang_weights = [0.40, 0.25, 0.20, 0.15]
+    lang_weights = [0.38, 0.26, 0.22, 0.14]
     
-    providers = ["gemini", "ollama", "mock"]
-    provider_weights = [0.70, 0.20, 0.10]
+    providers = ["gemini", "groq", "ollama", "mock"]
+    provider_weights = [0.65, 0.20, 0.10, 0.05]
+
+    document_ids = [
+        "DOC-ACAD-001",
+        "DOC-EXAM-002",
+        "DOC-FEE-003",
+        "DOC-SCH-004",
+        "DOC-HOSTEL-005",
+    ]
+    doc_weights = [0.35, 0.25, 0.15, 0.15, 0.10]
+
+    anonymous_users = [f"USER-{i:03d}" for i in range(1, 36)]
+
+    # Map each user to a primary language preference
+    user_pref = {}
+    for u in anonymous_users:
+        user_pref[u] = random.choices(
+            ["en_only", "en_hi", "en_kn", "en_te", "multilingual", "code_mixed"],
+            weights=[0.30, 0.20, 0.20, 0.15, 0.10, 0.05]
+        )[0]
 
     end_date = datetime.utcnow()
     start_date = end_date - timedelta(days=num_days)
@@ -47,21 +66,57 @@ def generate_fixture_telemetry(
             current_date = start_date + timedelta(days=day_offset)
             date_str = current_date.strftime("%Y-%m-%d")
 
+            # Active users for the day (15-25 active users per day)
+            day_active_users = random.sample(anonymous_users, k=random.randint(18, 28))
+
             for _ in range(records_per_day):
                 hour = random.randint(8, 22)
                 minute = random.randint(0, 59)
                 second = random.randint(0, 59)
                 ts = f"{date_str}T{hour:02d}:{minute:02d}:{second:02d}Z"
 
-                lang = random.choices(languages, weights=lang_weights)[0]
-                is_code_mixed = random.random() < 0.15
+                user = random.choice(day_active_users)
+                pref = user_pref[user]
+                session_id = f"SES-{user[5:]}-{day_offset}"
+
+                # Language selection based on user preference profile
+                if pref == "en_only":
+                    lang = "en"
+                    prev_lang = "en" if random.random() < 0.8 else None
+                    is_code_mixed = False
+                    is_romanized = False
+                elif pref == "en_hi":
+                    lang = random.choice(["en", "hi"])
+                    prev_lang = "en" if lang == "hi" and random.random() < 0.5 else ("hi" if lang == "en" and random.random() < 0.3 else None)
+                    is_code_mixed = random.random() < 0.15
+                    is_romanized = (lang == "hi" and random.random() < 0.25)
+                elif pref == "en_kn":
+                    lang = random.choice(["en", "kn"])
+                    prev_lang = "en" if lang == "kn" and random.random() < 0.5 else ("kn" if lang == "en" and random.random() < 0.3 else None)
+                    is_code_mixed = random.random() < 0.18
+                    is_romanized = (lang == "kn" and random.random() < 0.20)
+                elif pref == "en_te":
+                    lang = random.choice(["en", "te"])
+                    prev_lang = "en" if lang == "te" and random.random() < 0.5 else ("te" if lang == "en" and random.random() < 0.3 else None)
+                    is_code_mixed = random.random() < 0.15
+                    is_romanized = (lang == "te" and random.random() < 0.20)
+                elif pref == "code_mixed":
+                    lang = random.choice(["hi", "kn", "te"])
+                    prev_lang = "en" if random.random() < 0.4 else None
+                    is_code_mixed = True
+                    is_romanized = True
+                else: # multilingual
+                    lang = random.choices(languages, weights=lang_weights)[0]
+                    prev_lang = random.choice(languages) if random.random() < 0.4 else None
+                    is_code_mixed = random.random() < 0.12
+                    is_romanized = random.random() < 0.10
                 
                 if lang == "en":
                     script = "latin"
                     q_type = "fact_lookup"
-                elif is_code_mixed:
+                elif is_romanized or is_code_mixed:
                     script = "latin"
-                    q_type = "code_mixed_retrieval"
+                    q_type = "code_mixed_retrieval" if is_code_mixed else "romanized_fact"
                 elif lang == "hi":
                     script = "devanagari"
                     q_type = "cross_lingual_fact"
@@ -75,8 +130,10 @@ def generate_fixture_telemetry(
                     script = "latin"
                     q_type = "fact_lookup"
 
-                # Simulate fallbacks (~8% out-of-domain)
-                is_fallback = random.random() < 0.08
+                doc_id = random.choices(document_ids, weights=doc_weights)[0]
+
+                # Simulate fallbacks (~6% out-of-domain)
+                is_fallback = random.random() < 0.06
                 provider = random.choices(providers, weights=provider_weights)[0]
 
                 # Latencies based on Phase 6 warm benchmarks
@@ -89,16 +146,22 @@ def generate_fixture_telemetry(
                     schema_version="1.0",
                     event_id=str(uuid4()),
                     event_type="query_completed",
+                    telemetry_environment="fixture",
                     timestamp=ts,
                     date=date_str,
                     hour=hour,
                     request_id_hash=str(uuid4())[:16],
+                    anonymous_user_id=user,
+                    session_id=session_id,
+                    document_id=doc_id,
                     query_id=f"Q-FIX-{total_records+1:04d}",
                     retrieval_id=f"RET-FIX-{total_records+1:04d}",
                     language=lang,
+                    previous_language=prev_lang,
                     script=script,
                     query_type=q_type,
                     is_code_mixed=is_code_mixed,
+                    is_romanized=is_romanized,
                     variant_count=random.randint(1, 4) if lang != "en" else 1,
                     candidate_count=random.randint(15, 30),
                     retrieved_chunk_count=5 if not is_fallback else random.randint(0, 2),

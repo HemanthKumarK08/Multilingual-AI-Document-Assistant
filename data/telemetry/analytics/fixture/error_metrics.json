@@ -1,0 +1,11 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_records": 350,
+  "error_events_count": 0,
+  "overall_error_rate": 0.0,
+  "errors_by_type": {},
+  "fallback_events_count": 18,
+  "fallback_rate": 5.14,
+  "data_available": true
+}

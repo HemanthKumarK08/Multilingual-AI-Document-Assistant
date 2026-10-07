@@ -1,0 +1,372 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_unique_users": 35,
+  "avg_queries_per_user": 10.0,
+  "user_language_profiles": [
+    {
+      "profile": "English Only",
+      "user_count": 8,
+      "percentage": 22.9
+    },
+    {
+      "profile": "English + Hindi",
+      "user_count": 2,
+      "percentage": 5.7
+    },
+    {
+      "profile": "English + Kannada",
+      "user_count": 10,
+      "percentage": 28.6
+    },
+    {
+      "profile": "English + Telugu",
+      "user_count": 8,
+      "percentage": 22.9
+    },
+    {
+      "profile": "Multilingual (3+ Languages)",
+      "user_count": 1,
+      "percentage": 2.9
+    },
+    {
+      "profile": "Code-Mixed & Romanized",
+      "user_count": 6,
+      "percentage": 17.1
+    }
+  ],
+  "top_anonymous_users": [
+    {
+      "anonymous_user_id": "USER-002",
+      "query_count": 19,
+      "languages_used": [
+        "en",
+        "te"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 89.5,
+      "fallback_rate": 10.5,
+      "avg_latency_ms": 335.8
+    },
+    {
+      "anonymous_user_id": "USER-034",
+      "query_count": 18,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 94.4,
+      "fallback_rate": 5.6,
+      "avg_latency_ms": 273.3
+    },
+    {
+      "anonymous_user_id": "USER-008",
+      "query_count": 17,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 317.2
+    },
+    {
+      "anonymous_user_id": "USER-026",
+      "query_count": 16,
+      "languages_used": [
+        "en",
+        "te"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 93.8,
+      "fallback_rate": 6.2,
+      "avg_latency_ms": 312.1
+    },
+    {
+      "anonymous_user_id": "USER-007",
+      "query_count": 15,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 80.0,
+      "fallback_rate": 20.0,
+      "avg_latency_ms": 361.4
+    },
+    {
+      "anonymous_user_id": "USER-017",
+      "query_count": 15,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 93.3,
+      "fallback_rate": 6.7,
+      "avg_latency_ms": 370.9
+    },
+    {
+      "anonymous_user_id": "USER-022",
+      "query_count": 15,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 314.3
+    },
+    {
+      "anonymous_user_id": "USER-018",
+      "query_count": 14,
+      "languages_used": [
+        "hi",
+        "kn",
+        "te"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 92.9,
+      "fallback_rate": 7.1,
+      "avg_latency_ms": 308.4
+    },
+    {
+      "anonymous_user_id": "USER-019",
+      "query_count": 13,
+      "languages_used": [
+        "hi",
+        "kn",
+        "te"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 325.6
+    },
+    {
+      "anonymous_user_id": "USER-012",
+      "query_count": 13,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 92.3,
+      "fallback_rate": 7.7,
+      "avg_latency_ms": 318.2
+    },
+    {
+      "anonymous_user_id": "USER-033",
+      "query_count": 13,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 345.1
+    },
+    {
+      "anonymous_user_id": "USER-015",
+      "query_count": 13,
+      "languages_used": [
+        "en",
+        "hi"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 92.3,
+      "fallback_rate": 7.7,
+      "avg_latency_ms": 317.3
+    },
+    {
+      "anonymous_user_id": "USER-021",
+      "query_count": 13,
+      "languages_used": [
+        "en",
+        "te"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 316.3
+    },
+    {
+      "anonymous_user_id": "USER-027",
+      "query_count": 12,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 5,
+      "grounded_rate": 91.7,
+      "fallback_rate": 8.3,
+      "avg_latency_ms": 347.1
+    },
+    {
+      "anonymous_user_id": "USER-030",
+      "query_count": 11,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 337.2
+    },
+    {
+      "anonymous_user_id": "USER-023",
+      "query_count": 11,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 248.8
+    },
+    {
+      "anonymous_user_id": "USER-004",
+      "query_count": 11,
+      "languages_used": [
+        "en",
+        "te"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 90.9,
+      "fallback_rate": 9.1,
+      "avg_latency_ms": 324.8
+    },
+    {
+      "anonymous_user_id": "USER-003",
+      "query_count": 10,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 305.7
+    },
+    {
+      "anonymous_user_id": "USER-006",
+      "query_count": 10,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 306.4
+    },
+    {
+      "anonymous_user_id": "USER-016",
+      "query_count": 9,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 292.7
+    },
+    {
+      "anonymous_user_id": "USER-005",
+      "query_count": 8,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 87.5,
+      "fallback_rate": 12.5,
+      "avg_latency_ms": 379.2
+    },
+    {
+      "anonymous_user_id": "USER-029",
+      "query_count": 8,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 87.5,
+      "fallback_rate": 12.5,
+      "avg_latency_ms": 306.4
+    },
+    {
+      "anonymous_user_id": "USER-031",
+      "query_count": 8,
+      "languages_used": [
+        "en",
+        "kn"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 354.1
+    },
+    {
+      "anonymous_user_id": "USER-032",
+      "query_count": 8,
+      "languages_used": [
+        "en"
+      ],
+      "documents_accessed": 4,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 329.7
+    },
+    {
+      "anonymous_user_id": "USER-013",
+      "query_count": 7,
+      "languages_used": [
+        "en",
+        "hi"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 361.3
+    }
+  ],
+  "daily_active_users": [
+    {
+      "date": "2026-09-30",
+      "active_users": 18,
+      "queries": 50
+    },
+    {
+      "date": "2026-10-01",
+      "active_users": 22,
+      "queries": 50
+    },
+    {
+      "date": "2026-10-02",
+      "active_users": 23,
+      "queries": 50
+    },
+    {
+      "date": "2026-10-03",
+      "active_users": 24,
+      "queries": 50
+    },
+    {
+      "date": "2026-10-04",
+      "active_users": 24,
+      "queries": 50
+    },
+    {
+      "date": "2026-10-05",
+      "active_users": 20,
+      "queries": 50
+    },
+    {
+      "date": "2026-10-06",
+      "active_users": 17,
+      "queries": 50
+    }
+  ],
+  "data_available": true
+}

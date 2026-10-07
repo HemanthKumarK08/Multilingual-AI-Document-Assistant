@@ -1,0 +1,226 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_documents_referenced": 14,
+  "total_documents_analyzed": 14,
+  "documents": [
+    {
+      "document_id": "DOC-ATTN-001",
+      "title": "Attendance Policies & Academic Standards",
+      "total_queries": 69,
+      "query_count": 69,
+      "query_share_pct": 1.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 1076.7,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-MSMESCHEMEBOOKLE-3692EB",
+      "title": "Institutional Document (DOC-UP-MSMESCHEMEBOOKLE-3692EB)",
+      "total_queries": 65,
+      "query_count": 65,
+      "query_share_pct": 1.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 6359.4,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-INTELLIEXAM-AI-BAC477",
+      "title": "Institutional Document (DOC-UP-INTELLIEXAM-AI-BAC477)",
+      "total_queries": 11,
+      "query_count": 11,
+      "query_share_pct": 0.2,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3983.9,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-ATTN-002",
+      "title": "Institutional Document (DOC-ATTN-002)",
+      "total_queries": 5,
+      "query_count": 5,
+      "query_share_pct": 0.1,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 2540.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-ACAD-002",
+      "title": "Institutional Document (DOC-ACAD-002)",
+      "total_queries": 4,
+      "query_count": 4,
+      "query_share_pct": 0.1,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 35.0,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-EXAM-001",
+      "title": "Institutional Document (DOC-EXAM-001)",
+      "total_queries": 4,
+      "query_count": 4,
+      "query_share_pct": 0.1,
+      "unique_users": 2,
+      "languages_used": [
+        "en",
+        "hi"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 4307.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-ATTN-003",
+      "title": "Institutional Document (DOC-ATTN-003)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "kn"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 1755.7,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-HOST-002",
+      "title": "Institutional Document (DOC-HOST-002)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 29.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-PLACE-001",
+      "title": "Institutional Document (DOC-PLACE-001)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 34.0,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-SCHOL-001",
+      "title": "Institutional Document (DOC-SCHOL-001)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 32.4,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-TEST-POLICY-DOC-9F4521",
+      "title": "Institutional Document (DOC-UP-TEST-POLICY-DOC-9F4521)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 34.8,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-INSTRUCTIONS-TO-F38D94",
+      "title": "Institutional Document (DOC-UP-INSTRUCTIONS-TO-F38D94)",
+      "total_queries": 1,
+      "query_count": 1,
+      "query_share_pct": 0.0,
+      "unique_users": 1,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 66210.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-E2E-DELETE-VIEW-FBF60A",
+      "title": "Institutional Document (DOC-UP-E2E-DELETE-VIEW-FBF60A)",
+      "total_queries": 1,
+      "query_count": 1,
+      "query_share_pct": 0.0,
+      "unique_users": 1,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 50.3,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-E2E-DELETE-VIEW-BF45C8",
+      "title": "Institutional Document (DOC-UP-E2E-DELETE-VIEW-BF45C8)",
+      "total_queries": 1,
+      "query_count": 1,
+      "query_share_pct": 0.0,
+      "unique_users": 1,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 49.0,
+      "avg_citations": 5.0
+    }
+  ],
+  "data_available": true
+}

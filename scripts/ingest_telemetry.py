@@ -129,6 +129,15 @@ def ingest_telemetry(
                     # Ensure standard partition fields
                     if "schema_version" not in event_data:
                         event_data["schema_version"] = "1.0"
+                    if "telemetry_environment" not in event_data:
+                        # Derive based on event origin if missing
+                        if event_type == "query_completed" or str(event_data.get("query_id", "")).startswith("Q-FIX"):
+                            event_data["telemetry_environment"] = "fixture"
+                        elif event_data.get("session_id", "").startswith("SES-LIVE"):
+                            event_data["telemetry_environment"] = "live"
+                        else:
+                            event_data["telemetry_environment"] = "test"
+
                     if "date" not in event_data and dt:
                         event_data["date"] = dt
                     if "hour" not in event_data and "timestamp" in event_data:
@@ -139,7 +148,7 @@ def ingest_telemetry(
 
                     if event_type not in validated_handles:
                         target_validated_path = validated_dir / f"{event_type}.jsonl"
-                        validated_handles[event_type] = open(target_validated_path, "a", encoding="utf-8")
+                        validated_handles[event_type] = open(target_validated_path, "w", encoding="utf-8")
 
                     validated_handles[event_type].write(json.dumps(event_data, ensure_ascii=False) + "\n")
 

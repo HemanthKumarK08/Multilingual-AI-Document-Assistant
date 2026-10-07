@@ -5,9 +5,6 @@ import {
   Files,
   BotMessageSquare,
   BarChart3,
-  Settings,
-  ExternalLink,
-  ShieldCheck,
   Building2,
 } from 'lucide-react';
 
@@ -16,7 +13,6 @@ const NAV_ITEMS = [
   { name: 'Documents', path: '/documents', icon: Files },
   { name: 'Ask AI', path: '/ask', icon: BotMessageSquare },
   { name: 'Analytics', path: '/analytics', icon: BarChart3 },
-  { name: 'Settings', path: '/settings', icon: Settings },
 ];
 
 export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
@@ -32,8 +28,9 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed lg:sticky top-0 z-50 lg:z-0 h-screen lg:h-full w-64 shrink-0 bg-surface-sidebar/95 lg:bg-surface-sidebar/50 backdrop-blur-md border-r border-surface-border flex flex-col justify-between transition-transform duration-200 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-          }`}
+        className={`fixed lg:sticky top-0 z-50 lg:z-0 h-screen lg:h-full w-64 shrink-0 bg-surface-sidebar/95 lg:bg-surface-sidebar/50 backdrop-blur-md border-r border-surface-border flex flex-col justify-between transition-transform duration-200 ease-in-out ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
       >
         <div className="p-4 space-y-6">
           {/* Institution / Project Badge */}
@@ -62,9 +59,10 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                   end={item.path === '/'}
                   onClick={() => setIsSidebarOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${isActive
-                      ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
-                      : 'text-gray-400 hover:text-white hover:bg-surface-card'
+                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
+                      isActive
+                        ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30'
+                        : 'text-gray-400 hover:text-white hover:bg-surface-card'
                     }`
                   }
                 >
@@ -76,21 +74,8 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           </nav>
         </div>
 
-        {/* Footer / System Info */}
-        <div className="p-4 border-t border-surface-border space-y-3">
-          <div className="px-3 py-2 rounded-lg bg-surface-card/60 border border-surface-border/50 text-[11px] text-gray-400 space-y-1">
-            <div className="flex items-center justify-between text-gray-300 font-medium">
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck size={13} className="text-emerald-400" />
-                Zero-Raw-Data Privacy
-              </span>
-              <span className="text-[10px] text-emerald-400 font-bold">Active</span>
-            </div>
-            <p className="text-gray-500 text-[10px]">
-              PySpark Batch & Hybrid Vector RAG
-            </p>
-          </div>
-
+        {/* Footer Info */}
+        <div className="p-4 border-t border-surface-border">
           <div className="flex items-center justify-between px-2 text-[11px] text-gray-500">
             <span>Hemanth Kumar K</span>
             <span>MCA</span>

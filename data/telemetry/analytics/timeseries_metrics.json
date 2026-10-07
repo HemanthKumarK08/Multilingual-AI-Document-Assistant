@@ -1,71 +1,154 @@
 {
-  "generated_at_utc": "2026-09-15T10:59:27.214625Z",
+  "environment": "all",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
   "daily_trends": [
     {
-      "date": "2026-09-08",
+      "date": "2026-09-21",
+      "queries": 146,
+      "active_users": 1,
+      "avg_latency_ms": 2544.83,
+      "fallback_rate": 41.78,
+      "grounded_rate": 58.22,
+      "grounded_count": 85,
+      "fallback_count": 61
+    },
+    {
+      "date": "2026-09-22",
+      "queries": 568,
+      "active_users": 1,
+      "avg_latency_ms": 794.6,
+      "fallback_rate": 4.75,
+      "grounded_rate": 95.25,
+      "grounded_count": 541,
+      "fallback_count": 27
+    },
+    {
+      "date": "2026-09-23",
+      "queries": 595,
+      "active_users": 1,
+      "avg_latency_ms": 345.13,
+      "fallback_rate": 11.6,
+      "grounded_rate": 88.4,
+      "grounded_count": 526,
+      "fallback_count": 69
+    },
+    {
+      "date": "2026-09-24",
+      "queries": 4635,
+      "active_users": 1,
+      "avg_latency_ms": 403.99,
+      "fallback_rate": 18.75,
+      "grounded_rate": 81.25,
+      "grounded_count": 3766,
+      "fallback_count": 869
+    },
+    {
+      "date": "2026-09-25",
+      "queries": 385,
+      "active_users": 1,
+      "avg_latency_ms": 2845.53,
+      "fallback_rate": 27.79,
+      "grounded_rate": 72.21,
+      "grounded_count": 278,
+      "fallback_count": 107
+    },
+    {
+      "date": "2026-09-30",
+      "queries": 205,
+      "active_users": 19,
+      "avg_latency_ms": 2482.14,
+      "fallback_rate": 20.0,
+      "grounded_rate": 80.0,
+      "grounded_count": 164,
+      "fallback_count": 41
+    },
+    {
+      "date": "2026-10-01",
       "queries": 50,
-      "avg_latency_ms": 278.82,
+      "active_users": 22,
+      "avg_latency_ms": 326.24,
       "fallback_rate": 8.0,
-      "grounded_rate": 92.0
+      "grounded_rate": 92.0,
+      "grounded_count": 46,
+      "fallback_count": 4
     },
     {
-      "date": "2026-09-09",
+      "date": "2026-10-02",
       "queries": 50,
-      "avg_latency_ms": 279.67,
-      "fallback_rate": 6.0,
-      "grounded_rate": 94.0
-    },
-    {
-      "date": "2026-09-10",
-      "queries": 50,
-      "avg_latency_ms": 270.85,
-      "fallback_rate": 6.0,
-      "grounded_rate": 94.0
-    },
-    {
-      "date": "2026-09-11",
-      "queries": 50,
-      "avg_latency_ms": 295.47,
+      "active_users": 23,
+      "avg_latency_ms": 321.13,
       "fallback_rate": 2.0,
-      "grounded_rate": 98.0
+      "grounded_rate": 98.0,
+      "grounded_count": 49,
+      "fallback_count": 1
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-10-03",
       "queries": 50,
-      "avg_latency_ms": 325.05,
+      "active_users": 24,
+      "avg_latency_ms": 319.28,
+      "fallback_rate": 8.0,
+      "grounded_rate": 92.0,
+      "grounded_count": 46,
+      "fallback_count": 4
+    },
+    {
+      "date": "2026-10-04",
+      "queries": 50,
+      "active_users": 24,
+      "avg_latency_ms": 316.66,
       "fallback_rate": 6.0,
-      "grounded_rate": 94.0
+      "grounded_rate": 94.0,
+      "grounded_count": 47,
+      "fallback_count": 3
     },
     {
-      "date": "2026-09-13",
+      "date": "2026-10-05",
       "queries": 50,
-      "avg_latency_ms": 282.07,
-      "fallback_rate": 10.0,
-      "grounded_rate": 90.0
+      "active_users": 20,
+      "avg_latency_ms": 318.95,
+      "fallback_rate": 0.0,
+      "grounded_rate": 100.0,
+      "grounded_count": 50,
+      "fallback_count": 0
     },
     {
-      "date": "2026-09-14",
+      "date": "2026-10-06",
       "queries": 50,
-      "avg_latency_ms": 311.35,
-      "fallback_rate": 4.0,
-      "grounded_rate": 96.0
+      "active_users": 17,
+      "avg_latency_ms": 321.97,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0,
+      "grounded_count": 47,
+      "fallback_count": 3
+    },
+    {
+      "date": "2026-10-07",
+      "queries": 223,
+      "active_users": 4,
+      "avg_latency_ms": 3727.65,
+      "fallback_rate": 20.63,
+      "grounded_rate": 79.37,
+      "grounded_count": 177,
+      "fallback_count": 46
     }
   ],
   "hourly_distribution": {
-    "8": 22,
-    "9": 24,
-    "10": 23,
-    "11": 20,
-    "12": 23,
-    "13": 26,
-    "14": 20,
-    "15": 18,
-    "16": 18,
-    "17": 34,
-    "18": 17,
-    "19": 30,
-    "20": 30,
-    "21": 20,
-    "22": 25
-  }
+    "8": 27,
+    "9": 358,
+    "10": 516,
+    "11": 128,
+    "12": 1633,
+    "13": 2053,
+    "14": 1849,
+    "15": 65,
+    "16": 30,
+    "17": 286,
+    "18": 31,
+    "19": 26,
+    "20": 14,
+    "21": 22,
+    "22": 19
+  },
+  "data_available": true
 }

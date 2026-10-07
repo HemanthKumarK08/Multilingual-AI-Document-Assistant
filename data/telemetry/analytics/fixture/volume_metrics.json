@@ -1,0 +1,40 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "source_record_count": 350,
+  "total_events": 350,
+  "query_completed_count": 350,
+  "retrieval_completed_count": 0,
+  "rag_response_count": 0,
+  "error_count": 0,
+  "events_by_type": {
+    "query_completed": 350
+  },
+  "events_by_date": {
+    "2026-09-30": 50,
+    "2026-10-01": 50,
+    "2026-10-02": 50,
+    "2026-10-03": 50,
+    "2026-10-04": 50,
+    "2026-10-05": 50,
+    "2026-10-06": 50
+  },
+  "events_by_hour": {
+    "8": 26,
+    "9": 27,
+    "10": 22,
+    "11": 25,
+    "12": 27,
+    "13": 28,
+    "14": 20,
+    "15": 23,
+    "16": 14,
+    "17": 26,
+    "18": 31,
+    "19": 26,
+    "20": 14,
+    "21": 22,
+    "22": 19
+  },
+  "data_available": true
+}

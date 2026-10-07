@@ -1,0 +1,35 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "source_record_count": 6698,
+  "total_events": 6698,
+  "query_completed_count": 0,
+  "retrieval_completed_count": 0,
+  "rag_response_count": 6698,
+  "error_count": 0,
+  "events_by_type": {
+    "rag_response": 6698
+  },
+  "events_by_date": {
+    "2026-09-21": 146,
+    "2026-09-22": 568,
+    "2026-09-23": 595,
+    "2026-09-24": 4635,
+    "2026-09-25": 385,
+    "2026-09-30": 155,
+    "2026-10-07": 214
+  },
+  "events_by_hour": {
+    "8": 1,
+    "9": 327,
+    "10": 489,
+    "11": 103,
+    "12": 1606,
+    "13": 2025,
+    "14": 1829,
+    "15": 42,
+    "16": 16,
+    "17": 260
+  },
+  "data_available": true
+}

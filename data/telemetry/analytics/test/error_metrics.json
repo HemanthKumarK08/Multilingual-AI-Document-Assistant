@@ -1,0 +1,11 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_records": 6698,
+  "error_events_count": 0,
+  "overall_error_rate": 0.0,
+  "errors_by_type": {},
+  "fallback_events_count": 1214,
+  "fallback_rate": 18.12,
+  "data_available": true
+}

@@ -43,32 +43,62 @@ export const apiService = {
     return request('/api/v1/analytics/health');
   },
 
-  async getAnalyticsSummary() {
-    return request('/api/v1/analytics/summary');
+  async getAnalyticsHealth(environment = 'live') {
+    return request(`/api/v1/analytics/health?environment=${encodeURIComponent(environment)}`);
   },
 
-  async getAnalyticsVolume() {
-    return request('/api/v1/analytics/volume');
+  async getAnalyticsSummary(environment = 'live') {
+    return request(`/api/v1/analytics/summary?environment=${encodeURIComponent(environment)}`);
   },
 
-  async getAnalyticsLanguages() {
-    return request('/api/v1/analytics/languages');
+  async getAnalyticsVolume(environment = 'live') {
+    return request(`/api/v1/analytics/volume?environment=${encodeURIComponent(environment)}`);
   },
 
-  async getAnalyticsRetrieval() {
-    return request('/api/v1/analytics/retrieval');
+  async getAnalyticsLanguages(environment = 'live') {
+    return request(`/api/v1/analytics/languages?environment=${encodeURIComponent(environment)}`);
   },
 
-  async getAnalyticsRag() {
-    return request('/api/v1/analytics/rag');
+  async getAnalyticsRetrieval(environment = 'live') {
+    return request(`/api/v1/analytics/retrieval?environment=${encodeURIComponent(environment)}`);
   },
 
-  async getAnalyticsErrors() {
-    return request('/api/v1/analytics/errors');
+  async getAnalyticsRag(environment = 'live') {
+    return request(`/api/v1/analytics/rag?environment=${encodeURIComponent(environment)}`);
   },
 
-  async getAnalyticsTimeseries() {
-    return request('/api/v1/analytics/timeseries');
+  async getAnalyticsErrors(environment = 'live') {
+    return request(`/api/v1/analytics/errors?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async getAnalyticsTimeseries(environment = 'live') {
+    return request(`/api/v1/analytics/timeseries?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async getAnalyticsUsers(environment = 'live') {
+    return request(`/api/v1/analytics/users?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async getAnalyticsLanguagePerformance(environment = 'live') {
+    return request(`/api/v1/analytics/language-performance?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async getAnalyticsLanguageSwitching(environment = 'live') {
+    return request(`/api/v1/analytics/language-switching?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async getAnalyticsCodeMixed(environment = 'live') {
+    return request(`/api/v1/analytics/code-mixed?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async getAnalyticsDocuments(environment = 'live') {
+    return request(`/api/v1/analytics/documents?environment=${encodeURIComponent(environment)}`);
+  },
+
+  async runSparkPipeline() {
+    return request('/api/v1/analytics/run-spark-pipeline', {
+      method: 'POST',
+    });
   },
 
   // Document Management

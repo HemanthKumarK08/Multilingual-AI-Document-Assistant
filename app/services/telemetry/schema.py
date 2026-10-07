@@ -7,6 +7,12 @@ from typing import Set
 
 SCHEMA_VERSION: str = "1.0"
 
+SUPPORTED_ENVIRONMENTS: Set[str] = {
+    "live",
+    "test",
+    "fixture",
+}
+
 SUPPORTED_EVENT_TYPES: Set[str] = {
     "query_completed",
     "retrieval_completed",
@@ -34,6 +40,7 @@ SUPPORTED_SCRIPTS: Set[str] = {
 
 SUPPORTED_PROVIDERS: Set[str] = {
     "gemini",
+    "groq",
     "ollama",
     "mock",
     "unknown",

@@ -1,0 +1,44 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_queries_analyzed": 350,
+  "language_distribution": {
+    "en": {
+      "count": 207,
+      "percentage": 59.1,
+      "avg_latency_ms": 319.4,
+      "fallback_count": 9,
+      "fallback_rate": 4.3
+    },
+    "kn": {
+      "count": 72,
+      "percentage": 20.6,
+      "avg_latency_ms": 338.1,
+      "fallback_count": 3,
+      "fallback_rate": 4.2
+    },
+    "te": {
+      "count": 53,
+      "percentage": 15.1,
+      "avg_latency_ms": 314.5,
+      "fallback_count": 4,
+      "fallback_rate": 7.5
+    },
+    "hi": {
+      "count": 18,
+      "percentage": 5.1,
+      "avg_latency_ms": 314.7,
+      "fallback_count": 2,
+      "fallback_rate": 11.1
+    }
+  },
+  "script_distribution": {
+    "latin": 274,
+    "kannada": 42,
+    "telugu": 30,
+    "devanagari": 4
+  },
+  "code_mixed_queries_count": 70,
+  "code_mixed_percentage": 20.0,
+  "data_available": true
+}

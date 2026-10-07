@@ -10,7 +10,7 @@
 [![Sarvam AI](https://img.shields.io/badge/Sarvam_AI-Bulbul_v3-blueviolet.svg)](https://www.sarvam.ai/)
 [![Test Suite](https://img.shields.io/badge/Tests-599%20Passing-brightgreen.svg)]()
 
-> **MCA Project — Department of Master of Computer Applications, Bangalore Institute of Technology (BIT)**  
+> **MCA Major Project — Department of Master of Computer Applications, Bangalore Institute of Technology (BIT)**  
 > **Author:** Hemanth Kumar K  
 > An enterprise-grade, privacy-first Multilingual Document Assistant combining dense-lexical hybrid Retrieval-Augmented Generation (RAG), resilient multilingual answer generation, Sarvam Bulbul v3 neural voice synthesis, and Apache Spark Lakehouse analytics.
 
@@ -296,11 +296,16 @@ Application Telemetry Event (JSONL)
 ```
 
 ### Precomputed Analytics Metrics
-1. **Summary KPIs:** Total queries, unique sessions, average latency, grounded response rate, fallback rate.
-2. **Language Distribution:** Volume and percentage breakdown across `en`, `hi`, `kn`, `te`.
-3. **Retrieval Performance:** Mean similarity scores, top-k candidate distributions, dense vs lexical win rates.
-4. **Hourly Query Volume:** Peak usage intervals and daily throughput trends.
-5. **RAG Reliability:** Fallback category distributions (`INSUFFICIENT_EVIDENCE`, `EMPTY_CONTEXT`).
+1. **Executive User & Language KPIs:** Total anonymous users (SHA-256 hashed), total queries, active users, languages tracked, average queries/user, most used language, grounded answer rate, and citation validity.
+2. **User Activity & Query Trends:** Daily and hourly operational throughput, active users over time, grounded answers vs fallback distributions.
+3. **Multilingual Distribution:** Volume share, unique users, and query intensity across English, Hindi, Kannada, Telugu, and Romanized/Code-Mixed.
+4. **Language Performance Master Matrix:** Language-wise query count, grounded rate, citation validity, fallback rate, mean latency, P95 tail latency, and average retrieved chunks with data-driven status thresholds.
+5. **Language Quality & Deep-Dives:** Expandable per-language diagnostic cards covering candidate pool depth, reranking latencies, LLM provider cascade shares, and native script purity.
+6. **Single-Language Inspector:** Interactive deep-dive selector for evaluating 360° RAG retrieval, generation, and linguistic handling for any chosen language.
+7. **Language Switching & Behavior:** Conversational transition matrix and inter-turn source $\rightarrow$ target switching analysis.
+8. **Code-Mixed & Romanized Analytics:** Comparative evaluation of Native Script vs Romanized Transliteration vs Code-Mixed queries.
+9. **User Linguistic Profiles:** Aggregated anonymous user preference adoption (English-only, English + Hindi, English + Kannada, English + Telugu, Multilingual 3+).
+10. **Document Usage Analytics:** Aggregated institutional document interaction counts, cross-lingual reach, unique users, and grounding precision.
 
 ---
 
@@ -489,10 +494,20 @@ python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 - `DELETE /api/v1/documents/{doc_id}` — Delete document and evict vectors from ChromaDB/BM25.
 
 ### Analytics
-- `GET /api/v1/analytics/health` — Check analytics lakehouse status.
-- `GET /api/v1/analytics/summary` — Retrieve high-level summary KPIs.
-- `GET /api/v1/analytics/metrics/{metric_name}` — Retrieve granular metric series.
-- `POST /api/v1/analytics/run-spark-pipeline` — Trigger an on-demand PySpark batch run.
+- `GET /api/v1/analytics/health` — Check analytics lakehouse and precomputed manifest status.
+- `GET /api/v1/analytics/summary` — Retrieve high-level executive summary KPIs.
+- `GET /api/v1/analytics/volume` — Retrieve query volume and event type counts.
+- `GET /api/v1/analytics/languages` — Retrieve multilingual distribution and script metrics.
+- `GET /api/v1/analytics/users` — Retrieve anonymous user totals, linguistic preference profiles, and user sessions.
+- `GET /api/v1/analytics/language-performance` — Retrieve language-wise performance matrix (grounded rate, latency, P95, chunks).
+- `GET /api/v1/analytics/language-switching` — Retrieve inter-turn language transition counts and matrix.
+- `GET /api/v1/analytics/code-mixed` — Retrieve code-mixed query share and script comparative statistics.
+- `GET /api/v1/analytics/documents` — Retrieve aggregated document interaction volume, users, and grounding precision.
+- `GET /api/v1/analytics/retrieval` — Retrieve hybrid dense-lexical latency and candidate distributions.
+- `GET /api/v1/analytics/rag` — Retrieve generation latencies, citation validity, and provider shares.
+- `GET /api/v1/analytics/errors` — Retrieve fallback rates and gating breakdown.
+- `GET /api/v1/analytics/timeseries` — Retrieve daily and hourly operational trends.
+- `POST /api/v1/analytics/run-spark-pipeline` — Trigger an on-demand PySpark batch lakehouse aggregation.
 
 ---
 
@@ -529,5 +544,5 @@ The repository contains **599 automated tests** verifying all layers of the syst
 - **Institution:** Bangalore Institute of Technology (BIT), Bengaluru
 - **Department:** Master of Computer Applications (MCA)
 - **Project Title:** Multilingual AI Document Assistant with Big Data Analytics
-- **Candidate:** Hemanth Kumar K (1BI25MC039)
-- **Academic Year:** 2025–2027
+- **Candidate:** Hemanth Kumar K (1BI23MC041)
+- **Academic Year:** 2024–2026

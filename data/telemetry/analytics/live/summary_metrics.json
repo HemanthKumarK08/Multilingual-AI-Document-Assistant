@@ -1,0 +1,22 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "source_record_count": 9,
+  "total_queries": 9,
+  "total_users": 2,
+  "active_users": 2,
+  "avg_queries_per_user": 4.5,
+  "most_used_language": "kn",
+  "languages_active": 4,
+  "total_retrieval_events": 0,
+  "grounded_answer_rate": 66.67,
+  "citation_validity_rate": 100.0,
+  "fallback_rate": 33.33,
+  "error_rate": 0.0,
+  "avg_retrieval_latency_ms": 0.0,
+  "p95_retrieval_latency_ms": 0.0,
+  "avg_total_latency_ms": 7033.6,
+  "p95_total_latency_ms": 17495.69,
+  "code_mixed_query_share": 11.1,
+  "data_available": true
+}

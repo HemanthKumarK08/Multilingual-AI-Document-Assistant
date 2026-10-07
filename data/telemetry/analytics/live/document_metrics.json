@@ -1,0 +1,54 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_documents_referenced": 3,
+  "total_documents_analyzed": 3,
+  "documents": [
+    {
+      "document_id": "DOC-ATTN-001",
+      "title": "Attendance Policies & Academic Standards",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 22.2,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 17194.4,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-SCHOL-003",
+      "title": "Merit & Need-Based Scholarship Rules",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 22.2,
+      "unique_users": 2,
+      "languages_used": [
+        "te"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3799.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-HOST-001",
+      "title": "Hostel Admission & Fee Schedule",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 22.2,
+      "unique_users": 2,
+      "languages_used": [
+        "kn"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3760.2,
+      "avg_citations": 5.0
+    }
+  ],
+  "data_available": true
+}

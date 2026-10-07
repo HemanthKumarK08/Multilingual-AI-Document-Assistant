@@ -54,6 +54,14 @@ class TelemetryValidator:
         if not event_id or not isinstance(event_id, str):
             return False, "Missing or invalid 'event_id'"
 
+        # 3b. Check telemetry_environment if present
+        env = event_data.get("telemetry_environment")
+        if env is not None:
+            if not isinstance(env, str):
+                return False, "Field 'telemetry_environment' must be a string"
+            if env.lower() not in ("live", "test", "fixture"):
+                return False, f"Unsupported telemetry_environment '{env}'. Must be 'live', 'test', or 'fixture'"
+
         # 4. Check timestamp
         timestamp = event_data.get("timestamp") or event_data.get("timestamp_utc")
         if not timestamp or not isinstance(timestamp, str):

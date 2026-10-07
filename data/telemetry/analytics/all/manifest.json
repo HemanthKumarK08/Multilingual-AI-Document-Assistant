@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "analytics_version": "2.0",
+  "environment": "all",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "source_parquet_path": "/Users/hemanthkumark/College/BIT/Ml/data/telemetry/parquet",
+  "output_directory": "/Users/hemanthkumark/College/BIT/Ml/data/telemetry/analytics/all",
+  "input_records_processed": 7057,
+  "data_available": true,
+  "generated_files": [
+    "summary_metrics.json",
+    "volume_metrics.json",
+    "language_metrics.json",
+    "language_performance_metrics.json",
+    "user_metrics.json",
+    "language_switching_metrics.json",
+    "code_mixed_metrics.json",
+    "document_metrics.json",
+    "retrieval_metrics.json",
+    "rag_metrics.json",
+    "error_metrics.json",
+    "timeseries_metrics.json"
+  ],
+  "privacy_audit_status": "COMPLIANT_ZERO_RAW_DATA"
+}

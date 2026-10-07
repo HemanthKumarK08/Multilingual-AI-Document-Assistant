@@ -1,42 +1,44 @@
 {
-  "generated_at_utc": "2026-09-15T10:59:27.214625Z",
-  "total_queries_analyzed": 350,
+  "environment": "all",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_queries_analyzed": 7057,
   "language_distribution": {
-    "hi": {
-      "count": 90,
-      "percentage": 25.71,
-      "avg_latency_ms": 314.11,
-      "fallback_count": 4,
-      "fallback_rate": 4.44
+    "en": {
+      "count": 4391,
+      "percentage": 62.2,
+      "avg_latency_ms": 853.8,
+      "fallback_count": 690,
+      "fallback_rate": 15.7
     },
-    "kn": {
-      "count": 76,
-      "percentage": 21.71,
-      "avg_latency_ms": 291.04,
-      "fallback_count": 5,
-      "fallback_rate": 6.58
+    "hi": {
+      "count": 940,
+      "percentage": 13.3,
+      "avg_latency_ms": 599.3,
+      "fallback_count": 230,
+      "fallback_rate": 24.5
     },
     "te": {
-      "count": 49,
-      "percentage": 14.0,
-      "avg_latency_ms": 286.36,
-      "fallback_count": 1,
-      "fallback_rate": 2.04
+      "count": 891,
+      "percentage": 12.6,
+      "avg_latency_ms": 610.9,
+      "fallback_count": 145,
+      "fallback_rate": 16.3
     },
-    "en": {
-      "count": 135,
-      "percentage": 38.57,
-      "avg_latency_ms": 279.58,
-      "fallback_count": 11,
-      "fallback_rate": 8.15
+    "kn": {
+      "count": 835,
+      "percentage": 11.8,
+      "avg_latency_ms": 689.6,
+      "fallback_count": 170,
+      "fallback_rate": 20.4
     }
   },
   "script_distribution": {
-    "latin": 166,
-    "kannada": 65,
-    "devanagari": 76,
-    "telugu": 43
+    "latin": 4475,
+    "kannada": 800,
+    "devanagari": 920,
+    "telugu": 862
   },
-  "code_mixed_queries_count": 53,
-  "code_mixed_percentage": 15.14
+  "code_mixed_queries_count": 90,
+  "code_mixed_percentage": 1.28,
+  "data_available": true
 }

@@ -1,0 +1,346 @@
+{
+  "environment": "all",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_documents_referenced": 21,
+  "total_documents_analyzed": 21,
+  "documents": [
+    {
+      "document_id": "DOC-ACAD-001",
+      "title": "Academic Regulations & Evaluation Guidelines v1.0",
+      "total_queries": 132,
+      "query_count": 132,
+      "query_share_pct": 1.9,
+      "unique_users": 35,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 93.9,
+      "fallback_rate": 6.1,
+      "avg_latency_ms": 328.8,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-EXAM-002",
+      "title": "Examination Conduct & Malpractice Rules",
+      "total_queries": 84,
+      "query_count": 84,
+      "query_share_pct": 1.2,
+      "unique_users": 28,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 98.8,
+      "fallback_rate": 1.2,
+      "avg_latency_ms": 333.9,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-ATTN-001",
+      "title": "Attendance Policies & Academic Standards",
+      "total_queries": 71,
+      "query_count": 71,
+      "query_share_pct": 1.0,
+      "unique_users": 4,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 1530.7,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-MSMESCHEMEBOOKLE-3692EB",
+      "title": "Institutional Document (DOC-UP-MSMESCHEMEBOOKLE-3692EB)",
+      "total_queries": 65,
+      "query_count": 65,
+      "query_share_pct": 0.9,
+      "unique_users": 2,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 6359.4,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-FEE-003",
+      "title": "Fee Structure & Payment Policies",
+      "total_queries": 53,
+      "query_count": 53,
+      "query_share_pct": 0.8,
+      "unique_users": 24,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 90.6,
+      "fallback_rate": 9.4,
+      "avg_latency_ms": 292.3,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-SCH-004",
+      "title": "Scholarship & Financial Aid Schemes",
+      "total_queries": 51,
+      "query_count": 51,
+      "query_share_pct": 0.7,
+      "unique_users": 28,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 96.1,
+      "fallback_rate": 3.9,
+      "avg_latency_ms": 303.2,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-HOSTEL-005",
+      "title": "Hostel Rules & Campus Code of Conduct",
+      "total_queries": 30,
+      "query_count": 30,
+      "query_share_pct": 0.4,
+      "unique_users": 20,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 93.3,
+      "fallback_rate": 6.7,
+      "avg_latency_ms": 346.5,
+      "avg_citations": 2.0
+    },
+    {
+      "document_id": "DOC-UP-INTELLIEXAM-AI-BAC477",
+      "title": "Institutional Document (DOC-UP-INTELLIEXAM-AI-BAC477)",
+      "total_queries": 11,
+      "query_count": 11,
+      "query_share_pct": 0.2,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3983.9,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-ATTN-002",
+      "title": "Institutional Document (DOC-ATTN-002)",
+      "total_queries": 5,
+      "query_count": 5,
+      "query_share_pct": 0.1,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 2540.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-ACAD-002",
+      "title": "Institutional Document (DOC-ACAD-002)",
+      "total_queries": 4,
+      "query_count": 4,
+      "query_share_pct": 0.1,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 35.0,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-EXAM-001",
+      "title": "Institutional Document (DOC-EXAM-001)",
+      "total_queries": 4,
+      "query_count": 4,
+      "query_share_pct": 0.1,
+      "unique_users": 2,
+      "languages_used": [
+        "en",
+        "hi"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 4307.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-ATTN-003",
+      "title": "Institutional Document (DOC-ATTN-003)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "kn"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 1755.7,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-HOST-002",
+      "title": "Institutional Document (DOC-HOST-002)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 29.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-PLACE-001",
+      "title": "Institutional Document (DOC-PLACE-001)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 34.0,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-SCHOL-001",
+      "title": "Institutional Document (DOC-SCHOL-001)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 32.4,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-SCHOL-003",
+      "title": "Merit & Need-Based Scholarship Rules",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "te"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3799.1,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-TEST-POLICY-DOC-9F4521",
+      "title": "Institutional Document (DOC-UP-TEST-POLICY-DOC-9F4521)",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 34.8,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-HOST-001",
+      "title": "Hostel Admission & Fee Schedule",
+      "total_queries": 2,
+      "query_count": 2,
+      "query_share_pct": 0.0,
+      "unique_users": 2,
+      "languages_used": [
+        "kn"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 3760.2,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-E2E-DELETE-VIEW-BF45C8",
+      "title": "Institutional Document (DOC-UP-E2E-DELETE-VIEW-BF45C8)",
+      "total_queries": 1,
+      "query_count": 1,
+      "query_share_pct": 0.0,
+      "unique_users": 1,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 49.0,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-E2E-DELETE-VIEW-FBF60A",
+      "title": "Institutional Document (DOC-UP-E2E-DELETE-VIEW-FBF60A)",
+      "total_queries": 1,
+      "query_count": 1,
+      "query_share_pct": 0.0,
+      "unique_users": 1,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 50.3,
+      "avg_citations": 5.0
+    },
+    {
+      "document_id": "DOC-UP-INSTRUCTIONS-TO-F38D94",
+      "title": "Institutional Document (DOC-UP-INSTRUCTIONS-TO-F38D94)",
+      "total_queries": 1,
+      "query_count": 1,
+      "query_share_pct": 0.0,
+      "unique_users": 1,
+      "languages_used": [
+        "en"
+      ],
+      "grounded_rate": 100.0,
+      "fallback_rate": 0.0,
+      "avg_latency_ms": 66210.1,
+      "avg_citations": 5.0
+    }
+  ],
+  "data_available": true
+}

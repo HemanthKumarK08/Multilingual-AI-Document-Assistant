@@ -1,0 +1,20 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "queries_evaluated": 350,
+  "avg_total_latency_ms": 322.29,
+  "p50_total_latency_ms": 327.42,
+  "p95_total_latency_ms": 466.06,
+  "avg_generation_latency_ms": 290.72,
+  "grounded_answer_rate": 94.86,
+  "citation_validity_rate": 94.86,
+  "fallback_answer_rate": 5.14,
+  "avg_citation_count": 1.89,
+  "provider_distribution": {
+    "mock": 10,
+    "gemini": 220,
+    "groq": 77,
+    "ollama": 43
+  },
+  "data_available": true
+}

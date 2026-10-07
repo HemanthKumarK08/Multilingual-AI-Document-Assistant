@@ -1,0 +1,99 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_documents_referenced": 5,
+  "total_documents_analyzed": 5,
+  "documents": [
+    {
+      "document_id": "DOC-ACAD-001",
+      "title": "Academic Regulations & Evaluation Guidelines v1.0",
+      "total_queries": 132,
+      "query_count": 132,
+      "query_share_pct": 37.7,
+      "unique_users": 35,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 93.9,
+      "fallback_rate": 6.1,
+      "avg_latency_ms": 328.8,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-EXAM-002",
+      "title": "Examination Conduct & Malpractice Rules",
+      "total_queries": 84,
+      "query_count": 84,
+      "query_share_pct": 24.0,
+      "unique_users": 28,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 98.8,
+      "fallback_rate": 1.2,
+      "avg_latency_ms": 333.9,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-FEE-003",
+      "title": "Fee Structure & Payment Policies",
+      "total_queries": 53,
+      "query_count": 53,
+      "query_share_pct": 15.1,
+      "unique_users": 24,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 90.6,
+      "fallback_rate": 9.4,
+      "avg_latency_ms": 292.3,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-SCH-004",
+      "title": "Scholarship & Financial Aid Schemes",
+      "total_queries": 51,
+      "query_count": 51,
+      "query_share_pct": 14.6,
+      "unique_users": 28,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 96.1,
+      "fallback_rate": 3.9,
+      "avg_latency_ms": 303.2,
+      "avg_citations": 1.9
+    },
+    {
+      "document_id": "DOC-HOSTEL-005",
+      "title": "Hostel Rules & Campus Code of Conduct",
+      "total_queries": 30,
+      "query_count": 30,
+      "query_share_pct": 8.6,
+      "unique_users": 20,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "grounded_rate": 93.3,
+      "fallback_rate": 6.7,
+      "avg_latency_ms": 346.5,
+      "avg_citations": 2.0
+    }
+  ],
+  "data_available": true
+}

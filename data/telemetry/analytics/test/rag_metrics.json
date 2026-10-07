@@ -1,0 +1,17 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "queries_evaluated": 6698,
+  "avg_total_latency_ms": 784.78,
+  "p50_total_latency_ms": 23.67,
+  "p95_total_latency_ms": 2758.17,
+  "avg_generation_latency_ms": 0.0,
+  "grounded_answer_rate": 81.88,
+  "citation_validity_rate": 100.0,
+  "fallback_answer_rate": 18.12,
+  "avg_citation_count": 1.38,
+  "provider_distribution": {
+    "mock": 6698
+  },
+  "data_available": true
+}

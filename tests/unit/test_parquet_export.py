@@ -52,11 +52,11 @@ def test_parquet_export_and_partitioning(tmp_path: Path):
     )
 
     assert report["total_records_converted"] == 5
-    assert report["partition_count"] == 2  # date=2026-09-15, date=2026-09-16
+    assert report["partition_count"] == 2
 
-    # Verify parquet partition directories exist
-    p1 = parquet_dir / "date=2026-09-15"
-    p2 = parquet_dir / "date=2026-09-16"
+    # Verify parquet partition directories exist with telemetry_environment
+    p1 = parquet_dir / "telemetry_environment=fixture" / "date=2026-09-15"
+    p2 = parquet_dir / "telemetry_environment=fixture" / "date=2026-09-16"
     assert p1.exists()
     assert p2.exists()
 
@@ -64,3 +64,4 @@ def test_parquet_export_and_partitioning(tmp_path: Path):
     dataset = pq.ParquetDataset(str(parquet_dir))
     table = dataset.read()
     assert table.num_rows == 5
+    assert "telemetry_environment" in table.schema.names

@@ -21,6 +21,36 @@ router = APIRouter()
 # Single coordinator instance (embedding model loaded once)
 _rag_coordinator = RAGCoordinator()
 
+# In-memory session language history tracker (bounded to last 5,000 active sessions)
+_session_language_history: dict = {}
+
+
+def _detect_script_and_code_mixed(text: str, response_lang: str) -> tuple:
+    """Detects script and code-mixed/romanized characteristics from user query text."""
+    if not text:
+        return "latin", False, False
+
+    has_dev = any('\u0900' <= c <= '\u097F' for c in text)
+    has_kn = any('\u0C80' <= c <= '\u0CFF' for c in text)
+    has_te = any('\u0C00' <= c <= '\u0C7F' for c in text)
+    has_latin = any('a' <= c.lower() <= 'z' for c in text)
+    indic_count = sum([has_dev, has_kn, has_te])
+
+    if has_dev and indic_count == 1:
+        script = "devanagari"
+    elif has_kn and indic_count == 1:
+        script = "kannada"
+    elif has_te and indic_count == 1:
+        script = "telugu"
+    elif has_latin and indic_count == 0:
+        script = "latin"
+    else:
+        script = "mixed" if (indic_count > 1 or (indic_count >= 1 and has_latin)) else "latin"
+
+    is_romanized = bool(has_latin and response_lang in ("hi", "kn", "te") and indic_count == 0)
+    is_code_mixed = bool((has_latin and indic_count >= 1) or is_romanized)
+    return script, is_code_mixed, is_romanized
+
 
 @router.post("/query", response_model=QueryResponse)
 async def submit_query(req: QueryRequest, db: AsyncSession = Depends(get_db)):
@@ -74,18 +104,53 @@ async def submit_query(req: QueryRequest, db: AsyncSession = Depends(get_db)):
 
     # Telemetry (best-effort, non-blocking)
     try:
+        import os
         from app.services.telemetry.models import RAGTelemetryEvent
         from app.services.telemetry.recorder import telemetry_recorder
+        from app.services.telemetry.user_identity import (
+            generate_anonymous_user_id,
+            generate_anonymous_session_id,
+        )
+
+        raw_sess_id = req.session_id or "SES-DEFAULT"
+        anon_user = generate_anonymous_user_id(raw_sess_id)
+        anon_session = generate_anonymous_session_id(raw_sess_id)
+
+        # Retrieve previous language in this session
+        global _session_language_history
+        prev_lang = _session_language_history.get(anon_session)
+        if len(_session_language_history) > 5000:
+            _session_language_history.clear()
+        _session_language_history[anon_session] = grounded_answer.response_language
+
+        # Detect script and code-mixing
+        script, is_code_mixed, is_romanized = _detect_script_and_code_mixed(
+            req.query_text, grounded_answer.response_language
+        )
+
+        # Resolve telemetry environment
+        active_env = os.environ.get("TELEMETRY_ENVIRONMENT")
+        if not active_env:
+            if os.environ.get("PYTEST_CURRENT_TEST") or settings.APP_ENV == "testing":
+                active_env = "test"
+            else:
+                active_env = settings.TELEMETRY_ENVIRONMENT or "live"
+
+        top_doc_id = grounded_answer.sources[0].doc_id if grounded_answer.sources else None
 
         telemetry_recorder.record_event(
             RAGTelemetryEvent(
                 query_id=grounded_answer.query_id,
+                telemetry_environment=active_env,
+                anonymous_user_id=anon_user,
+                session_id=anon_session,
+                document_id=top_doc_id,
                 retrieval_id=grounded_answer.retrieval_id or "",
                 language=grounded_answer.response_language,
-                script={"en": "latin", "hi": "devanagari",
-                        "kn": "kannada", "te": "telugu"}.get(
-                    grounded_answer.response_language, "unknown"),
-                is_code_mixed=False,
+                previous_language=prev_lang,
+                script=script,
+                is_code_mixed=is_code_mixed,
+                is_romanized=is_romanized,
                 candidate_count=len(grounded_answer.sources),
                 selected_chunk_count=len(grounded_answer.sources),
                 best_retrieval_score=1.0 if is_grounded else 0.0,

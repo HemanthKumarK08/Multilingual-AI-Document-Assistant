@@ -1,0 +1,82 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_queries_analyzed": 9,
+  "code_mixed_count": 1,
+  "total_code_mixed_queries": 1,
+  "code_mixed_percentage": 11.1,
+  "code_mixed_share_pct": 11.1,
+  "romanized_count": 1,
+  "romanized_percentage": 11.1,
+  "script_type_comparison": [
+    {
+      "category": "Native Script Standard",
+      "script_type": "Native Script Standard",
+      "query_count": 8,
+      "share_pct": 88.9,
+      "grounded_rate": 75.0,
+      "fallback_rate": 25.0,
+      "avg_latency_ms": 7410.5,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_retrieved_chunks": 3.75
+    },
+    {
+      "category": "Code-Mixed",
+      "script_type": "Code-Mixed",
+      "query_count": 1,
+      "share_pct": 11.1,
+      "grounded_rate": 0.0,
+      "fallback_rate": 100.0,
+      "avg_latency_ms": 4018.1,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_retrieved_chunks": 0.0
+    },
+    {
+      "category": "Romanized Indic",
+      "script_type": "Romanized Indic",
+      "query_count": 1,
+      "share_pct": 11.1,
+      "grounded_rate": 0.0,
+      "fallback_rate": 100.0,
+      "avg_latency_ms": 4018.1,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_retrieved_chunks": 0.0
+    }
+  ],
+  "comparison": {
+    "native_script": {
+      "category": "Native Script Standard",
+      "script_type": "Native Script Standard",
+      "query_count": 8,
+      "share_pct": 88.9,
+      "grounded_rate": 75.0,
+      "fallback_rate": 25.0,
+      "avg_latency_ms": 7410.5,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_retrieved_chunks": 3.75
+    },
+    "code_mixed": {
+      "category": "Code-Mixed",
+      "script_type": "Code-Mixed",
+      "query_count": 1,
+      "share_pct": 11.1,
+      "grounded_rate": 0.0,
+      "fallback_rate": 100.0,
+      "avg_latency_ms": 4018.1,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_retrieved_chunks": 0.0
+    },
+    "romanized": {
+      "category": "Romanized Indic",
+      "script_type": "Romanized Indic",
+      "query_count": 1,
+      "share_pct": 11.1,
+      "grounded_rate": 0.0,
+      "fallback_rate": 100.0,
+      "avg_latency_ms": 4018.1,
+      "avg_retrieval_latency_ms": 0.0,
+      "avg_retrieved_chunks": 0.0
+    }
+  },
+  "data_available": true
+}

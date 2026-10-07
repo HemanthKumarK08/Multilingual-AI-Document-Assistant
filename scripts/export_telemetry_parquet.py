@@ -18,6 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.core.config import settings
+from app.services.telemetry.user_identity import generate_anonymous_user_id, generate_anonymous_session_id
 
 
 # Standardized PyArrow Schema for Telemetry Parquet Data Lake
@@ -25,16 +26,23 @@ TELEMETRY_ARROW_SCHEMA = pa.schema([
     ("schema_version", pa.string()),
     ("event_id", pa.string()),
     ("event_type", pa.string()),
+    ("telemetry_environment", pa.string()),
     ("timestamp", pa.string()),
     ("date", pa.string()),
     ("hour", pa.int32()),
     ("request_id_hash", pa.string()),
+    ("anonymous_user_id", pa.string()),
+    ("user_identity_available", pa.bool_()),
+    ("session_id", pa.string()),
+    ("document_id", pa.string()),
     ("query_id", pa.string()),
     ("retrieval_id", pa.string()),
     ("language", pa.string()),
+    ("previous_language", pa.string()),
     ("script", pa.string()),
     ("query_type", pa.string()),
     ("is_code_mixed", pa.bool_()),
+    ("is_romanized", pa.bool_()),
     ("variant_count", pa.int32()),
     ("candidate_count", pa.int32()),
     ("retrieved_chunk_count", pa.int32()),
@@ -58,7 +66,7 @@ TELEMETRY_ARROW_SCHEMA = pa.schema([
 
 
 def normalize_record_for_parquet(rec: Dict[str, Any]) -> Dict[str, Any]:
-    """Ensures all schema fields are present with correct scalar default types."""
+    """Ensures all schema fields are present with correct scalar default types without inventing fake identities."""
     ts = rec.get("timestamp") or rec.get("timestamp_utc") or datetime.utcnow().isoformat()
     dt = rec.get("date") or ts[:10]
     hr = rec.get("hour")
@@ -68,20 +76,54 @@ def normalize_record_for_parquet(rec: Dict[str, Any]) -> Dict[str, Any]:
         except Exception:
             hr = 0
 
+    # Determine environment
+    env = rec.get("telemetry_environment")
+    if not env:
+        if rec.get("event_type") == "query_completed" or str(rec.get("query_id", "")).startswith("Q-FIX"):
+            env = "fixture"
+        elif str(rec.get("session_id", "")).startswith("SES-LIVE"):
+            env = "live"
+        else:
+            env = "test"
+
+    raw_user_id = rec.get("anonymous_user_id") or rec.get("user_id")
+    raw_sess_id = rec.get("session_id")
+    
+    # Safe user identity derivation (DO NOT default missing users to USER-001)
+    if raw_user_id and str(raw_user_id).strip():
+        anon_user = str(raw_user_id).strip()
+        user_avail = True
+    elif raw_sess_id and str(raw_sess_id).strip():
+        derived = generate_anonymous_user_id(raw_sess_id)
+        anon_user = derived if derived else ""
+        user_avail = bool(derived)
+    else:
+        anon_user = ""
+        user_avail = False
+
+    anon_session = str(raw_sess_id).strip() if raw_sess_id else ""
+
     return {
         "schema_version": str(rec.get("schema_version", "1.0")),
         "event_id": str(rec.get("event_id", "")),
         "event_type": str(rec.get("event_type", "unknown")),
+        "telemetry_environment": str(env),
         "timestamp": str(ts),
         "date": str(dt),
         "hour": int(hr),
         "request_id_hash": str(rec.get("request_id_hash", "")),
+        "anonymous_user_id": anon_user,
+        "user_identity_available": user_avail,
+        "session_id": anon_session,
+        "document_id": str(rec.get("document_id") or rec.get("top_doc_id") or ""),
         "query_id": str(rec.get("query_id", "")),
         "retrieval_id": str(rec.get("retrieval_id", "")),
         "language": str(rec.get("language", "und")),
+        "previous_language": str(rec.get("previous_language") or ""),
         "script": str(rec.get("script", "unknown")),
         "query_type": str(rec.get("query_type", "cross_lingual_fact")),
         "is_code_mixed": bool(rec.get("is_code_mixed", False)),
+        "is_romanized": bool(rec.get("is_romanized", False)),
         "variant_count": int(rec.get("variant_count", 1)),
         "candidate_count": int(rec.get("candidate_count", 0)),
         "retrieved_chunk_count": int(rec.get("retrieved_chunk_count", rec.get("selected_chunk_count", 0))),
@@ -145,22 +187,32 @@ def export_parquet_lake(
             "parquet_directory": str(parquet_dir),
         }
 
+    # Clean existing parquet directories before exporting to prevent duplicate chunk buildup
+    import shutil
+    for item in parquet_dir.iterdir():
+        if item.is_dir():
+            shutil.rmtree(item)
+        elif item.is_file():
+            item.unlink()
+
     # Convert to PyArrow Table
     dict_columns = {col_name: [r[col_name] for r in records] for col_name in TELEMETRY_ARROW_SCHEMA.names}
     table = pa.Table.from_pydict(dict_columns, schema=TELEMETRY_ARROW_SCHEMA)
 
-    # Write partitioned dataset by date and event_type
+    # Write partitioned dataset by environment, date, and event_type
     pq.write_to_dataset(
         table,
         root_path=str(parquet_dir),
-        partition_cols=["date", "event_type"],
+        partition_cols=["telemetry_environment", "date", "event_type"],
         use_dictionary=True,
         compression="SNAPPY",
         existing_data_behavior="overwrite_or_ignore",
     )
 
     # Count generated partition folders
-    partition_dirs = [p for p in parquet_dir.glob("date=*/event_type=*") if p.is_dir()]
+    partition_dirs = [p for p in parquet_dir.glob("telemetry_environment=*/date=*/event_type=*") if p.is_dir()]
+    if not partition_dirs:
+        partition_dirs = [p for p in parquet_dir.glob("date=*/event_type=*") if p.is_dir()]
 
     return {
         "timestamp_utc": datetime.utcnow().isoformat() + "Z",

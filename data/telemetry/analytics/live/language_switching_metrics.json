@@ -1,0 +1,50 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_switches_detected": 4,
+  "transitions": [
+    {
+      "from_language": "te",
+      "from_language_name": "తెలుగు (Telugu)",
+      "to_language": "kn",
+      "to_language_name": "ಕನ್ನಡ (Kannada)",
+      "transition_count": 1
+    },
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "hi",
+      "to_language_name": "हिन्दी (Hindi)",
+      "transition_count": 1
+    },
+    {
+      "from_language": "hi",
+      "from_language_name": "हिन्दी (Hindi)",
+      "to_language": "kn",
+      "to_language_name": "ಕನ್ನಡ (Kannada)",
+      "transition_count": 1
+    },
+    {
+      "from_language": "kn",
+      "from_language_name": "ಕನ್ನಡ (Kannada)",
+      "to_language": "te",
+      "to_language_name": "తెలుగు (Telugu)",
+      "transition_count": 1
+    }
+  ],
+  "transition_matrix": {
+    "te": {
+      "kn": 1
+    },
+    "en": {
+      "hi": 1
+    },
+    "hi": {
+      "kn": 1
+    },
+    "kn": {
+      "te": 1
+    }
+  },
+  "data_available": true
+}

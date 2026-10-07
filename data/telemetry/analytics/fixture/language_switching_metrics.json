@@ -1,0 +1,74 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_switches_detected": 102,
+  "transitions": [
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "kn",
+      "to_language_name": "ಕನ್ನಡ (Kannada)",
+      "transition_count": 33
+    },
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "te",
+      "to_language_name": "తెలుగు (Telugu)",
+      "transition_count": 30
+    },
+    {
+      "from_language": "kn",
+      "from_language_name": "ಕನ್ನಡ (Kannada)",
+      "to_language": "en",
+      "to_language_name": "English",
+      "transition_count": 17
+    },
+    {
+      "from_language": "te",
+      "from_language_name": "తెలుగు (Telugu)",
+      "to_language": "en",
+      "to_language_name": "English",
+      "transition_count": 12
+    },
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "hi",
+      "to_language_name": "हिन्दी (Hindi)",
+      "transition_count": 7
+    },
+    {
+      "from_language": "hi",
+      "from_language_name": "हिन्दी (Hindi)",
+      "to_language": "en",
+      "to_language_name": "English",
+      "transition_count": 2
+    },
+    {
+      "from_language": "hi",
+      "from_language_name": "हिन्दी (Hindi)",
+      "to_language": "te",
+      "to_language_name": "తెలుగు (Telugu)",
+      "transition_count": 1
+    }
+  ],
+  "transition_matrix": {
+    "en": {
+      "te": 30,
+      "hi": 7,
+      "kn": 33
+    },
+    "te": {
+      "en": 12
+    },
+    "hi": {
+      "en": 2,
+      "te": 1
+    },
+    "kn": {
+      "en": 17
+    }
+  },
+  "data_available": true
+}

@@ -67,10 +67,10 @@ else
     echo -e "  ${GREEN}✓${NC} All core backend and analytics dependencies verified."
 fi
 
-if [ ! -d "$PROJECT_ROOT/frontend/dist" ] && command -v npm &>/dev/null; then
-    echo -e "  ${YELLOW}!${NC} Building frontend application shell (Vite)..."
+if command -v npm &>/dev/null; then
+    echo -e "  ${YELLOW}!${NC} Checking/building frontend application shell (Vite)..."
     npm --prefix "$PROJECT_ROOT/frontend" run build
-    echo -e "  ${GREEN}✓${NC} Frontend build complete."
+    echo -e "  ${GREEN}✓${NC} Frontend build current."
 elif [ -d "$PROJECT_ROOT/frontend/dist" ]; then
     echo -e "  ${GREEN}✓${NC} Frontend build verified and current."
 fi

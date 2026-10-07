@@ -1,0 +1,76 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_unique_users": 2,
+  "avg_queries_per_user": 4.5,
+  "user_language_profiles": [
+    {
+      "profile": "English Only",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "English + Hindi",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "English + Kannada",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "English + Telugu",
+      "user_count": 0,
+      "percentage": 0.0
+    },
+    {
+      "profile": "Multilingual (3+ Languages)",
+      "user_count": 2,
+      "percentage": 100.0
+    },
+    {
+      "profile": "Code-Mixed & Romanized",
+      "user_count": 0,
+      "percentage": 0.0
+    }
+  ],
+  "top_anonymous_users": [
+    {
+      "anonymous_user_id": "USER-B201435A",
+      "query_count": 5,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 60.0,
+      "fallback_rate": 40.0,
+      "avg_latency_ms": 6568.6
+    },
+    {
+      "anonymous_user_id": "USER-484920",
+      "query_count": 4,
+      "languages_used": [
+        "en",
+        "hi",
+        "kn",
+        "te"
+      ],
+      "documents_accessed": 3,
+      "grounded_rate": 75.0,
+      "fallback_rate": 25.0,
+      "avg_latency_ms": 7614.8
+    }
+  ],
+  "daily_active_users": [
+    {
+      "date": "2026-10-07",
+      "active_users": 2,
+      "queries": 9
+    }
+  ],
+  "data_available": true
+}

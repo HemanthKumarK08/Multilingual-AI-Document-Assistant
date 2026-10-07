@@ -1,0 +1,114 @@
+{
+  "environment": "all",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "total_switches_detected": 143,
+  "transitions": [
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "kn",
+      "to_language_name": "ಕನ್ನಡ (Kannada)",
+      "transition_count": 35
+    },
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "te",
+      "to_language_name": "తెలుగు (Telugu)",
+      "transition_count": 32
+    },
+    {
+      "from_language": "kn",
+      "from_language_name": "ಕನ್ನಡ (Kannada)",
+      "to_language": "en",
+      "to_language_name": "English",
+      "transition_count": 19
+    },
+    {
+      "from_language": "te",
+      "from_language_name": "తెలుగు (Telugu)",
+      "to_language": "en",
+      "to_language_name": "English",
+      "transition_count": 17
+    },
+    {
+      "from_language": "en",
+      "from_language_name": "English",
+      "to_language": "hi",
+      "to_language_name": "हिन्दी (Hindi)",
+      "transition_count": 13
+    },
+    {
+      "from_language": "hi",
+      "from_language_name": "हिन्दी (Hindi)",
+      "to_language": "kn",
+      "to_language_name": "ಕನ್ನಡ (Kannada)",
+      "transition_count": 7
+    },
+    {
+      "from_language": "kn",
+      "from_language_name": "ಕನ್ನಡ (Kannada)",
+      "to_language": "te",
+      "to_language_name": "తెలుగు (Telugu)",
+      "transition_count": 6
+    },
+    {
+      "from_language": "hi",
+      "from_language_name": "हिन्दी (Hindi)",
+      "to_language": "en",
+      "to_language_name": "English",
+      "transition_count": 4
+    },
+    {
+      "from_language": "hi",
+      "from_language_name": "हिन्दी (Hindi)",
+      "to_language": "te",
+      "to_language_name": "తెలుగు (Telugu)",
+      "transition_count": 3
+    },
+    {
+      "from_language": "te",
+      "from_language_name": "తెలుగు (Telugu)",
+      "to_language": "hi",
+      "to_language_name": "हिन्दी (Hindi)",
+      "transition_count": 3
+    },
+    {
+      "from_language": "te",
+      "from_language_name": "తెలుగు (Telugu)",
+      "to_language": "kn",
+      "to_language_name": "ಕನ್ನಡ (Kannada)",
+      "transition_count": 2
+    },
+    {
+      "from_language": "kn",
+      "from_language_name": "ಕನ್ನಡ (Kannada)",
+      "to_language": "hi",
+      "to_language_name": "हिन्दी (Hindi)",
+      "transition_count": 2
+    }
+  ],
+  "transition_matrix": {
+    "en": {
+      "te": 32,
+      "hi": 13,
+      "kn": 35
+    },
+    "te": {
+      "kn": 2,
+      "en": 17,
+      "hi": 3
+    },
+    "hi": {
+      "en": 4,
+      "te": 3,
+      "kn": 7
+    },
+    "kn": {
+      "hi": 2,
+      "en": 19,
+      "te": 6
+    }
+  },
+  "data_available": true
+}

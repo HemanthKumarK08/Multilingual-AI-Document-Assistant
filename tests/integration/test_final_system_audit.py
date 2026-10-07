@@ -422,12 +422,13 @@ def test_audit_r02_no_eval_in_frontend():
 # ── Group S: Frontend UI & Branding (2 tests) ─────────────────────────────────
 
 def test_audit_s01_production_branding_in_header():
-    """AUDIT-S01: Header contains Production status badge and platform title."""
+    """AUDIT-S01: Header contains platform title and live health badge."""
     header_file = PROJECT_ROOT / "frontend" / "src" / "components" / "Header.jsx"
     content = header_file.read_text(encoding="utf-8")
-    assert "Production" in content
     assert "Multilingual AI Document Assistant" in content
+    assert "isOnline" in content
     assert "Phase 8.1" not in content
+    assert "Swagger API" not in content
 
 
 def test_audit_s02_sidebar_branding():

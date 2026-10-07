@@ -44,15 +44,29 @@ class TelemetryRecorder:
             return False
 
         try:
+            import os
+            # Resolve current active telemetry environment
+            active_env = os.environ.get("TELEMETRY_ENVIRONMENT")
+            if not active_env:
+                if os.environ.get("PYTEST_CURRENT_TEST") or settings.APP_ENV == "testing":
+                    active_env = "test"
+                else:
+                    active_env = settings.TELEMETRY_ENVIRONMENT or "live"
+
             if isinstance(event, BaseModel):
                 event_dict = event.model_dump()
+                if not event_dict.get("telemetry_environment"):
+                    event_dict["telemetry_environment"] = active_env
+                    setattr(event, "telemetry_environment", active_env)
                 event_type = getattr(event, "event_type", "event")
                 json_line = event.model_dump_json() + "\n"
             elif isinstance(event, dict):
                 event_dict = event
+                if not event_dict.get("telemetry_environment"):
+                    event_dict["telemetry_environment"] = active_env
                 event_type = event.get("event_type", "event")
                 import json
-                json_line = json.dumps(event, ensure_ascii=False) + "\n"
+                json_line = json.dumps(event_dict, ensure_ascii=False) + "\n"
             else:
                 logger.warning(f"Unsupported telemetry event type: {type(event)}")
                 return False

@@ -1,0 +1,94 @@
+{
+  "environment": "fixture",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "daily_trends": [
+    {
+      "date": "2026-09-30",
+      "queries": 50,
+      "active_users": 18,
+      "avg_latency_ms": 331.76,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0,
+      "grounded_count": 47,
+      "fallback_count": 3
+    },
+    {
+      "date": "2026-10-01",
+      "queries": 50,
+      "active_users": 22,
+      "avg_latency_ms": 326.24,
+      "fallback_rate": 8.0,
+      "grounded_rate": 92.0,
+      "grounded_count": 46,
+      "fallback_count": 4
+    },
+    {
+      "date": "2026-10-02",
+      "queries": 50,
+      "active_users": 23,
+      "avg_latency_ms": 321.13,
+      "fallback_rate": 2.0,
+      "grounded_rate": 98.0,
+      "grounded_count": 49,
+      "fallback_count": 1
+    },
+    {
+      "date": "2026-10-03",
+      "queries": 50,
+      "active_users": 24,
+      "avg_latency_ms": 319.28,
+      "fallback_rate": 8.0,
+      "grounded_rate": 92.0,
+      "grounded_count": 46,
+      "fallback_count": 4
+    },
+    {
+      "date": "2026-10-04",
+      "queries": 50,
+      "active_users": 24,
+      "avg_latency_ms": 316.66,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0,
+      "grounded_count": 47,
+      "fallback_count": 3
+    },
+    {
+      "date": "2026-10-05",
+      "queries": 50,
+      "active_users": 20,
+      "avg_latency_ms": 318.95,
+      "fallback_rate": 0.0,
+      "grounded_rate": 100.0,
+      "grounded_count": 50,
+      "fallback_count": 0
+    },
+    {
+      "date": "2026-10-06",
+      "queries": 50,
+      "active_users": 17,
+      "avg_latency_ms": 321.97,
+      "fallback_rate": 6.0,
+      "grounded_rate": 94.0,
+      "grounded_count": 47,
+      "fallback_count": 3
+    }
+  ],
+  "hourly_distribution": {
+    "8": 26,
+    "9": 27,
+    "10": 22,
+    "11": 25,
+    "12": 27,
+    "13": 28,
+    "14": 20,
+    "15": 23,
+    "16": 14,
+    "17": 26,
+    "18": 31,
+    "19": 26,
+    "20": 14,
+    "21": 22,
+    "22": 19
+  },
+  "data_available": true
+}

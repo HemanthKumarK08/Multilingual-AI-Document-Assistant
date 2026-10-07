@@ -117,6 +117,11 @@ class Settings(BaseSettings):
     # --- Logging & Telemetry (Phase 7) ---
     LOG_LEVEL: str = "INFO"
     TELEMETRY_ENABLED: bool = True
+    TELEMETRY_ENVIRONMENT: Literal["live", "test", "fixture"] = "live"
+    ANALYTICS_HASH_SECRET: str = Field(
+        default="dev-telemetry-hmac-secret-salt-do-not-expose-min32chars",
+        repr=False
+    )
     TELEMETRY_DIRECTORY: str = "./data/telemetry"
     TELEMETRY_LOG_ROTATION_MB: int = 25
 

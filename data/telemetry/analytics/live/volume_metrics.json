@@ -1,0 +1,21 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "source_record_count": 9,
+  "total_events": 9,
+  "query_completed_count": 0,
+  "retrieval_completed_count": 0,
+  "rag_response_count": 9,
+  "error_count": 0,
+  "events_by_type": {
+    "rag_response": 9
+  },
+  "events_by_date": {
+    "2026-10-07": 9
+  },
+  "events_by_hour": {
+    "9": 4,
+    "10": 5
+  },
+  "data_available": true
+}

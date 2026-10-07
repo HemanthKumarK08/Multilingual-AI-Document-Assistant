@@ -4,7 +4,7 @@ Defines strongly typed, privacy-preserving event models for Retrieval, Grounded 
 """
 
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Literal, Optional
 from uuid import uuid4
 from pydantic import BaseModel, Field
 
@@ -28,6 +28,7 @@ class RetrievalTelemetryEvent(BaseModel):
     schema_version: str = SCHEMA_VERSION
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     event_type: str = "retrieval_completed"
+    telemetry_environment: Literal["live", "test", "fixture"] = "live"
     timestamp: str = Field(default_factory=_get_utc_now_iso)
     date: str = Field(default_factory=_get_utc_date)
     hour: int = Field(default_factory=_get_utc_hour)
@@ -48,14 +49,20 @@ class RAGTelemetryEvent(BaseModel):
     schema_version: str = SCHEMA_VERSION
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     event_type: str = "rag_response"
+    telemetry_environment: Literal["live", "test", "fixture"] = "live"
     timestamp: str = Field(default_factory=_get_utc_now_iso)
     date: str = Field(default_factory=_get_utc_date)
     hour: int = Field(default_factory=_get_utc_hour)
     query_id: str
+    anonymous_user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    document_id: Optional[str] = None
     retrieval_id: Optional[str] = None
     language: str
+    previous_language: Optional[str] = None
     script: str
     is_code_mixed: bool = False
+    is_romanized: bool = False
     candidate_count: int = 0
     selected_chunk_count: int = 0
     best_retrieval_score: float = 0.0
@@ -75,16 +82,22 @@ class UnifiedQueryTelemetryEvent(BaseModel):
     schema_version: str = SCHEMA_VERSION
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     event_type: str = "query_completed"
+    telemetry_environment: Literal["live", "test", "fixture"] = "live"
     timestamp: str = Field(default_factory=_get_utc_now_iso)
     date: str = Field(default_factory=_get_utc_date)
     hour: int = Field(default_factory=_get_utc_hour)
     request_id_hash: str = Field(default_factory=lambda: str(uuid4())[:16])
+    anonymous_user_id: Optional[str] = None
+    session_id: Optional[str] = None
+    document_id: Optional[str] = None
     query_id: str
     retrieval_id: Optional[str] = None
     language: str = "en"
+    previous_language: Optional[str] = None
     script: str = "latin"
     query_type: str = "cross_lingual_fact"
     is_code_mixed: bool = False
+    is_romanized: bool = False
     variant_count: int = 1
     candidate_count: int = 0
     retrieved_chunk_count: int = 0
@@ -109,6 +122,7 @@ class ErrorTelemetryEvent(BaseModel):
     schema_version: str = SCHEMA_VERSION
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     event_type: str = "error"
+    telemetry_environment: Literal["live", "test", "fixture"] = "live"
     timestamp: str = Field(default_factory=_get_utc_now_iso)
     date: str = Field(default_factory=_get_utc_date)
     hour: int = Field(default_factory=_get_utc_hour)

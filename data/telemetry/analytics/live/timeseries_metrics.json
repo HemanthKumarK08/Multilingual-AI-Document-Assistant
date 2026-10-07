@@ -1,0 +1,21 @@
+{
+  "environment": "live",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "daily_trends": [
+    {
+      "date": "2026-10-07",
+      "queries": 9,
+      "active_users": 2,
+      "avg_latency_ms": 7033.6,
+      "fallback_rate": 33.33,
+      "grounded_rate": 66.67,
+      "grounded_count": 6,
+      "fallback_count": 3
+    }
+  ],
+  "hourly_distribution": {
+    "9": 4,
+    "10": 5
+  },
+  "data_available": true
+}

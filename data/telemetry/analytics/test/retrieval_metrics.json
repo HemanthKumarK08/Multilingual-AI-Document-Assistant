@@ -1,0 +1,35 @@
+{
+  "environment": "test",
+  "generated_at_utc": "2026-10-07T10:51:35.186677Z",
+  "avg_retrieval_latency_ms": 0.0,
+  "p50_retrieval_latency_ms": 0.0,
+  "p95_retrieval_latency_ms": 0.0,
+  "avg_candidate_count": 1.38,
+  "avg_retrieved_chunk_count": 1.38,
+  "avg_query_variant_count": 1.0,
+  "avg_reranking_latency_ms": 0.0,
+  "avg_best_retrieval_score": 0.8188,
+  "retrieval_by_language": {
+    "hi": {
+      "avg_latency_ms": 0.0,
+      "avg_candidates": 1.38,
+      "avg_variants": 1.0
+    },
+    "kn": {
+      "avg_latency_ms": 0.0,
+      "avg_candidates": 1.42,
+      "avg_variants": 1.0
+    },
+    "te": {
+      "avg_latency_ms": 0.0,
+      "avg_candidates": 1.51,
+      "avg_variants": 1.0
+    },
+    "en": {
+      "avg_latency_ms": 0.0,
+      "avg_candidates": 1.35,
+      "avg_variants": 1.0
+    }
+  },
+  "data_available": true
+}
