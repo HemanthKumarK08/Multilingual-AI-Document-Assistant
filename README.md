@@ -10,7 +10,7 @@
 [![Sarvam AI](https://img.shields.io/badge/Sarvam_AI-Bulbul_v3-blueviolet.svg)](https://www.sarvam.ai/)
 [![Test Suite](https://img.shields.io/badge/Tests-599%20Passing-brightgreen.svg)]()
 
-> **MCA Major Project — Department of Master of Computer Applications, Bangalore Institute of Technology (BIT)**  
+> **MCA  Project — Department of Master of Computer Applications, Bangalore Institute of Technology (BIT)**  
 > **Author:** Hemanth Kumar K  
 > An enterprise-grade, privacy-first Multilingual Document Assistant combining dense-lexical hybrid Retrieval-Augmented Generation (RAG), resilient multilingual answer generation, Sarvam Bulbul v3 neural voice synthesis, and Apache Spark Lakehouse analytics.
 
